@@ -16,6 +16,9 @@
         <!--Import jQuery before materialize.js-->
         <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
         <script type="text/javascript" src="js/materialize.min.js"></script>
+        
+        <!--Syntax Highlighting-->
+        <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 
         <style>
             #testTitle{
@@ -51,6 +54,10 @@
             .btnAction{
                 width: 5em;
             }
+            
+            pre.prettyprint {
+                background: #e0e0e0;
+            }
         </style>
     </head>
     <body>
@@ -82,26 +89,38 @@
                 </div>
 
                 <div id="testAnswer" class="col s8">
-                    <h4>What is the difference between JDK,JRE and JVM?</h4>
+                    <h4>What is the output of the code below?</h4>
+                    
+                    <!--Add class prettyprint to <pre> containing code-->
+                    <pre class="prettyprint card">
+#include &lt;stdio.h&gt;
+int x;
+void main()
+{
+    if (x)
+        printf("hi");
+    else
+        printf("how are u");
+}</pre>
 
                     <p>
                         <input type="checkbox" class="filled-in" id="filled-in-box1" checked="checked" />
-                        <label for="filled-in-box1">Answer 1</label>
+                        <label for="filled-in-box1">hi</label>
                     </p>
 
                     <p>
                         <input type="checkbox" class="filled-in" id="filled-in-box2" />
-                        <label for="filled-in-box2">Answer 2</label>
+                        <label for="filled-in-box2">how are you</label>
                     </p>
 
                     <p>
                         <input type="checkbox" class="filled-in" id="filled-in-box3" />
-                        <label for="filled-in-box3">Answer 3</label>
+                        <label for="filled-in-box3">Compile time error</label>
                     </p>
 
                     <p>
                         <input type="checkbox" class="filled-in" id="filled-in-box4" />
-                        <label for="filled-in-box4">Answer 4</label>
+                        <label for="filled-in-box4">None of the mentioned</label>
                     </p>
                 </div>
             </div>
