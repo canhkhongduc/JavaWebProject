@@ -1,0 +1,11 @@
+<%@page pageEncoding="UTF-8" %>
+        <nav>
+            <div class="nav-wrapper white">
+                <!--<a href="#" class="brand-logo right">Idiot Team</a>-->
+                <ul class="right hide-on-med-and-down">
+                    <li><a class="black-text" href="${contextPath}">Home</a></li>
+                    <li><a class="black-text" href="${contextPath}/subject/view.jsp">My courses</a></li>
+                    <li><a class="waves-effect waves-teal btn white black-text">Sign in</a></li>
+                </ul>
+            </div>
+        </nav>

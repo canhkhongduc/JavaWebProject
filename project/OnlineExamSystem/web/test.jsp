@@ -8,15 +8,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <%@include file="/WEB-INF/jspf/head.jspf" %>
         <title>Test</title>
-        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <!--Import materialize.css-->
-        <link rel="stylesheet" type="text/css" href="css/materialize.min.css"/>
-        <!--Import jQuery before materialize.js-->
-        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-        <script type="text/javascript" src="js/materialize.min.js"></script>
-        
         <!--Syntax Highlighting-->
         <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 
@@ -54,22 +47,20 @@
             .btnAction{
                 width: 5em;
             }
-            
+
             pre.prettyprint {
                 background: #e0e0e0;
             }
         </style>
     </head>
     <body>
-        <jsp:include page="Navbar.jsp"></jsp:include>
-
+        <%@include file="/WEB-INF/jspf/navbar.jspf" %>
         <main>
             <div id="testTitle" class="row amber lighten-2 valign-wrapper">
                 <div class="col s4 offset-s4">
                     <h3 class="valign center-align white-text">Insert test name here</h3>
                 </div>
             </div>
-
             <div id="testContent" class="row">
                 <div id="testChoice" class="col s4 lighten-4">
                     <a class="answerBox waves-effect white black-text waves-teal btn">1</a>
@@ -90,7 +81,7 @@
 
                 <div id="testAnswer" class="col s8">
                     <h4>What is the output of the code below?</h4>
-                    
+
                     <!--Add class prettyprint to <pre> containing code-->
                     <pre class="prettyprint card">
 #include &lt;stdio.h&gt;
@@ -101,30 +92,26 @@ void main()
         printf("hi");
     else
         printf("how are u");
-}</pre>
-
+}
+                    </pre>
                     <p>
                         <input type="checkbox" class="filled-in" id="filled-in-box1" checked="checked" />
                         <label for="filled-in-box1">hi</label>
                     </p>
-
                     <p>
                         <input type="checkbox" class="filled-in" id="filled-in-box2" />
                         <label for="filled-in-box2">how are you</label>
                     </p>
-
                     <p>
                         <input type="checkbox" class="filled-in" id="filled-in-box3" />
                         <label for="filled-in-box3">Compile time error</label>
                     </p>
-
                     <p>
                         <input type="checkbox" class="filled-in" id="filled-in-box4" />
                         <label for="filled-in-box4">None of the mentioned</label>
                     </p>
                 </div>
             </div>
-
             <div id="testAction">
                 <!--<div class="col s4 offset-s4">-->
                 <a class="waves-effect waves-light btn" href="#modalConfirm">Finish</a>
@@ -141,9 +128,7 @@ void main()
                 <!--</div>-->
             </div>
         </main>
-        
-        <jsp:include page="Footer.jsp"></jsp:include>
-
+        <%@include file="/WEB-INF/jspf/footer.jspf" %>
         <script>
             $(document).ready(function () {
                 // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
