@@ -14,7 +14,9 @@
             .collapsible-body {
                 padding: 1rem;
             }
-            body{overflow:auto;}
+            body {
+                overflow: auto;
+            }
             .carousel-item{
                 width: 80%;
                 height: 200px;

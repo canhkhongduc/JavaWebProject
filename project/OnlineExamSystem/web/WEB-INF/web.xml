@@ -13,6 +13,38 @@
             <param-value>1.8</param-value>
         </init-param>
     </servlet>
+    <servlet>
+        <servlet-name>LoginController</servlet-name>
+        <servlet-class>controller.authentication.LoginController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GoogleOAuthLoginController</servlet-name>
+        <servlet-class>controller.authentication.GoogleOAuthLoginController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GoogleOAuthCallbackController</servlet-name>
+        <servlet-class>controller.authentication.GoogleOAuthCallbackController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LogoutController</servlet-name>
+        <servlet-class>controller.authentication.LogoutController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginController</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GoogleOAuthLoginController</servlet-name>
+        <url-pattern>/oauth2login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GoogleOAuthCallbackController</servlet-name>
+        <url-pattern>/oauth2callback</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LogoutController</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
