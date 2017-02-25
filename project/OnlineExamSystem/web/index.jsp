@@ -25,10 +25,9 @@
         <%@include file="/WEB-INF/jspf/navbar.jspf" %>
         <main>
             <div class="carousel carousel-slider">
-                <a class="carousel-item"><img src="resources/images/billgates.png"></a>
-                <a class="carousel-item"><img src="resources/images/einstein.jpeg"></a>
-                <a class="carousel-item"><img src="resources/images/stevejob.png"></a>
-                <a class="carousel-item"><img src="resources/images/warrenbuffet.png"></a>
+                <a class="carousel-item"><img src="resources/images/sky.jpg" style="height:200px;"></a>
+                <a class="carousel-item"><img src="resources/images/mountain.jpg" style="height:200px;"></a>
+                <a class="carousel-item"><img src="resources/images/sea.png" style="height:200px;"></a>
             </div>
         </main>
         <%@include file="/WEB-INF/jspf/footer.jspf" %>
