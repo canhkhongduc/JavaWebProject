@@ -1,11 +1,18 @@
 package controller.authentication;
 
+import dao.AccountManager;
+import dao.GroupManager;
 import java.io.IOException;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.core.UriBuilder;
+import model.Account;
+import model.Group;
+import util.HashingUtil;
 import util.googleapi.GoogleProfile;
 
 /**
@@ -14,68 +21,98 @@ import util.googleapi.GoogleProfile;
  */
 public class LoginController extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    private static final long serialVersionUID = 1846816234516327701L;
+
+    private final AccountManager accountManager = new AccountManager();
+
+    public static void responseLoginError(HttpServletResponse response, LoginResult result)
+            throws ServletException, IOException {
+        UriBuilder builder = UriBuilder.fromUri("login/error").queryParam("errorId", result.name());
+        response.sendRedirect(builder.build().toString());
+    }
+
+    private boolean isValidDomain(String email) {
+        // TODO: Store allowed domain in application settings
+        return email.endsWith("@fpt.edu.vn");
+    }
+
+    private LoginResult verifyLogin(String username, String password) {
+        if (username == null || password == null) {
+            return LoginResult.BAD_REQUEST;
+        }
+        Account account = accountManager.getAccount(username);
+        if (account == null) {
+            return LoginResult.USERNAME_DOES_NOT_EXIST;
+        }
+        String passwordHash = HashingUtil.generateSHA512Hash(password);
+        if (!passwordHash.equals(account.getPassword())) {
+            return LoginResult.INCORRECT_PASSWORD;
+        }
+        return LoginResult.SUCCESS;
+    }
+
+    private boolean addNewStudentAccount(AccountManager manager, GoogleProfile profile) {
+        GroupManager groupManager = new GroupManager();
+        Group studentGroup = groupManager.getGroup("student");
+        Account account = new Account();
+        account.setUsername(profile.getEmail());
+        account.setPassword(HashingUtil.generateSHA512Hash(profile.getId()));
+        account.setFullName(profile.getName());
+        account.setEmail(profile.getEmail());
+        account.setGender(true);
+        account.setBirthdate(new Date());
+        account.getGroups().add(studentGroup);
+        return manager.addAccount(account);
+    }
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        GoogleProfile profile = (GoogleProfile) request.getAttribute("google_profile");
-        if (profile == null) {
-            profile = (GoogleProfile) session.getAttribute("account");
-        }
+        LoginResult loginResult;
+        GoogleProfile googleProfile = (GoogleProfile) request.getAttribute("googleProfile");
         
-        if (profile == null) {
-            response.sendRedirect("oauth2login");
+        String username, password;
+        if (googleProfile != null) {
+            username = googleProfile.getEmail();
+            password = googleProfile.getId();
+            if (!isValidDomain(username)) {
+                loginResult = LoginResult.DOMAIN_NOT_ALLOWED;
+            } else {
+                loginResult = verifyLogin(username, password);
+                if (loginResult == LoginResult.USERNAME_DOES_NOT_EXIST) {
+                    if (addNewStudentAccount(accountManager, googleProfile)) {
+                        loginResult = LoginResult.SUCCESS;
+                    }
+                }
+            }
         } else {
-            session.setAttribute("account", profile);
-            response.sendRedirect("");
+            request.setCharacterEncoding("UTF-8");
+            username = request.getParameter("username");
+            password = request.getParameter("password");
+            loginResult = verifyLogin(username, password);
+        }
+
+        switch (loginResult) {
+            case SUCCESS:
+                Account account = accountManager.getAccount(username);
+                session.setAttribute("account", account);
+                response.sendRedirect("");
+                break;
+            default:
+                responseLoginError(response, loginResult);
+                break;
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }

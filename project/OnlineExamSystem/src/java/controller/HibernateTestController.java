@@ -1,19 +1,47 @@
-package controller.authentication;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package controller;
 
+import dao.AccountManager;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import model.Account;
+import org.hibernate.Hibernate;
+import util.HashingUtil;
 
 /**
+ * Controller for testing Hibernate DAO objects.
  *
  * @author nguyen
  */
-public class LogoutController extends HttpServlet {
+public class HibernateTestController extends HttpServlet {
 
-    private static final long serialVersionUID = 7128587046707690487L;
+    private static final long serialVersionUID = -6086405224915190824L;
+
+    /**
+     * 
+     * @param response
+     * @param password
+     * @throws ServletException
+     * @throws IOException 
+     */
+    private void updateAdminPassword(HttpServletResponse response, String password) throws ServletException, IOException {
+        AccountManager accountManager = new AccountManager();
+        Account admin = accountManager.getAccount("admin");
+        admin.setPassword(HashingUtil.generateSHA512Hash("admin"));
+        if (accountManager.updateAccount(admin)) {
+            response.getWriter().write("Admin password has been updated!");
+        } else {
+            response.getWriter().write("Failed to update admin password!");
+        }
+
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -26,9 +54,18 @@ public class LogoutController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        session.setAttribute("account", null);
-        response.sendRedirect("");
+        String action = request.getParameter("action");
+        switch (action) {
+            case "uap":
+                String password = request.getParameter("password");
+                if (password == null) {
+                    password = "admin";
+                }
+                updateAdminPassword(response, password);
+                break;
+            default:
+                response.getWriter().write("No action has been done!");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -8,6 +8,8 @@ import java.io.Serializable;
  */
 public class GoogleProfile implements Serializable {
 
+    private static final long serialVersionUID = 509464941191679201L;
+
     private String id;
     private String name;
     private String email;

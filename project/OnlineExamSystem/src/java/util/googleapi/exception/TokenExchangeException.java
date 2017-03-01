@@ -6,6 +6,7 @@ package util.googleapi.exception;
  */
 public class TokenExchangeException extends Exception {
 
+    private static final long serialVersionUID = 4846981975289168664L;
     private static final String EXCEPTION_MESSAGE = "Could not exchange authorization code for an access token.";
 
     public TokenExchangeException() {

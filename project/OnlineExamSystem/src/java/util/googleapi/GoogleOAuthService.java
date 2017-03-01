@@ -9,6 +9,7 @@ import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth20Service;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import util.googleapi.exception.GoogleAPIRequestException;
 import util.googleapi.exception.GoogleAPIResponseParseException;
 import util.googleapi.exception.TokenExchangeException;
@@ -128,7 +129,7 @@ public class GoogleOAuthService {
             String name = obj.get("name").getAsString().trim();
             String email = obj.get("email").getAsString();
             return new GoogleProfile(id, name, email);
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException ex) {
             throw new GoogleAPIResponseParseException(ex);
         }
     }

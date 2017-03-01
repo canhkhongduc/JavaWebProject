@@ -18,11 +18,13 @@ import util.HashingUtil;
  * @author nguyen
  */
 public class GoogleOAuthLoginController extends HttpServlet {
+
+    private static final long serialVersionUID = 5319716120169294969L;
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         GoogleOAuthService service = new GoogleOAuthService();
-        String state = HashingUtil.generateSHA256Hash(request.getSession().getId());
+        String state = HashingUtil.generateSHA1Hash(request.getSession().getId());
         response.sendRedirect(service.getAuthorizationUrl(state));
     }
 

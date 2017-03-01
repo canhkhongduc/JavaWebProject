@@ -22,30 +22,36 @@ import util.googleapi.exception.TokenExchangeException;
 import util.servlet.ServletMethodInterface;
 
 /**
+ * Controller for handling callback request from Google's OAuth server.<br>
+ * This controller will perform the following functions:<br>
+ * <ol>
+ * <li>Get authorization <i>code</i> parameter from callback request.</li>
+ * <li>Verify <i>state</i> parameter in the callback request (must equal to the
+ * SHA-1 hash of session ID).</li>
+ * <li>Perform Google API request to get Google public profile.</li>
+ * <li>Forward the profile to login controller.</li>
+ * </ol>
  *
  * @author nguyen
  */
 public class GoogleOAuthCallbackController extends HttpServlet implements ServletMethodInterface {
 
-    private void responseGoogleOAuthError(HttpServletResponse response, int status, String error)
-            throws ServletException, IOException {
-        response.sendError(status, String.format("Google sign-in error: %s", (error == null) ? "unknown" : error));
-    }
+    private static final long serialVersionUID = -5302619356988689274L;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String code = request.getParameter("code");
         if (code == null) {
-            String error = request.getParameter("error");
-            responseGoogleOAuthError(response, HttpServletResponse.SC_BAD_REQUEST, error);
+            LoginController.responseLoginError(response, LoginResult.OAUTH_ACCESS_DENIED);
             return;
         }
 
         String state = request.getParameter("state");
         if (state != null) {
-            String verifyState = HashingUtil.generateSHA256Hash(request.getSession().getId());
+            String verifyState = HashingUtil.generateSHA1Hash(request.getSession().getId());
             if (!state.equals(verifyState)) {
-                responseGoogleOAuthError(response, HttpServletResponse.SC_BAD_REQUEST, "invalid_request_state");
+                LoginController.responseLoginError(response, LoginResult.OAUTH_INVALID_STATE);
+                return;
             }
         }
 
@@ -53,13 +59,10 @@ public class GoogleOAuthCallbackController extends HttpServlet implements Servle
             GoogleOAuthService service = new GoogleOAuthService();
             OAuth2AccessToken token = service.exchangeCodeForToken(code);
             GoogleProfile profile = service.getGoogleProfile(token);
-            request.setAttribute("google_profile", profile);
+            request.setAttribute("googleProfile", profile);
             request.getRequestDispatcher("login").forward(request, response);
-        } catch (TokenExchangeException ex) {
-            responseGoogleOAuthError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "server_token_exchange_error");
-            Logger.getLogger(GoogleOAuthCallbackController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (GoogleAPIRequestException | GoogleAPIResponseParseException ex) {
-            responseGoogleOAuthError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "server_profile_retrieval_error");
+        } catch (TokenExchangeException | GoogleAPIRequestException | GoogleAPIResponseParseException ex) {
+            LoginController.responseLoginError(response, LoginResult.OAUTH_PROFILE_RETRIEVAL_ERROR);
             Logger.getLogger(GoogleOAuthCallbackController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

@@ -6,6 +6,7 @@ package util.googleapi.exception;
  */
 public class GoogleAPIRequestException extends Exception {
 
+    private static final long serialVersionUID = 4434771570966837321L;
     private static final String EXCEPTION_MESSAGE = "Could not successfully perform the Google API Request.";
 
     public GoogleAPIRequestException() {

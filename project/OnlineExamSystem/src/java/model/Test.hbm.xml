@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Mar 1, 2017 12:17:01 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class catalog="OnlineExamSystem" name="model.Test" optimistic-lock="version" schema="dbo" table="Test">
+        <id name="id" type="int">
+            <column name="id"/>
+            <generator class="native"/>
+        </id>
+        <many-to-one class="model.Account" fetch="select" name="owner">
+            <column name="owner"/>
+        </many-to-one>
+        <property name="name" type="string">
+            <column name="name" not-null="true"/>
+        </property>
+        <property name="joinStartTime" type="timestamp">
+            <column length="27" name="joinStartTime"/>
+        </property>
+        <property name="joinEndTime" type="timestamp">
+            <column length="27" name="joinEndTime"/>
+        </property>
+        <property name="timeLength" type="int">
+            <column name="timeLength" not-null="true"/>
+        </property>
+        <property name="attemptLimit" type="int">
+            <column name="attemptLimit" not-null="true"/>
+        </property>
+        <set fetch="select" inverse="true" lazy="true" name="attempts" table="Attempt">
+            <key>
+                <column name="testId"/>
+            </key>
+            <one-to-many class="model.Attempt"/>
+        </set>
+        <set fetch="select" inverse="true" lazy="true" name="questions" table="Test_Question">
+            <key>
+                <column name="testId" not-null="true"/>
+            </key>
+            <many-to-many entity-name="model.Question">
+                <column name="questionId" not-null="true"/>
+            </many-to-many>
+        </set>
+    </class>
+</hibernate-mapping>

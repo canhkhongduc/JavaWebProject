@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd">
+<hibernate-reverse-engineering>
+  <schema-selection match-catalog="OnlineExamSystem" match-schema="dbo"/>
+  <table-filter match-name="Account"/>
+  <table-filter match-name="Course"/>
+  <table-filter match-name="Attempt"/>
+  <table-filter match-name="Choice"/>
+  <table-filter match-name="Permission"/>
+  <table-filter match-name="Attempt_Choice"/>
+  <table-filter match-name="Group"/>
+  <table-filter match-name="Account_Group"/>
+  <table-filter match-name="Test_Question"/>
+  <table-filter match-name="Test"/>
+  <table-filter match-name="Question"/>
+  <table-filter match-name="Group_Permission"/>
+</hibernate-reverse-engineering>

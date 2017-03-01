@@ -29,7 +29,7 @@
             <div class="carousel carousel-slider">
                 <a class="carousel-item"><img src="resources/images/sky.jpg" style="height:200px;"></a>
                 <a class="carousel-item"><img src="resources/images/mountain.jpg" style="height:200px;"></a>
-                <a class="carousel-item"><img src="resources/images/sea.png" style="height:200px;"></a>
+                <a class="carousel-item"><img src="resources/images/sea.jpg" style="height:200px;"></a>
             </div>
         </main>
         <%@include file="/WEB-INF/jspf/footer.jspf" %>

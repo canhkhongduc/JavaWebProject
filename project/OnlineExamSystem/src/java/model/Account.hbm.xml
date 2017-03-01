@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="model.Account" table="Account" schema="dbo" catalog="OnlineExamSystem" optimistic-lock="version">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="native" />
+        </id>
+        <property name="username" type="string">
+            <column name="username" length="255" not-null="true" unique="true" />
+        </property>
+        <property name="password" type="string">
+            <column name="password" length="128" not-null="true" />
+        </property>
+        <property name="fullName" type="string">
+            <column name="fullName" length="255" not-null="true" />
+        </property>
+        <property name="gender" type="boolean">
+            <column name="gender" />
+        </property>
+        <property name="birthdate" type="timestamp">
+            <column name="birthdate" length="27"/>
+        </property>
+        <property name="email" type="string">
+            <column name="email" />
+        </property>
+        <set name="groups" table="Account_Group" inverse="false" lazy="true" fetch="select">
+            <key>
+                <column name="accountId" not-null="true" />
+            </key>
+            <many-to-many entity-name="model.Group">
+                <column name="groupName" length="30" not-null="true" />
+            </many-to-many>
+        </set>
+    </class>
+</hibernate-mapping>
