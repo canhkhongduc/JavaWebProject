@@ -25,13 +25,8 @@
         <property name="email" type="string">
             <column name="email" />
         </property>
-        <set name="groups" table="Account_Group" inverse="false" lazy="true" fetch="select">
-            <key>
-                <column name="accountId" not-null="true" />
-            </key>
-            <many-to-many entity-name="model.Group">
-                <column name="groupName" length="30" not-null="true" />
-            </many-to-many>
-        </set>
+        <many-to-one name="group" class="model.Group" fetch="select" lazy="false">
+            <column name="groupName" not-null="true" />
+        </many-to-one>
     </class>
 </hibernate-mapping>

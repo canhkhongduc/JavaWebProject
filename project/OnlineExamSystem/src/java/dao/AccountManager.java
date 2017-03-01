@@ -3,6 +3,7 @@ package dao;
 import util.hibernate.HibernateUtil;
 import java.util.List;
 import model.Account;
+import model.Group;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -35,6 +36,17 @@ public class AccountManager {
         return accounts;
     }
     
+    public List<Account> getAccountsByGroup(Group group) {
+        Session session = sessionFactory.getCurrentSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(Account.class);
+        criteria.addOrder(Order.asc("username"));
+        criteria.add(Restrictions.eq("group", group));
+        List<Account> accounts = criteria.list();
+        session.getTransaction().commit();
+        return accounts;
+    }
+    
     public Account getAccount(int id) {
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
@@ -60,7 +72,7 @@ public class AccountManager {
         Criteria criteria = session.createCriteria(Account.class);
         criteria.add(Restrictions.eq("id", id));
         criteria.setProjection(Projections.rowCount());
-        int count = (int) criteria.uniqueResult();
+        long count = (long) criteria.uniqueResult();
         session.getTransaction().commit();
         return count > 0;
     }
@@ -71,7 +83,7 @@ public class AccountManager {
         Criteria criteria = session.createCriteria(Account.class);
         criteria.add(Restrictions.eq("username", username));
         criteria.setProjection(Projections.rowCount());
-        int count = (int) criteria.uniqueResult();
+        long count = (long) criteria.uniqueResult();
         session.getTransaction().commit();
         return count > 0;
     }

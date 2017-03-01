@@ -27,7 +27,7 @@ public class LoginController extends HttpServlet {
 
     public static void responseLoginError(HttpServletResponse response, LoginResult result)
             throws ServletException, IOException {
-        UriBuilder builder = UriBuilder.fromUri("login/error").queryParam("errorId", result.name());
+        UriBuilder builder = UriBuilder.fromUri("login/error").queryParam("errorId", result.name().toLowerCase());
         response.sendRedirect(builder.build().toString());
     }
 
@@ -61,7 +61,7 @@ public class LoginController extends HttpServlet {
         account.setEmail(profile.getEmail());
         account.setGender(true);
         account.setBirthdate(new Date());
-        account.getGroups().add(studentGroup);
+        account.setGroup(studentGroup);
         return manager.addAccount(account);
     }
     

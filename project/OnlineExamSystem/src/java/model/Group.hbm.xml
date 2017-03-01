@@ -11,7 +11,7 @@
         <property name="description" type="string">
             <column name="description" length="255" not-null="true" />
         </property>
-        <set name="permissions" table="Group_Permission" inverse="true" lazy="true" fetch="select">
+        <set name="permissions" table="Group_Permission" inverse="true" lazy="false" fetch="select">
             <key>
                 <column name="groupName" length="30" not-null="true" />
             </key>
@@ -19,13 +19,11 @@
                 <column name="permissionName" length="30" not-null="true" />
             </many-to-many>
         </set>
-        <set name="accounts" table="Account_Group" inverse="true" lazy="true" fetch="select">
+        <set fetch="select" inverse="true" lazy="true" name="accounts" table="Account">
             <key>
                 <column name="groupName" length="30" not-null="true" />
             </key>
-            <many-to-many entity-name="model.Account">
-                <column name="accountId" not-null="true" />
-            </many-to-many>
+            <one-to-many class="model.Account" />
         </set>
     </class>
 </hibernate-mapping>
