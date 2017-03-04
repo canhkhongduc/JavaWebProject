@@ -1,27 +1,25 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page pageEncoding="UTF-8" %>
 <nav>
     <div class="nav-wrapper white">
         <!--<a href="#" class="brand-logo right">Idiot Team</a>-->
         <ul class="right hide-on-med-and-down">
             <li><a class="black-text" href="${contextPath}">Home</a></li>
             <li><a class="black-text" href="${contextPath}/subject/view.jsp">My courses</a></li>
-            <li><a class="black-text" href="${contextPath}/listmaster">Settings</a></li>
+            <li><a class="black-text" href="${contextPath}/settings">Settings</a></li>
 
             <li>
-                <c:if test="${empty sessionScope.account}">
-                    <a class="waves-effect waves-teal btn white black-text" href="${contextPath}/oauth2login">Login with FPT Email</a>
-                </c:if>
-                <c:if test="${not empty sessionScope.account}">
-                    <a id="account-dropdown-button" class="dropdown-button teal lighten-3" href="#" data-activates="account-dropdown-menu">
-                        <span class="black-text">${sessionScope.account.fullName}</span>
-                    </a>
-                    <ul id="account-dropdown-menu" class="dropdown-content">
-                        <li><a href="#">Profile</a></li>
-                        <li class="divider"></li>
-                        <li><a href="${contextPath}/logout">Logout</a></li>
-                    </ul>
-                </c:if>
+            <c:if test="${empty sessionScope.account}">
+                <a class="waves-effect waves-teal btn white black-text" href="${contextPath}/oauth2login">Login with FPT Email</a>
+            </c:if>
+            <c:if test="${not empty sessionScope.account}">
+                <a id="account-dropdown-button" class="dropdown-button teal lighten-3" href="#" data-activates="account-dropdown-menu">
+                    <span class="black-text">${sessionScope.account.fullName}</span>
+                </a>
+                <ul id="account-dropdown-menu" class="dropdown-content">
+                    <li><a href="#">Profile</a></li>
+                    <li class="divider"></li>
+                    <li><a href="${contextPath}/logout">Logout</a></li>
+                </ul>
+            </c:if>
             </li>
         </ul>
     </div>

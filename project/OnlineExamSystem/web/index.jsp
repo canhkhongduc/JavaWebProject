@@ -4,7 +4,6 @@
     Author     : Canh Khong Duc <canhkdse04533 at FPT University>
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
