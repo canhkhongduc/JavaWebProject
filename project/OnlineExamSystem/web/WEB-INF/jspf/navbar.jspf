@@ -6,7 +6,7 @@
         <ul class="right hide-on-med-and-down">
             <li><a class="black-text" href="${contextPath}">Home</a></li>
             <li><a class="black-text" href="${contextPath}/subject/view.jsp">My courses</a></li>
-            <!--<li><a class="black-text" href="${contextPath}/listmaster">Settings</a></li>-->
+            <li><a class="black-text" href="${contextPath}/listmaster">Settings</a></li>
 
             <li>
                 <c:if test="${empty sessionScope.account}">

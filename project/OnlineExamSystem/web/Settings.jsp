@@ -110,7 +110,7 @@
                                         <tr>
                                             <td>${master.fullName}</td>
                                             <td>${master.email}</td>
-                                            <td><form action="deletemaster"><input type="hidden" name="email" value="<c:out value="${master.email}"></c:out>"><button type="submit" class="waves-effect waves-light btn"><i class="large material-icons red-text">delete</i></button></form></td>
+                                            <td><form action="deletemaster"><input type="hidden" name="email" value="<c:out value="${master.email}"></c:out>"><button type="submit" class="white waves-effect waves-light btn"><i class="large material-icons red-text">delete</i></button></form></td>
                                         </tr>
                                     </c:forEach>
                                 </tbody>
