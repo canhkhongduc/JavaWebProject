@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.http.HttpSession;
+import java.servlet.http.HttpSession;
 import model.GoogleProfile;
 
 /**

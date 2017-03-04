@@ -37,6 +37,18 @@
         <servlet-name>HibernateTestController</servlet-name>
         <servlet-class>controller.HibernateTestController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddMasterController</servlet-name>
+        <servlet-class>controller.AddMasterController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteMasterController</servlet-name>
+        <servlet-class>controller.DeleteMasterController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListMasterController</servlet-name>
+        <servlet-class>controller.ListMasterController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -60,6 +72,18 @@
     <servlet-mapping>
         <servlet-name>HibernateTestController</servlet-name>
         <url-pattern>/hbtest</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddMasterController</servlet-name>
+        <url-pattern>/addmaster</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteMasterController</servlet-name>
+        <url-pattern>/deletemaster</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListMasterController</servlet-name>
+        <url-pattern>/listmaster</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

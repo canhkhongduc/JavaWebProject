@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -87,9 +88,10 @@
                 <div class="row">
                     <h5>Test Master</h5>
                 </div>
-                <div class="row">
-                    <a class="waves-effect waves-light btn"><i class="material-icons left">add</i>Add</a>
-                </div>
+                <form action="addmaster" method="POST">
+                    <input type="email" name="email" placeholder="Email" class="col s6 validate" required>
+                    <button class="waves-effect waves-light btn" type="submit"><i class="material-icons left">add</i>Add</button>
+                </form>
                 <div class="row">
                     <div class="col s12">
                         <div class="card-panel">
@@ -103,11 +105,14 @@
                                 </thead>
 
                                 <tbody>
-                                    <tr>
-                                        <td>Ngo Tung Son</td>
-                                        <td>sonnt5@fpt.edu.vn</td>
-                                        <td><a href="#"><i class="material-icons red-text">delete</i></a></td>
-                                    </tr>
+                                    <c:forEach items="${masters}" var="master">
+
+                                        <tr>
+                                            <td>${master.fullName}</td>
+                                            <td>${master.email}</td>
+                                            <td><form action="deletemaster"><input type="hidden" name="email" value="<c:out value="${master.email}"></c:out>"><button type="submit" class="waves-effect waves-light btn"><i class="large material-icons red-text">delete</i></button></form></td>
+                                        </tr>
+                                    </c:forEach>
                                 </tbody>
                             </table>
                         </div>
