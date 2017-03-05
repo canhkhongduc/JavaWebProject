@@ -5,20 +5,22 @@
  */
 package controller;
 
-import dao.AccountManager;
 import dao.ChoiceManager;
 import dao.QuestionManager;
+import javax.servlet.annotation.WebServlet;
+import model.Choice;
+import model.Question;
+import dao.CourseManager;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import model.Account;
-import model.Choice;
-import model.Question;
+import model.Course;
+import model.Permission;
 
 /**
  *
@@ -39,7 +41,26 @@ public class TestController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            response.sendRedirect("oauth2login");
+        } else if (!account.getGroup().getPermissions().stream().anyMatch((Permission t) -> t.getName().equals("manage_tests"))) {
+            request.getRequestDispatcher("/WEB-INF/jsp/error.jsp?error=Permission%20denied").forward(request, response);
+        } else {
+            String action = request.getParameter("action");
+            if (action == null) {
+                action = "add";
+            }
+            switch (action) {
+                case "add": {
+                    List<Course> courses = new CourseManager().getAllCourse();
+                    request.setAttribute("courses", courses);
+                    request.getRequestDispatcher("/WEB-INF/jsp/add_test.jsp").forward(request, response);
+                    break;
+                }
+            }
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -60,14 +81,14 @@ public class TestController extends HttpServlet {
         ChoiceManager choiceManager = new ChoiceManager();
 
         int currentQuestion = 0;
-        
+
         if (request.getParameter("question") != null) {
             currentQuestion = Integer.parseInt(request.getParameter("question"));
         }
 
         List<Question> questionList = questionManager.getAllQuestions();
         List<Choice> choiceList = choiceManager.getAllChoice(questionList.get(currentQuestion));
-        
+
         request.setAttribute("questionList", questionList);
         request.setAttribute("questionIndex", currentQuestion);
         request.setAttribute("choiceList", choiceList);
