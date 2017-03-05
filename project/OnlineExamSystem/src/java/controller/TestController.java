@@ -50,14 +50,31 @@ public class TestController extends HttpServlet {
         } else {
             String action = request.getParameter("action");
             if (action == null) {
-                action = "add";
-            }
-            switch (action) {
-                case "add": {
-                    List<Course> courses = new CourseManager().getAllCourse();
-                    request.setAttribute("courses", courses);
-                    request.getRequestDispatcher("/WEB-INF/jsp/add_test.jsp").forward(request, response);
-                    break;
+                QuestionManager questionManager = new QuestionManager();
+                ChoiceManager choiceManager = new ChoiceManager();
+
+                int currentQuestion = 0;
+
+                if (request.getParameter("question") != null) {
+                    currentQuestion = Integer.parseInt(request.getParameter("question"));
+                }
+
+                List<Question> questionList = questionManager.getAllQuestions();
+                List<Choice> choiceList = choiceManager.getAllChoice(questionList.get(currentQuestion));
+
+                request.setAttribute("questionList", questionList);
+                request.setAttribute("questionIndex", currentQuestion);
+                request.setAttribute("choiceList", choiceList);
+
+                request.getRequestDispatcher("test.jsp").forward(request, response);
+            } else {
+                switch (action) {
+                    case "add": {
+                        List<Course> courses = new CourseManager().getAllCourse();
+                        request.setAttribute("courses", courses);
+                        request.getRequestDispatcher("/WEB-INF/jsp/add_test.jsp").forward(request, response);
+                        break;
+                    }
                 }
             }
         }
