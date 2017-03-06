@@ -7,6 +7,10 @@ package dao;
 
 import model.Account;
 import model.Attempt;
+import model.Choice;
+import model.Course;
+import model.Group;
+import model.Permission;
 import model.Question;
 import model.Test;
 import org.hibernate.Session;
@@ -157,7 +161,124 @@ public class TestMasterManager {
         try {
             session.beginTransaction();
             test.getQuestions().add(question);
-            session.save(test);
+            session.saveOrUpdate(test);
+            session.getTransaction().commit();
+        } catch (RuntimeException ex) {
+            success = false;
+            session.getTransaction().rollback();
+            LOGGER.error(ex.toString());
+        }
+        return success;
+    }
+    
+    public boolean removeQuestionFromTest(Question question, Test test) {
+        boolean success = true;
+        Session session = sessionFactory.getCurrentSession();
+        
+        try {
+            session.beginTransaction();
+            test.getQuestions().remove(question);
+            session.saveOrUpdate(test);
+            session.getTransaction().commit();
+        } catch (RuntimeException ex) {
+            success = false;
+            session.getTransaction().rollback();
+            LOGGER.error(ex.toString());
+        }
+        return success;
+    }
+    
+    public boolean addGroup(Group group) {
+        boolean success = true;
+        Session session = sessionFactory.getCurrentSession();
+        
+        try {
+            session.beginTransaction();
+            session.save(group);
+            session.getTransaction().commit();
+        } catch (RuntimeException ex) {
+            success = false;
+            session.getTransaction().rollback();
+            LOGGER.error(ex.toString());
+        }
+        return success;
+    }
+    
+    public boolean addCourse(Course course) {
+        boolean success = true;
+        Session session = sessionFactory.getCurrentSession();
+        
+        try {
+            session.beginTransaction();
+            session.save(course);
+            session.getTransaction().commit();
+        } catch (RuntimeException ex) {
+            success = false;
+            session.getTransaction().rollback();
+            LOGGER.error(ex.toString());
+        }
+        return success;
+    }
+    
+    public boolean addChoiceToQuestion(Question question, Choice choice) {
+        boolean success = true;
+        Session session = sessionFactory.getCurrentSession();
+        
+        try {
+            session.beginTransaction();
+            question.getChoices().add(choice);
+            session.saveOrUpdate(question);
+            session.getTransaction().commit();
+        } catch (RuntimeException ex) {
+            success = false;
+            session.getTransaction().rollback();
+            LOGGER.error(ex.toString());
+        }
+        return success;
+    }
+    
+    public boolean removeChoiceFromQuestion(Question question, Choice choice) {
+        boolean success = true;
+        Session session = sessionFactory.getCurrentSession();
+        
+        try {
+            session.beginTransaction();
+            question.getChoices().remove(choice);
+            session.saveOrUpdate(question);
+            session.getTransaction().commit();
+        } catch (RuntimeException ex) {
+            success = false;
+            session.getTransaction().rollback();
+            LOGGER.error(ex.toString());
+        }
+        return success;
+    }
+   
+    public boolean addPermissionForGroup(Permission permission, Group group) {
+        boolean success = true;
+        Session session = sessionFactory.getCurrentSession();
+        
+        try {
+            session.beginTransaction();
+            group.getPermissions().add(permission);
+            session.saveOrUpdate(group);
+            session.getTransaction().commit();
+        } catch (RuntimeException ex) {
+            success = false;
+            session.getTransaction().rollback();
+            LOGGER.error(ex.toString());
+        }
+        return success;
+    }
+    
+    public boolean removePermissionFromGroup(Permission permission, Group group) {
+        boolean success = true;
+        Session session = sessionFactory.getCurrentSession();
+        
+        try {
+            session.beginTransaction();
+            group.getPermissions().remove(permission);
+            session.saveOrUpdate(group);
             session.getTransaction().commit();
         } catch (RuntimeException ex) {
             success = false;
