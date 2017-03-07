@@ -18,20 +18,17 @@ public class Test implements java.io.Serializable {
     private Date joinEndTime;
     private int timeLength;
     private int attemptLimit;
+    private boolean restricted;
     private Set<Attempt> attempts = new HashSet<>(0);
     private Set<Question> questions = new HashSet<>(0);
-
+    private Set<Account> examinees = new HashSet<>(0);
+    
     public Test() {
     }
 
-    public Test(int id, String name, int timeLength, int attemptLimit) {
-        this.id = id;
-        this.name = name;
-        this.timeLength = timeLength;
-        this.attemptLimit = attemptLimit;
-    }
-
-    public Test(int id, Account owner, String name, Date joinStartTime, Date joinEndTime, int timeLength, int attemptLimit, Set<Attempt> attempts, Set<Question> questions) {
+    public Test(int id, Account owner, String name, Date joinStartTime, Date joinEndTime, 
+            int timeLength, int attemptLimit, boolean restricted, 
+            Set<Attempt> attempts, Set<Question> questions, Set<Account> examinees) {
         this.id = id;
         this.owner = owner;
         this.name = name;
@@ -39,8 +36,10 @@ public class Test implements java.io.Serializable {
         this.joinEndTime = joinEndTime;
         this.timeLength = timeLength;
         this.attemptLimit = attemptLimit;
+        this.restricted = restricted;
         this.attempts = attempts;
         this.questions = questions;
+        this.examinees = examinees;
     }
 
     public int getId() {
@@ -113,6 +112,22 @@ public class Test implements java.io.Serializable {
 
     public void setQuestions(Set<Question> questions) {
         this.questions = questions;
+    }
+
+    public Set<Account> getExaminees() {
+        return examinees;
+    }
+
+    public void setExaminees(Set<Account> examinees) {
+        this.examinees = examinees;
+    }
+
+    public boolean isRestricted() {
+        return restricted;
+    }
+
+    public void setRestricted(boolean restricted) {
+        this.restricted = restricted;
     }
 
 }
