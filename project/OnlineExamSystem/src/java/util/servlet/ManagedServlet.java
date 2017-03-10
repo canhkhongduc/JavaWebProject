@@ -14,7 +14,7 @@ import javax.ws.rs.core.UriBuilder;
  * This class enforces some constraints on servlet registration, as well as
  * providing methods for easier servlet management.
  * <h3>What is a 'managed' servlet?</h3>
- * A servlet is considered to be 'managed' must satisfy the following
+ * A servlet considered to be 'managed' must satisfy the following
  * requirements:
  * <ul>
  * <li>Servlet must be registered (either in web.xml or annotations).</li>

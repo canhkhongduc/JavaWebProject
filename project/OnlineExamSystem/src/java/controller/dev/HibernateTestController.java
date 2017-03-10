@@ -8,11 +8,11 @@ import java.io.IOException;
 import java.text.DateFormat;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Account;
 import util.HashingUtil;
+import util.servlet.ManagedServlet;
 
 /**
  * Controller for testing Hibernate DAO objects.
@@ -20,7 +20,7 @@ import util.HashingUtil;
  * @author Le Cao Nguyen
  */
 @WebServlet("/dev/hbtest")
-public class HibernateTestController extends HttpServlet {
+public class HibernateTestController extends ManagedServlet {
 
     /**
      * Append a line constructed from format string and arguments to response
