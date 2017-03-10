@@ -1,3 +1,6 @@
+/*
+ * Copyright © 2017 Six Idiots Team
+ */
 package dao;
 
 import util.hibernate.HibernateUtil;
@@ -16,8 +19,9 @@ import org.slf4j.LoggerFactory;
  * @author nguyen
  */
 public class QuestionManager {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(QuestionManager.class);
-    
+
     private final SessionFactory sessionFactory;
 
     public QuestionManager() {
@@ -32,7 +36,7 @@ public class QuestionManager {
         session.getTransaction().commit();
         return questions;
     }
-    
+
     public List<Question> getQuestionsByCourse(Course course) {
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();

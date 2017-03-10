@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright © 2017 Six Idiots Team
  */
 package controller;
 
@@ -14,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +28,7 @@ import model.Test;
  *
  * @author Hai
  */
+@WebServlet("/settings")
 public class SettingsController extends HttpServlet {
 
     /**
@@ -87,7 +87,7 @@ public class SettingsController extends HttpServlet {
                     System.out.println(questions.size());
                     request.setAttribute("courses", courses);
                     request.setAttribute("questions", questions);
-                    
+
                 }
             }
             request.getRequestDispatcher("/WEB-INF/jsp/" + func + ".jsp?func=" + func).forward(request, response);

@@ -1,32 +1,30 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright © 2017 Six Idiots Team
  */
 package controller;
 
 import dao.ChoiceManager;
-import dao.QuestionManager;
-import javax.servlet.annotation.WebServlet;
-import model.Choice;
-import model.Question;
 import dao.CourseManager;
+import dao.QuestionManager;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.Account;
+import model.Choice;
 import model.Course;
 import model.Permission;
+import model.Question;
 
 /**
  *
  * @author Lam
  */
-@WebServlet(name = "TestController", urlPatterns = {"/test"})
+@WebServlet("/test")
 public class TestController extends HttpServlet {
 
     /**

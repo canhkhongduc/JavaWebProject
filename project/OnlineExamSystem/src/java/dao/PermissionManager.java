@@ -1,3 +1,6 @@
+/*
+ * Copyright © 2017 Six Idiots Team
+ */
 package dao;
 
 import util.hibernate.HibernateUtil;
@@ -14,8 +17,9 @@ import org.slf4j.LoggerFactory;
  * @author nguyen
  */
 public class PermissionManager {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(PermissionManager.class);
-    
+
     private final SessionFactory sessionFactory;
 
     public PermissionManager() {
@@ -30,7 +34,7 @@ public class PermissionManager {
         session.getTransaction().commit();
         return permissions;
     }
-    
+
     public Permission getPermission(String name) {
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();

@@ -1,3 +1,6 @@
+/*
+ * Copyright © 2017 Six Idiots Team
+ */
 package util.googleapi;
 
 import java.io.Serializable;

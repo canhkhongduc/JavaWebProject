@@ -1,16 +1,14 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright © 2017 Six Idiots Team
  */
 package controller;
 
 import dao.AccountManager;
 import dao.GroupManager;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,8 +18,9 @@ import model.Group;
 
 /**
  *
- * @author Canh Khong Duc <canhkdse04533 at FPT University>
+ * @author Canh Khong Duc
  */
+@WebServlet("/deletemaster")
 public class DeleteMasterController extends HttpServlet {
 
     /**

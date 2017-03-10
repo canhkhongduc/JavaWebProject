@@ -1,0 +1,7 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix}Copyright © 2017 Six Idiots Team
+<#if licenseLast??>
+${licenseLast}
+</#if>

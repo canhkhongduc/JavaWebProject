@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright © 2017 Six Idiots Team
  */
 package util;
 
@@ -16,6 +14,7 @@ import java.util.logging.Logger;
  * @author nguyen
  */
 public class HashingUtil {
+
     public static String generateHash(String original, String algorithm) {
         String hash = null;
         try {
@@ -28,15 +27,15 @@ public class HashingUtil {
         }
         return hash;
     }
-    
+
     public static String generateSHA1Hash(String original) {
         return generateHash(original, "SHA-1");
     }
-    
+
     public static String generateSHA256Hash(String original) {
         return generateHash(original, "SHA-256");
     }
-    
+
     public static String generateSHA512Hash(String original) {
         return generateHash(original, "SHA-512");
     }

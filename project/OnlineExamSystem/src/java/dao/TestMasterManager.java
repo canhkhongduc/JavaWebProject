@@ -1,11 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright © 2017 Six Idiots Team
  */
 package dao;
 
-import model.Account;
 import model.Attempt;
 import model.Choice;
 import model.Course;
@@ -24,14 +21,15 @@ import util.hibernate.HibernateUtil;
  * @author Niles
  */
 public class TestMasterManager {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(TestMasterManager.class);
-    
+
     private final SessionFactory sessionFactory;
-    
+
     public TestMasterManager() {
         this.sessionFactory = HibernateUtil.getSessionFactory();
     }
-    
+
     public boolean addTest(Test test) {
         boolean success = true;
         Session session = sessionFactory.getCurrentSession();
@@ -46,7 +44,7 @@ public class TestMasterManager {
         }
         return success;
     }
-    
+
     public boolean updateTest(Test test) {
         boolean success = true;
         Session session = sessionFactory.getCurrentSession();
@@ -61,7 +59,7 @@ public class TestMasterManager {
         }
         return success;
     }
-    
+
     public boolean deleteTest(Test test) {
         boolean success = true;
         Session session = sessionFactory.getCurrentSession();
@@ -76,7 +74,7 @@ public class TestMasterManager {
         }
         return success;
     }
-    
+
     public boolean addQuestion(Question question) {
         boolean success = true;
         Session session = sessionFactory.getCurrentSession();
@@ -91,7 +89,7 @@ public class TestMasterManager {
         }
         return success;
     }
-    
+
     public boolean updateQuestion(Question question) {
         boolean success = true;
         Session session = sessionFactory.getCurrentSession();
@@ -106,7 +104,7 @@ public class TestMasterManager {
         }
         return success;
     }
-    
+
     public boolean deleteQuestion(Question question) {
         boolean success = true;
         Session session = sessionFactory.getCurrentSession();
@@ -121,11 +119,11 @@ public class TestMasterManager {
         }
         return success;
     }
-    
+
     public boolean addStudentToPrivateTest(Attempt attempt) {
         boolean success = true;
         Session session = sessionFactory.getCurrentSession();
-        
+
         try {
             session.beginTransaction();
             session.save(attempt);
@@ -137,11 +135,11 @@ public class TestMasterManager {
         }
         return success;
     }
-    
+
     public boolean deleteStudentFromPrivateTest(Attempt attempt) {
         boolean success = true;
         Session session = sessionFactory.getCurrentSession();
-        
+
         try {
             session.beginTransaction();
             session.delete(attempt);
@@ -153,11 +151,11 @@ public class TestMasterManager {
         }
         return success;
     }
-    
+
     public boolean addQuestionToTest(Question question, Test test) {
         boolean success = true;
         Session session = sessionFactory.getCurrentSession();
-        
+
         try {
             session.beginTransaction();
             test.getQuestions().add(question);
@@ -170,11 +168,11 @@ public class TestMasterManager {
         }
         return success;
     }
-    
+
     public boolean removeQuestionFromTest(Question question, Test test) {
         boolean success = true;
         Session session = sessionFactory.getCurrentSession();
-        
+
         try {
             session.beginTransaction();
             test.getQuestions().remove(question);
@@ -187,11 +185,11 @@ public class TestMasterManager {
         }
         return success;
     }
-    
+
     public boolean addGroup(Group group) {
         boolean success = true;
         Session session = sessionFactory.getCurrentSession();
-        
+
         try {
             session.beginTransaction();
             session.save(group);
@@ -203,11 +201,11 @@ public class TestMasterManager {
         }
         return success;
     }
-    
+
     public boolean addCourse(Course course) {
         boolean success = true;
         Session session = sessionFactory.getCurrentSession();
-        
+
         try {
             session.beginTransaction();
             session.save(course);
@@ -219,11 +217,11 @@ public class TestMasterManager {
         }
         return success;
     }
-    
+
     public boolean addChoiceToQuestion(Question question, Choice choice) {
         boolean success = true;
         Session session = sessionFactory.getCurrentSession();
-        
+
         try {
             session.beginTransaction();
             question.getChoices().add(choice);
@@ -236,11 +234,11 @@ public class TestMasterManager {
         }
         return success;
     }
-    
+
     public boolean removeChoiceFromQuestion(Question question, Choice choice) {
         boolean success = true;
         Session session = sessionFactory.getCurrentSession();
-        
+
         try {
             session.beginTransaction();
             question.getChoices().remove(choice);
@@ -253,11 +251,11 @@ public class TestMasterManager {
         }
         return success;
     }
-   
+
     public boolean addPermissionForGroup(Permission permission, Group group) {
         boolean success = true;
         Session session = sessionFactory.getCurrentSession();
-        
+
         try {
             session.beginTransaction();
             group.getPermissions().add(permission);
@@ -270,11 +268,11 @@ public class TestMasterManager {
         }
         return success;
     }
-    
+
     public boolean removePermissionFromGroup(Permission permission, Group group) {
         boolean success = true;
         Session session = sessionFactory.getCurrentSession();
-        
+
         try {
             session.beginTransaction();
             group.getPermissions().remove(permission);

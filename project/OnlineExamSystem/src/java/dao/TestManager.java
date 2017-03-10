@@ -1,3 +1,6 @@
+/*
+ * Copyright © 2017 Six Idiots Team
+ */
 package dao;
 
 import util.hibernate.HibernateUtil;
@@ -17,8 +20,9 @@ import org.slf4j.LoggerFactory;
  * @author nguyen
  */
 public class TestManager {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(TestManager.class);
-    
+
     private final SessionFactory sessionFactory;
 
     public TestManager() {
@@ -34,7 +38,7 @@ public class TestManager {
         session.getTransaction().commit();
         return tests;
     }
-    
+
     public List<Test> getTestsByAccount(Account account) {
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
@@ -45,7 +49,7 @@ public class TestManager {
         session.getTransaction().commit();
         return tests;
     }
-    
+
     public Test getTest(int id) {
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
@@ -53,7 +57,7 @@ public class TestManager {
         session.getTransaction().commit();
         return test;
     }
-    
+
     public boolean addTest(Test test) {
         boolean success = true;
         Session session = sessionFactory.getCurrentSession();
@@ -68,7 +72,7 @@ public class TestManager {
         }
         return success;
     }
-    
+
     public boolean updateTest(Test test) {
         boolean success = true;
         Session session = sessionFactory.getCurrentSession();
@@ -83,7 +87,7 @@ public class TestManager {
         }
         return success;
     }
-    
+
     public boolean deleteTest(Test test) {
         boolean success = true;
         Session session = sessionFactory.getCurrentSession();

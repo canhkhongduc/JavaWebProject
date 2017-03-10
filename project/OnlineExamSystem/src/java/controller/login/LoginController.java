@@ -1,54 +1,56 @@
-package controller.authentication;
+/*
+ * Copyright © 2017 Six Idiots Team
+ */
+package controller.login;
 
 import dao.AccountManager;
 import dao.GroupManager;
 import java.io.IOException;
 import java.util.Date;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.core.UriBuilder;
 import model.Account;
 import model.Group;
 import util.HashingUtil;
 import util.googleapi.GoogleProfile;
+import util.servlet.ManagedServlet;
 
 /**
  *
  * @author nguyen
  */
-public class LoginController extends HttpServlet {
-
-    private static final long serialVersionUID = 1846816234516327701L;
+@WebServlet("/login")
+public class LoginController extends ManagedServlet {
 
     private final AccountManager accountManager = new AccountManager();
 
-    public static void responseLoginError(HttpServletResponse response, LoginResult result)
+    public void redirectLoginError(HttpServletResponse response, LoginError error)
             throws ServletException, IOException {
-        UriBuilder builder = UriBuilder.fromUri("login/error").queryParam("errorId", result.name().toLowerCase());
-        response.sendRedirect(builder.build().toString());
+        String uri = buildUri(getServletURI(LoginErrorController.class), "errorId", error.name().toLowerCase());
+        response.sendRedirect(uri);
     }
 
     private boolean isValidDomain(String email) {
-        // TODO: Store allowed domain in application settings
+        // TODO: Move allowed domain to controller parameter or application configuration
         return email.endsWith("@fpt.edu.vn");
     }
 
-    private LoginResult verifyLogin(String username, String password) {
+    private LoginError verifyLogin(String username, String password) {
         if (username == null || password == null) {
-            return LoginResult.BAD_REQUEST;
+            return LoginError.BAD_REQUEST;
         }
         Account account = accountManager.getAccount(username);
         if (account == null) {
-            return LoginResult.USERNAME_DOES_NOT_EXIST;
+            return LoginError.USERNAME_DOES_NOT_EXIST;
         }
         String passwordHash = HashingUtil.generateSHA512Hash(password);
         if (!passwordHash.equals(account.getPassword())) {
-            return LoginResult.INCORRECT_PASSWORD;
+            return LoginError.INCORRECT_PASSWORD;
         }
-        return LoginResult.SUCCESS;
+        return LoginError.NONE;
     }
 
     private boolean addNewStudentAccount(AccountManager manager, GoogleProfile profile) {
@@ -68,39 +70,37 @@ public class LoginController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        LoginResult loginResult;
         GoogleProfile googleProfile = (GoogleProfile) request.getAttribute("googleProfile");
-        
+        LoginError error;
         String username, password;
         if (googleProfile != null) {
             username = googleProfile.getEmail();
             password = googleProfile.getId();
-            if (!isValidDomain(username)) {
-                loginResult = LoginResult.DOMAIN_NOT_ALLOWED;
-            } else {
-                loginResult = verifyLogin(username, password);
-                if (loginResult == LoginResult.USERNAME_DOES_NOT_EXIST) {
+            if (isValidDomain(username)) {
+                error = verifyLogin(username, password);
+                if (error == LoginError.USERNAME_DOES_NOT_EXIST) {
                     if (addNewStudentAccount(accountManager, googleProfile)) {
-                        loginResult = LoginResult.SUCCESS;
+                        error = LoginError.NONE;
                     }
                 }
+            } else {
+                error = LoginError.DOMAIN_NOT_ALLOWED;
             }
         } else {
             request.setCharacterEncoding("UTF-8");
             username = request.getParameter("username");
             password = request.getParameter("password");
-            loginResult = verifyLogin(username, password);
+            error = verifyLogin(username, password);
         }
 
-        switch (loginResult) {
-            case SUCCESS:
+        switch (error) {
+            case NONE:
                 Account account = accountManager.getAccount(username);
                 session.setAttribute("account", account);
-                response.sendRedirect("");
+                response.sendRedirect(getContextPath());
                 break;
             default:
-                responseLoginError(response, loginResult);
-                break;
+                redirectLoginError(response, error);
         }
     }
 

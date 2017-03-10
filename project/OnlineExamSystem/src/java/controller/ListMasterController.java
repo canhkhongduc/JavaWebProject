@@ -1,16 +1,14 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright © 2017 Six Idiots Team
  */
 package controller;
 
 import dao.AccountManager;
 import dao.GroupManager;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,8 +18,9 @@ import model.Group;
 
 /**
  *
- * @author Canh Khong Duc <canhkdse04533 at FPT University>
+ * @author Canh Khong Duc
  */
+@WebServlet("/listmaster")
 public class ListMasterController extends HttpServlet {
 
     /**
@@ -35,13 +34,13 @@ public class ListMasterController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            AccountManager am = new AccountManager();
-            GroupManager gm = new GroupManager();
-            Group group = gm.getGroup("testmaster");
-            List<Account> masters = am.getAccountsByGroup(group);
-            HttpSession session = request.getSession();
-            session.setAttribute("masters", masters);
-            response.sendRedirect("Settings.jsp");
+        AccountManager am = new AccountManager();
+        GroupManager gm = new GroupManager();
+        Group group = gm.getGroup("testmaster");
+        List<Account> masters = am.getAccountsByGroup(group);
+        HttpSession session = request.getSession();
+        session.setAttribute("masters", masters);
+        response.sendRedirect("Settings.jsp");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -1,3 +1,6 @@
+/*
+ * Copyright © 2017 Six Idiots Team
+ */
 package util.googleapi;
 
 import com.github.scribejava.apis.GoogleApi20;
@@ -73,7 +76,7 @@ public class GoogleOAuthService {
         }
         return service.getAuthorizationUrl(params);
     }
-    
+
     /**
      * Exchange authorization code for access token, then save it to session
      * scope.

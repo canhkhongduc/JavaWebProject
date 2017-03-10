@@ -1,31 +1,36 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2017 Le Cao Nguyen
  */
-package controller.authentication;
+package controller.login;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import util.googleapi.GoogleOAuthService;
-import util.HashingUtil;
+import util.servlet.ManagedServlet;
 
 /**
  *
- * @author nguyen
+ * @author Le Cao Nguyen
  */
-public class GoogleOAuthLoginController extends HttpServlet {
-
-    private static final long serialVersionUID = 5319716120169294969L;
+@WebServlet("/login/error")
+public class LoginErrorController extends ManagedServlet {
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        GoogleOAuthService service = new GoogleOAuthService();
-        String state = HashingUtil.generateSHA1Hash(request.getSession().getId());
-        response.sendRedirect(service.getAuthorizationUrl(state));
+        String errorId = request.getParameter("errorId");
+        if (errorId == null) {
+            response.sendError(400);
+            return;
+        }
+        try {
+            LoginError error = LoginError.valueOf(errorId.toUpperCase());
+            request.setAttribute("message", error.getMessage());
+            getCorrespondingViewDispatcher().forward(request, response);
+        } catch (IllegalArgumentException ex) {
+            response.sendError(400);
+        }
     }
 
     @Override

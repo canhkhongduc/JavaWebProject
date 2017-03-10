@@ -1,3 +1,6 @@
+/*
+ * Copyright © 2017 Six Idiots Team
+ */
 package dao;
 
 import util.hibernate.HibernateUtil;
@@ -18,8 +21,9 @@ import org.slf4j.LoggerFactory;
  * @author nguyen
  */
 public class AccountManager {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountManager.class);
-    
+
     private final SessionFactory sessionFactory;
 
     public AccountManager() {
@@ -35,7 +39,7 @@ public class AccountManager {
         session.getTransaction().commit();
         return accounts;
     }
-    
+
     public List<Account> getAccountsByGroup(Group group) {
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
@@ -46,7 +50,7 @@ public class AccountManager {
         session.getTransaction().commit();
         return accounts;
     }
-    
+
     public Account getAccount(int id) {
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
@@ -65,7 +69,7 @@ public class AccountManager {
         session.getTransaction().commit();
         return account;
     }
-    
+
     public boolean hasAccount(int id) {
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
@@ -76,7 +80,7 @@ public class AccountManager {
         session.getTransaction().commit();
         return count > 0;
     }
-    
+
     public boolean hasAccount(String username) {
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
@@ -87,7 +91,7 @@ public class AccountManager {
         session.getTransaction().commit();
         return count > 0;
     }
-    
+
     public boolean addAccount(Account account) {
         boolean success = true;
         Session session = sessionFactory.getCurrentSession();
@@ -102,7 +106,7 @@ public class AccountManager {
         }
         return success;
     }
-    
+
     public boolean updateAccount(Account account) {
         boolean success = true;
         Session session = sessionFactory.getCurrentSession();
@@ -117,7 +121,7 @@ public class AccountManager {
         }
         return success;
     }
-    
+
     public boolean deleteAccount(Account account) {
         boolean success = true;
         Session session = sessionFactory.getCurrentSession();

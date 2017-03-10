@@ -1,25 +1,23 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright © 2017 Six Idiots Team
  */
-package controller.authentication;
+package controller.login;
 
 import com.github.scribejava.core.model.OAuth2AccessToken;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import util.googleapi.GoogleProfile;
-import util.googleapi.GoogleOAuthService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.HashingUtil;
+import util.googleapi.GoogleOAuthService;
+import util.googleapi.GoogleProfile;
 import util.googleapi.exception.GoogleAPIRequestException;
 import util.googleapi.exception.GoogleAPIResponseParseException;
 import util.googleapi.exception.TokenExchangeException;
-import util.servlet.ServletMethodInterface;
+import util.servlet.ManagedServlet;
 
 /**
  * Controller for handling callback request from Google's OAuth server.<br>
@@ -34,15 +32,21 @@ import util.servlet.ServletMethodInterface;
  *
  * @author nguyen
  */
-public class GoogleOAuthCallbackController extends HttpServlet implements ServletMethodInterface {
+@WebServlet("/oauth2callback")
+public class OAuth2CallbackController extends ManagedServlet {
+    private static final Logger LOGGER = LoggerFactory.getLogger(OAuth2CallbackController.class);
 
-    private static final long serialVersionUID = -5302619356988689274L;
-
+    public void redirectLoginError(HttpServletResponse response, LoginError error)
+            throws ServletException, IOException {
+        String uri = buildUri(getServletURI(LoginErrorController.class), "errorId", error.name().toLowerCase());
+        response.sendRedirect(uri);
+    }
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String code = request.getParameter("code");
         if (code == null) {
-            LoginController.responseLoginError(response, LoginResult.OAUTH_ACCESS_DENIED);
+            redirectLoginError(response, LoginError.OAUTH_ACCESS_DENIED);
             return;
         }
 
@@ -50,7 +54,7 @@ public class GoogleOAuthCallbackController extends HttpServlet implements Servle
         if (state != null) {
             String verifyState = HashingUtil.generateSHA1Hash(request.getSession().getId());
             if (!state.equals(verifyState)) {
-                LoginController.responseLoginError(response, LoginResult.OAUTH_INVALID_STATE);
+                redirectLoginError(response, LoginError.OAUTH_INVALID_STATE);
                 return;
             }
         }
@@ -60,50 +64,22 @@ public class GoogleOAuthCallbackController extends HttpServlet implements Servle
             OAuth2AccessToken token = service.exchangeCodeForToken(code);
             GoogleProfile profile = service.getGoogleProfile(token);
             request.setAttribute("googleProfile", profile);
-            request.getRequestDispatcher("login").forward(request, response);
+            getServletDispatcher(LoginController.class).forward(request, response);
         } catch (TokenExchangeException | GoogleAPIRequestException | GoogleAPIResponseParseException ex) {
-            LoginController.responseLoginError(response, LoginResult.OAUTH_PROFILE_RETRIEVAL_ERROR);
-            Logger.getLogger(GoogleOAuthCallbackController.class.getName()).log(Level.SEVERE, null, ex);
+            redirectLoginError(response, LoginError.GOOGLE_PROFILE_RETRIEVAL_ERROR);
+            LOGGER.error(null, ex);
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }
