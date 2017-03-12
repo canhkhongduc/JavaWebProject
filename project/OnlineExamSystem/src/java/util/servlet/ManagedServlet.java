@@ -26,9 +26,10 @@ import org.slf4j.LoggerFactory;
  * </ul>
  * <h3>Recommendations</h3>
  * It is recommended that servlet's class name should be in the form of
- * <b><u>CategorySubcategoryAction</u>Controller</b>, and the mapped URL should
- * be <i>/category/subcategory/action</i>. For example, a servlet class named
- * <b>SubjectAddController</b> should be mapped to <i>/subject/add</i>.<br><br>
+ * <b><u>CategoryAction</u>Controller</b>, and the mapped URL should be
+ * <i>.../category/action</i>. For example, a servlet class named
+ * <b>SubjectAddController</b> should be mapped to <i>/subject/add</i> or
+ * <i>/manage/subject/add</i>.<br><br>
  * Note: by setting the <i>strictServletNameAndUrl</i> context parameter value
  * to
  * <i>true</i>, the name and URL of the servlet will be checked against the
@@ -213,7 +214,8 @@ public class ManagedServlet extends HttpServlet {
      * <li>By default, the relative path of the JSP file is the servlet's URL
      * plus the <i>.jsp</i> suffix (e.g: <i>/subject/list.jsp</i>).</li>
      * <li>If no JSP file exists at that path, then it will test another path,
-     * which is is the servlet's URL plus the <i>/index.jsp</i> suffix (e.g: <i>/subject/list/index.jsp</i>).</li>
+     * which is is the servlet's URL plus the <i>/index.jsp</i> suffix (e.g:
+     * <i>/subject/list/index.jsp</i>).</li>
      * </ol>
      * Then the method will return the request dispatcher of the JSP file.
      *
