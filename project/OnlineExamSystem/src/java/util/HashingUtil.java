@@ -6,24 +6,27 @@ package util;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  *
  * @author nguyen
  */
 public class HashingUtil {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(HashingUtil.class);
+    
     public static String generateHash(String original, String algorithm) {
         String hash = null;
         try {
             MessageDigest md = MessageDigest.getInstance(algorithm);
             md.update(original.getBytes("UTF-8"));
             byte[] bytes = md.digest();
-            hash = String.format("%064x", new java.math.BigInteger(1, bytes));
+            hash = "";
+            for (byte b : bytes) {
+                hash += String.format("%02x", b);
+            }
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
-            Logger.getLogger(HashingUtil.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error(null, ex);
         }
         return hash;
     }
