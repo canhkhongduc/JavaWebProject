@@ -3,22 +3,25 @@
  */
 package util.servlet;
 
+import java.net.MalformedURLException;
 import java.util.Optional;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 import javax.servlet.http.HttpServlet;
 import javax.ws.rs.core.UriBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class enforces some constraints on servlet registration, as well as
  * providing methods for easier servlet management.
  * <h3>What is a 'managed' servlet?</h3>
- * A servlet considered to be 'managed' must satisfy the following
- * requirements:
+ * A servlet considered to be 'managed' must satisfy the following requirements:
  * <ul>
  * <li>Servlet must be registered (either in web.xml or annotations).</li>
- * <li>Servlet's name must be the same as servlet's fully qualified class name.</li>
+ * <li>Servlet's name must be the same as servlet's fully qualified class
+ * name.</li>
  * <li>Servlet must be mapped to exactly one URL.</li>
  * </ul>
  * <h3>Recommendations</h3>
@@ -35,6 +38,7 @@ import javax.ws.rs.core.UriBuilder;
  */
 public class ManagedServlet extends HttpServlet {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ManagedServlet.class);
     private static final long serialVersionUID = 1L;
 
     /**
@@ -48,12 +52,15 @@ public class ManagedServlet extends HttpServlet {
 
     /**
      * Return the context path.<br>
-     * This method is a shorthand of {@link javax.servlet.ServletContext#getContextPath() ServletContext.getContextPath()}.
+     * This method is a shorthand of
+     * {@link javax.servlet.ServletContext#getContextPath() ServletContext.getContextPath()}.
+     *
      * @return The context path.
      */
     public String getContextPath() {
         return getServletContext().getContextPath();
     }
+
     /**
      * Return the root path where all the JSP files are stored.<br>
      * <h3>Details</h3>
@@ -107,10 +114,9 @@ public class ManagedServlet extends HttpServlet {
      * Return the URL mapped to this servlet.
      *
      * @return The URL mapped to this servlet.
-     * @throws ServletException
      */
-    public String getServletURI() throws ServletException {
-        return getServletURI(getServletName());
+    public String getServletURL() {
+        return ManagedServlet.this.getServletURL(getServletName());
     }
 
     /**
@@ -119,8 +125,8 @@ public class ManagedServlet extends HttpServlet {
      * @param servletClass The class of the managed servlet.
      * @return The URL mapped to the servlet.
      */
-    public String getServletURI(Class<? extends ManagedServlet> servletClass) {
-        return getServletURI(servletClass.getName());
+    public String getServletURL(Class<? extends ManagedServlet> servletClass) {
+        return ManagedServlet.this.getServletURL(servletClass.getName());
     }
 
     /**
@@ -133,7 +139,7 @@ public class ManagedServlet extends HttpServlet {
      * @param servletName The name of the servlet.
      * @return The URL mapped to the servlet.
      */
-    public String getServletURI(String servletName) {
+    public String getServletURL(String servletName) {
         ServletRegistration registration = getServletRegistration(servletName);
         if (registration == null) {
             return null;
@@ -201,17 +207,33 @@ public class ManagedServlet extends HttpServlet {
      * Return the {@link javax.servlet.RequestDispatcher RequestDispatcher}
      * object of the view (JSP file) corresponding to a specified servlet.
      * <h3>Details</h3>
-     * This method will assume that the JSP 'relative' path is the URL mapped to
-     * the servlet plus the <i>.jsp</i> extension. Then the method will return
-     * the request dispatcher of the assumed JSP.
+     * This method will search for the JSP file to be used as a view for a
+     * controller servlet:
+     * <ol>
+     * <li>By default, the relative path of the JSP file is the servlet's URL
+     * plus the <i>.jsp</i> suffix (e.g: <i>/subject/list.jsp</i>).</li>
+     * <li>If no JSP file exists at that path, then it will test another path,
+     * which is is the servlet's URL plus the <i>/index.jsp</i> suffix (e.g: <i>/subject/list/index.jsp</i>).</li>
+     * </ol>
+     * Then the method will return the request dispatcher of the JSP file.
      *
      * @param servletName The name of the servlet.
      * @return The request dispatcher of the corresponding view.
      */
     public RequestDispatcher getCorrespondingViewDispatcher(String servletName) {
-        String servletUrl = getServletURI(servletName);
-        String viewUrl = getJSPPath(servletUrl + ".jsp");
-        return getServletContext().getRequestDispatcher(viewUrl);
+        String servletUrl = ManagedServlet.this.getServletURL(servletName);
+        String viewPath = getJSPPath(servletUrl + ".jsp");
+        try {
+            if (getServletContext().getResource(viewPath) == null) {
+                String viewPath2 = getJSPPath(servletUrl + "/index.jsp");
+                if (getServletContext().getResource(viewPath2) != null) {
+                    viewPath = viewPath2;
+                }
+            }
+        } catch (MalformedURLException ex) {
+            LOGGER.error(null, ex);
+        }
+        return getServletContext().getRequestDispatcher(viewPath);
     }
 
     /**
@@ -241,7 +263,7 @@ public class ManagedServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         String servletName = getServletName();
-        String servletUrl = getServletURI();
+        String servletUrl = getServletURL();
         if (!this.getClass().getName().equals(servletName)) {
             throw new ServletException("Servlet's name must be the same as servlet's class name.");
         }

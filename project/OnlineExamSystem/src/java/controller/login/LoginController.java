@@ -29,7 +29,7 @@ public class LoginController extends ManagedServlet {
 
     public void redirectLoginError(HttpServletResponse response, LoginError error)
             throws ServletException, IOException {
-        String uri = buildUri(getServletURI(LoginErrorController.class), "errorId", error.name().toLowerCase());
+        String uri = buildUri(getServletURL(LoginErrorController.class), "errorId", error.name().toLowerCase());
         response.sendRedirect(uri);
     }
 
