@@ -9,6 +9,9 @@
         <param-name>jspRootPath</param-name>
         <param-value>/WEB-INF/jsp</param-value>
     </context-param>
+    <listener>
+        <listener-class>app.ApplicationContextListener</listener-class>
+    </listener>
     <servlet id="jsp">
         <servlet-name>jsp</servlet-name>
         <servlet-class>org.apache.jasper.servlet.JspServlet</servlet-class>
