@@ -1,60 +1,68 @@
 package model;
 
-import java.util.Date;
+import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
+import javax.persistence.OneToOne;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.NaturalId;
 
 @Entity
-public class Account implements java.io.Serializable {
+public class Account implements Serializable {
 
-    private static final long serialVersionUID = 2243509845765364807L;
+    private static final long serialVersionUID = 8314745598970424584L;
 
-    private Integer id;
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @NaturalId
     private String username;
+
+    @Column(length = 128)
     private String password;
-    private String fullName;
-    private Boolean gender;
-    private Date birthdate;
-    private String email;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "Account_Role", joinColumns = @JoinColumn(name = "accountId"), inverseJoinColumns = @JoinColumn(name = "roleName"))
+    @Cascade(CascadeType.SAVE_UPDATE)
     private Set<Role> roles = new HashSet<>(0);
+
+    @OneToOne(mappedBy = "account")
+    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
+    private AccountProfile profile;
 
     public Account() {
     }
 
-    public Account(Integer id, String username, String password, String fullName, Boolean gender, Date birthdate, String email) {
-        this.id = id;
+    public Account(String username, String password) {
         this.username = username;
         this.password = password;
-        this.fullName = fullName;
-        this.gender = gender;
-        this.birthdate = birthdate;
-        this.email = email;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Integer getId() {
+    public Account(String username, String password, AccountProfile profile) {
+        this.username = username;
+        this.password = password;
+        this.profile = profile;
+    }
+
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    @Column(unique = true, nullable = false)
     public String getUsername() {
         return this.username;
     }
@@ -63,7 +71,6 @@ public class Account implements java.io.Serializable {
         this.username = username;
     }
 
-    @Column(length = 128)
     public String getPassword() {
         return this.password;
     }
@@ -71,47 +78,45 @@ public class Account implements java.io.Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    public String getFullName() {
-        return this.fullName;
-    }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public Boolean getGender() {
-        return this.gender;
-    }
-
-    public void setGender(Boolean gender) {
-        this.gender = gender;
-    }
-
-    @Temporal(TemporalType.DATE)
-    public Date getBirthdate() {
-        return this.birthdate;
-    }
-
-    public void setBirthdate(Date birthdate) {
-        this.birthdate = birthdate;
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "Account_Role", joinColumns = @JoinColumn(name = "accountId"), inverseJoinColumns = @JoinColumn(name = "roleName"))
     public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
+
+    public void removeRole(Role role) {
+        this.roles.remove(role);
+    }
+
+    public AccountProfile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(AccountProfile profile) {
+        this.profile = profile;
+        profile.setAccount(this);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.username);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Account other = (Account) obj;
+        return Objects.equals(this.username, other.username);
     }
 }
