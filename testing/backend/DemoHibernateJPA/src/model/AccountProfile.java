@@ -17,17 +17,17 @@ public class AccountProfile implements Serializable {
     private static final long serialVersionUID = -8205509774590071423L;
 
     @Id
-    private Long id;
+    private String username;
 
     @OneToOne
     @MapsId
-    @JoinColumn(name = "accountId", referencedColumnName = "id")
+    @JoinColumn(name = "username", referencedColumnName = "username")
     private Account account;
 
     @Column(columnDefinition = "nvarchar(255)")
     private String fullName;
 
-    private Boolean gender = Boolean.TRUE;
+    private Boolean gender;
 
     @Temporal(TemporalType.DATE)
     private Date birthdate;
@@ -37,6 +37,11 @@ public class AccountProfile implements Serializable {
     public AccountProfile() {
     }
 
+    // Here intentionally use default access modifier
+    AccountProfile(Account account) {
+        this.account = account;
+    }
+
     public AccountProfile(String fullName, Boolean gender, Date birthdate, String email) {
         this.fullName = fullName;
         this.gender = gender;
@@ -44,19 +49,17 @@ public class AccountProfile implements Serializable {
         this.email = email;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    // Here intentionally use default access modifier
+    String getUsername() {
+        return username;
     }
 
     public Account getAccount() {
         return account;
     }
 
-    public void setAccount(Account account) {
+    // Here intentionally use default access modifier
+    void setAccount(Account account) {
         this.account = account;
     }
 

@@ -1,10 +1,14 @@
 package model;
 
 import java.io.Serializable;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OrderBy;
 
 @Entity
 public class Role implements Serializable {
@@ -17,6 +21,10 @@ public class Role implements Serializable {
 
     @Column(nullable = false)
     private String description;
+
+    @ManyToMany(mappedBy = "roles")
+    @OrderBy("username")
+    private Set<Account> accounts = new LinkedHashSet<>(0);
 
     public Role() {
     }
@@ -40,6 +48,10 @@ public class Role implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Set<Account> getAccounts() {
+        return accounts;
     }
 
     @Override

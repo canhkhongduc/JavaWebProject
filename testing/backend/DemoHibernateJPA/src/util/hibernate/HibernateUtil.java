@@ -1,3 +1,6 @@
+/*
+ * Copyright © 2017 Six Idiots Team
+ */
 package util.hibernate;
 
 import org.hibernate.HibernateException;
@@ -11,15 +14,15 @@ import org.hibernate.service.ServiceRegistry;
  * @author nguyen
  */
 public class HibernateUtil {
+    private static final Configuration CONFIGURATION;
+    private static final SessionFactory SESSION_FACTORY;
 
-    private static final SessionFactory SESSION_FACTORY = buildSessionFactory();
-
-    private static SessionFactory buildSessionFactory() {
+    static {
         try {
-            Configuration configuration = new Configuration();
-            configuration.configure();
-            ServiceRegistry registry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
-            return configuration.buildSessionFactory(registry);
+            CONFIGURATION = new Configuration();
+            CONFIGURATION.configure();
+            ServiceRegistry registry = new StandardServiceRegistryBuilder().applySettings(CONFIGURATION.getProperties()).build();
+            SESSION_FACTORY = CONFIGURATION.buildSessionFactory(registry);
         } catch (HibernateException ex) {
             System.err.println("Initial SessionFactory creation failed." + ex);
             throw new ExceptionInInitializerError(ex);
@@ -28,5 +31,9 @@ public class HibernateUtil {
 
     public static SessionFactory getSessionFactory() {
         return SESSION_FACTORY;
+    }
+    
+    public static Configuration getConfiguration() {
+        return CONFIGURATION;
     }
 }

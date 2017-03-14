@@ -2,7 +2,7 @@ package model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Entity;
@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.hibernate.annotations.Cascade;
@@ -45,7 +46,8 @@ public class Attempt implements Serializable {
     @ManyToMany
     @JoinTable(name = "Attempt_Choice", joinColumns = @JoinColumn(name = "attemptId"), inverseJoinColumns = @JoinColumn(name = "choiceId"))
     @Cascade(CascadeType.SAVE_UPDATE)
-    private Set<Choice> choices = new HashSet<>(0);
+    @OrderBy("id")
+    private Set<Choice> choices = new LinkedHashSet<>(0);
 
     public Attempt() {
     }

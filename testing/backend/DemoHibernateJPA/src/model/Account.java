@@ -7,7 +7,6 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -15,7 +14,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.NaturalId;
 
 @Entity
 public class Account implements Serializable {
@@ -23,23 +21,19 @@ public class Account implements Serializable {
     private static final long serialVersionUID = 8314745598970424584L;
 
     @Id
-    @GeneratedValue
-    private Long id;
-
-    @NaturalId
     private String username;
 
     @Column(length = 128)
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "Account_Role", joinColumns = @JoinColumn(name = "accountId"), inverseJoinColumns = @JoinColumn(name = "roleName"))
+    @JoinTable(joinColumns = @JoinColumn(name = "username"), inverseJoinColumns = @JoinColumn(name = "role"))
     @Cascade(CascadeType.SAVE_UPDATE)
     private Set<Role> roles = new HashSet<>(0);
 
     @OneToOne(mappedBy = "account")
     @Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
-    private AccountProfile profile;
+    private AccountProfile profile = new AccountProfile(this);
 
     public Account() {
     }
@@ -47,20 +41,6 @@ public class Account implements Serializable {
     public Account(String username, String password) {
         this.username = username;
         this.password = password;
-    }
-
-    public Account(String username, String password, AccountProfile profile) {
-        this.username = username;
-        this.password = password;
-        this.profile = profile;
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getUsername() {

@@ -2,7 +2,7 @@ package model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
@@ -14,6 +14,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.hibernate.annotations.Cascade;
@@ -49,17 +50,20 @@ public class Test implements Serializable {
 
     @OneToMany(mappedBy = "test", orphanRemoval = true)
     @Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
-    private Set<Attempt> attempts = new HashSet<>(0);
+    @OrderBy("id")
+    private Set<Attempt> attempts = new LinkedHashSet<>(0);
 
     @ManyToMany
     @JoinTable(name = "Test_Question", joinColumns = @JoinColumn(name = "testId"), inverseJoinColumns = @JoinColumn(name = "questionId"))
     @Cascade(CascadeType.SAVE_UPDATE)
-    private Set<Question> questions = new HashSet<>(0);
+    @OrderBy("id")
+    private Set<Question> questions = new LinkedHashSet<>(0);
 
     @ManyToMany
     @JoinTable(name = "Test_Examinee", joinColumns = @JoinColumn(name = "testId"), inverseJoinColumns = @JoinColumn(name = "examinee"))
     @Cascade(CascadeType.SAVE_UPDATE)
-    private Set<Account> examinees = new HashSet<>(0);
+    @OrderBy("username")
+    private Set<Account> examinees = new LinkedHashSet<>(0);
 
     public Test() {
     }

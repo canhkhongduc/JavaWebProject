@@ -1,7 +1,6 @@
 package model;
 
-import java.util.HashSet;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
@@ -11,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -36,7 +36,8 @@ public class Question implements java.io.Serializable {
 
     @OneToMany(mappedBy = "question", orphanRemoval = true)
     @Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
-    private Set<Choice> choices = new HashSet<>(0);
+    @OrderBy("id")
+    private Set<Choice> choices = new LinkedHashSet<>(0);
 
     public Question() {
     }
@@ -116,6 +117,5 @@ public class Question implements java.io.Serializable {
         final Question other = (Question) obj;
         return (this.id != null) && Objects.equals(this.id, other.id);
     }
-    
-    
+
 }
