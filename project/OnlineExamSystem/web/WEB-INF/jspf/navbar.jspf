@@ -12,7 +12,7 @@
             </c:if>
             <c:if test="${not empty sessionScope.account}">
                 <a id="account-dropdown-button" class="dropdown-button teal lighten-3" href="#" data-activates="account-dropdown-menu">
-                    <span class="black-text">${sessionScope.account.fullName}</span>
+                    <span class="black-text">${sessionScope.account.profile.fullName}</span>
                 </a>
                 <ul id="account-dropdown-menu" class="dropdown-content">
                     <li><a href="#">Profile</a></li>

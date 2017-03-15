@@ -38,8 +38,7 @@ public class OAuth2CallbackController extends ManagedServlet {
 
     public void redirectLoginError(HttpServletResponse response, LoginError error)
             throws ServletException, IOException {
-        String uri = buildUri(getServletURL(LoginErrorController.class), "errorId", error.name().toLowerCase());
-        response.sendRedirect(uri);
+        redirect(response, getServletURL(LoginErrorController.class), "errorId", error.name().toLowerCase());
     }
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)

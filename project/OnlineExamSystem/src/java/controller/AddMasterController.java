@@ -4,7 +4,7 @@
 package controller;
 
 import dao.AccountManager;
-import dao.GroupManager;
+import dao.RoleManager;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.Account;
-import model.Group;
+import model.Role;
 
 /**
  *
@@ -35,11 +35,12 @@ public class AddMasterController extends HttpServlet {
             throws ServletException, IOException {
         String email = request.getParameter("email");
         AccountManager am = new AccountManager();
-        GroupManager gm = new GroupManager();
+        RoleManager rm = new RoleManager();
         Account master = am.getAccount(email);
         if (master != null) {
-            Group group = gm.getGroup("testmaster");
-            master.setGroup(group);
+            Role masterRole = rm.getRole("testmaster");
+            master.getRoles().clear();
+            master.addRole(masterRole);
             am.updateAccount(master);
             HttpSession session = request.getSession();
             session.setAttribute("master", master);

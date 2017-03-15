@@ -23,7 +23,7 @@ public class OAuth2LoginController extends ManagedServlet {
             throws ServletException, IOException {
         GoogleOAuthService service = new GoogleOAuthService();
         String state = HashingUtil.generateSHA1Hash(request.getSession().getId());
-        response.sendRedirect(service.getAuthorizationUrl(state));
+        redirect(response, service.getAuthorizationUrl(state));
     }
 
     @Override

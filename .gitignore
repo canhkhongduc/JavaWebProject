@@ -47,3 +47,5 @@ Temporary Items
 .apdisk
 /project/OnlineExamSystem/nbproject/private/
 /project/OnlineExamSystem/build/
+/testing/backend/DemoHibernateJPA/nbproject/private/
+/testing/backend/DemoHibernateJPA/build/

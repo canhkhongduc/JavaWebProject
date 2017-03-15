@@ -7,34 +7,28 @@ import java.util.List;
 import model.Choice;
 import model.Question;
 import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import util.hibernate.HibernateUtil;
+import util.hibernate.transaction.TransactionPerformer;
 
 /**
  *
  * @author Lam
  */
-public class ChoiceManager {
+public class ChoiceManager extends TransactionPerformer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChoiceManager.class);
-
-    private final SessionFactory sessionFactory;
-
-    public ChoiceManager() {
-        this.sessionFactory = HibernateUtil.getSessionFactory();
+    public List<Choice> getChoices(Question question) {
+        return performTransaction((session) -> {
+            Criteria criteria = session.createCriteria(Choice.class);
+            criteria.addOrder(Order.asc("id"));
+            criteria.add(Restrictions.eq("question", question));
+            return criteria.list();
+        });
     }
-
-    public List<Choice> getAllChoice(Question question) {
-        Session session = sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        Criteria criteria = session.createCriteria(Choice.class);
-        criteria.add(Restrictions.eq("question", question));
-        List<Choice> choiceList = criteria.list();
-        session.getTransaction().commit();
-        return choiceList;
+    
+    public Choice getChoice(Long id) {
+        return performTransaction((session) -> {
+            return (Choice) session.get(Choice.class, id);
+        });
     }
 }

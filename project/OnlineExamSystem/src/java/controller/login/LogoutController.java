@@ -22,7 +22,7 @@ public class LogoutController extends ManagedServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         session.setAttribute("account", null);
-        response.sendRedirect(getContextPath());
+        redirect(response, "");
     }
 
     @Override

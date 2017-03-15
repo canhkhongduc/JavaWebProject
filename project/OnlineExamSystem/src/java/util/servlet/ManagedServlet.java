@@ -3,13 +3,16 @@
  */
 package util.servlet;
 
+import io.mikael.urlbuilder.UrlBuilder;
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.util.Optional;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 import javax.servlet.http.HttpServlet;
-import javax.ws.rs.core.UriBuilder;
+import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,6 +63,18 @@ public class ManagedServlet extends HttpServlet {
      */
     public String getContextPath() {
         return getServletContext().getContextPath();
+    }
+
+    /**
+     * Return the absolute URL of a relative URL.<br>
+     * This method will simply concatenate the context path with the relative
+     * URL.
+     *
+     * @param relativeUrl The relative URL.
+     * @return The absolute URL.
+     */
+    public String getAbsoluteUrl(String relativeUrl) {
+        return getContextPath() + relativeUrl;
     }
 
     /**
@@ -239,22 +254,50 @@ public class ManagedServlet extends HttpServlet {
     }
 
     /**
-     * Build query URI from a source URI and a list of query parameters.<br>
+     * Perform a redirection to a destination URL, with (or without) query
+     * parameter(s).<br>
+     * <h3>Details</h3>
+     * This method will do the following steps:
+     * <ol>
+     * <li>Check if the destination URL is absolute or not. If not, then convert it to absolute URL.</li>
+     * <li>Use {@link util.servlet.ManagedServlet#buildUrl(java.lang.String, java.lang.String...) buildUrl()}
+     * method to build the query URL.</li>
+     * <li>Perform redirection to the query URL, using the given response object.</li>
+     * </ol>
+     *
+     * @param response The response object.
+     * @param destinationUrl The destination URL.
+     * @param params The optional query parameters.
+     */
+    public void redirect(HttpServletResponse response, String destinationUrl, String... params) {
+        if (!java.net.URI.create(destinationUrl).isAbsolute()) {
+            destinationUrl = getAbsoluteUrl(destinationUrl);
+        }
+        String url = buildUrl(destinationUrl, params);
+        try {
+            response.sendRedirect(url);
+        } catch (IOException ex) {
+            LOGGER.error(null, ex);
+        }
+    }
+
+    /**
+     * Build query URL from a source URL and a list of query parameters.<br>
      * The parameters should be a sequence of name-value pair. For example, if
-     * the source URI is <i>"/search"</i>, and the parameters are <i>"q",
-     * "hello", "page", "1"</i>, then the result URI is
+     * the source URL is <i>"/search"</i>, and the parameters are <i>"q",
+     * "hello", "page", "1"</i>, then the result URL is
      * <i>/search?q=hello&page=1</i>
      *
-     * @param sourceUri The source URI.
+     * @param sourceUrl The source URL.
      * @param params The query parameters.
-     * @return The result URI.
+     * @return The result URL.
      */
-    public static String buildUri(String sourceUri, String... params) {
-        UriBuilder builder = UriBuilder.fromUri(sourceUri);
+    public static String buildUrl(String sourceUrl, String... params) {
+        UrlBuilder builder = UrlBuilder.fromString(sourceUrl);
         for (int i = 0; i < params.length / 2; i++) {
-            builder.queryParam(params[2 * i], params[2 * i + 1]);
+            builder.addParameter(params[2 * i], params[2 * i + 1]);
         }
-        return builder.build().toString();
+        return builder.toString();
     }
 
     /**

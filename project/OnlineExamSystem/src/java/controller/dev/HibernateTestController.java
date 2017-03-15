@@ -6,12 +6,16 @@ package controller.dev;
 import dao.AccountManager;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Account;
+import model.Role;
 import util.HashingUtil;
+import util.hibernate.transaction.TransactionPerformer;
 import util.servlet.ManagedServlet;
 
 /**
@@ -63,16 +67,52 @@ public class HibernateTestController extends ManagedServlet {
         AccountManager accountManager = new AccountManager();
         if (accountManager.hasAccount(username)) {
             Account a = accountManager.getAccount(username);
-            appendToResponse(response, "ID: %s", a.getId());
             appendToResponse(response, "Username: %s", a.getUsername());
-            appendToResponse(response, "Full name: %s", a.getFullName());
-            appendToResponse(response, "Gender: %s", a.getGender() ? "Male" : "Female");
-            appendToResponse(response, "Birthdate: %s", DateFormat.getDateInstance().format(a.getBirthdate()));
-            appendToResponse(response, "Email: %s", a.getEmail());
-            appendToResponse(response, "Group: %s", a.getGroup().getDescription());
+            appendToResponse(response, "Full name: %s",
+                    Optional.ofNullable(a.getProfile().getFullName())
+                            .orElse("null")
+            );
+            appendToResponse(response, "Gender: %s",
+                    Optional.ofNullable(a.getProfile().getGender())
+                            .map((gender) -> gender ? "Male" : "Female")
+                            .orElse("null")
+            );
+            appendToResponse(response, "Birthdate: %s",
+                    Optional.ofNullable(a.getProfile().getBirthdate())
+                            .map((date) -> DateFormat.getInstance().format(date))
+                            .orElse("null")
+            );
+            appendToResponse(response, "Email: %s",
+                    Optional.ofNullable(a.getProfile().getEmail())
+                            .orElse("null"));
+            appendToResponse(response, "Roles: %s",
+                    a.getRoles().stream().map(Role::getName)
+                            .collect(Collectors.joining(", "))
+            );
         } else {
             appendToResponse(response, "%s does not exist!", username);
         }
+    }
+
+    /**
+     * Initialize data for the database.
+     */
+    private boolean initializeDataSource() {
+        TransactionPerformer performer = new TransactionPerformer();
+        return performer.performTransaction((session) -> {
+            Role adminRole = new Role("admin", "Administrator");
+            Role testMasterRole = new Role("testmaster", "Test Master");
+            Role studentRole = new Role("student", "Student");
+
+            session.save(adminRole);
+            session.save(testMasterRole);
+            session.save(studentRole);
+
+            Account adminAccount = new Account("admin", HashingUtil.generateSHA512Hash("admin"));
+            adminAccount.getProfile().setFullName("Administrator");
+            adminAccount.addRole((Role) session.get(Role.class, "admin"));
+            session.save(adminAccount);
+        });
     }
 
     /**
@@ -105,6 +145,13 @@ public class HibernateTestController extends ManagedServlet {
                     appendToResponse(response, "No username provided!");
                 } else {
                     showAccountInfo(username, response);
+                }
+                break;
+            case "init":
+                if (initializeDataSource()) {
+                    appendToResponse(response, "Data has been initialized!");
+                } else {
+                    appendToResponse(response, "Failed to initialize data!");
                 }
                 break;
             default:

@@ -3,10 +3,9 @@
  */
 package controller;
 
-import dao.AttemptManager;
 import dao.TestManager;
 import java.io.IOException;
-import java.util.List;
+import java.util.Set;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.Account;
 import model.Attempt;
-import model.Permission;
 import model.Test;
+import org.hibernate.Hibernate;
 import util.servlet.ManagedServlet;
 
 /**
@@ -24,7 +23,7 @@ import util.servlet.ManagedServlet;
  */
 @WebServlet("/viewtestreport")
 public class ViewTestReportController extends ManagedServlet {
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -35,21 +34,18 @@ public class ViewTestReportController extends ManagedServlet {
 //        } else if (!account.getGroup().getPermissions().stream().anyMatch((Permission t) -> t.getName().equals("manage_tests"))) {
 //            request.getRequestDispatcher("/WEB-INF/jsp/error.jsp?error=Permission%20denied").forward(request, response);
 //        }
-        
+
         // Get test id from view
-        String testId = request.getParameter("testId");
-        
-        
-         // Get info of the test
+        String testIdStr = request.getParameter("testId");
+
+        // Get info of the test
         TestManager tm = new TestManager();
-        Test test = tm.getTest(Integer.parseInt(testId));
-        
-        // Get a list of attempts related to this test id
-        AttemptManager attM = new AttemptManager();
-        List<Attempt> attempts = attM.getAttempts(test);
-        
-        
+        Test test = tm.getTest(Long.parseLong(testIdStr));
+
         if (test != null) {
+            Hibernate.initialize(test.getAttempts());
+            Set<Attempt> attempts = test.getAttempts();
+
             session.setAttribute("test", test);
             session.setAttribute("attempts", attempts);
             response.sendRedirect("viewtest/report.jsp");

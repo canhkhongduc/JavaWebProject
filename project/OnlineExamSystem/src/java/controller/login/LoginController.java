@@ -4,16 +4,15 @@
 package controller.login;
 
 import dao.AccountManager;
-import dao.GroupManager;
+import dao.RoleManager;
 import java.io.IOException;
-import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.Account;
-import model.Group;
+import model.Role;
 import util.HashingUtil;
 import util.googleapi.GoogleProfile;
 import util.servlet.ManagedServlet;
@@ -29,8 +28,7 @@ public class LoginController extends ManagedServlet {
 
     public void redirectLoginError(HttpServletResponse response, LoginError error)
             throws ServletException, IOException {
-        String uri = buildUri(getServletURL(LoginErrorController.class), "errorId", error.name().toLowerCase());
-        response.sendRedirect(uri);
+        redirect(response, getServletURL(LoginErrorController.class), "errorId", error.name().toLowerCase());
     }
 
     private boolean isValidDomain(String email) {
@@ -54,19 +52,17 @@ public class LoginController extends ManagedServlet {
     }
 
     private boolean addNewStudentAccount(AccountManager manager, GoogleProfile profile) {
-        GroupManager groupManager = new GroupManager();
-        Group studentGroup = groupManager.getGroup("student");
+        RoleManager roleManager = new RoleManager();
+        Role studentRole = roleManager.getRole("student");
         Account account = new Account();
         account.setUsername(profile.getEmail());
-        account.setPassword(HashingUtil.generateSHA512Hash(profile.getId()));
-        account.setFullName(profile.getName());
-        account.setEmail(profile.getEmail());
-        account.setGender(true);
-        account.setBirthdate(new Date());
-        account.setGroup(studentGroup);
-        return manager.addAccount(account);
+        account.setPassword(HashingUtil.generateSHA512Hash(profile.getEmail()));
+        account.getProfile().setFullName(profile.getName());
+        account.getProfile().setEmail(profile.getEmail());
+        account.addRole(studentRole);
+        return manager.saveAccount(account);
     }
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
@@ -75,13 +71,10 @@ public class LoginController extends ManagedServlet {
         String username, password;
         if (googleProfile != null) {
             username = googleProfile.getEmail();
-            password = googleProfile.getId();
             if (isValidDomain(username)) {
-                error = verifyLogin(username, password);
-                if (error == LoginError.USERNAME_DOES_NOT_EXIST) {
-                    if (addNewStudentAccount(accountManager, googleProfile)) {
-                        error = LoginError.NONE;
-                    }
+                error = LoginError.NONE;
+                if (!accountManager.hasAccount(username)) {
+                    addNewStudentAccount(accountManager, googleProfile);
                 }
             } else {
                 error = LoginError.DOMAIN_NOT_ALLOWED;
@@ -97,7 +90,7 @@ public class LoginController extends ManagedServlet {
             case NONE:
                 Account account = accountManager.getAccount(username);
                 session.setAttribute("account", account);
-                response.sendRedirect(getContextPath());
+                redirect(response, "");
                 break;
             default:
                 redirectLoginError(response, error);

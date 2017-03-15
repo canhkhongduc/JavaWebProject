@@ -1,48 +1,47 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright © 2017 Six Idiots Team
  */
 package dao;
 
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import model.Account;
 import model.Attempt;
 import model.Test;
 import org.hibernate.Criteria;
-import org.hibernate.Hibernate;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import util.hibernate.HibernateUtil;
+import util.hibernate.transaction.TransactionPerformer;
 
 /**
  *
  * @author Niles
  */
-public class AttemptManager {
-    private static final Logger LOGGER = LoggerFactory.getLogger(TestManager.class);
-    
-    private final SessionFactory sessionFactory;
+public class AttemptManager extends TransactionPerformer {
 
-    public AttemptManager() {
-        this.sessionFactory = HibernateUtil.getSessionFactory();
+    public Attempt getAttempt(Long id) {
+        return performTransaction((session) -> {
+            return (Attempt) session.get(Attempt.class, id);
+        });
     }
-    
+
     public List<Attempt> getAttempts(Test test) {
-        Session session = sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        Criteria criteria = session.createCriteria(Attempt.class);
-        criteria.addOrder(Order.asc("id"));
-        criteria.add(Restrictions.eq("test", test));
-        List<Attempt> attempts = criteria.list();
-        for (Attempt attempt : attempts) {
-            Hibernate.initialize(attempt.getExaminee());
-        }
- 
-        session.getTransaction().commit();
-        return attempts;
+        return performTransaction((session) -> {
+            Criteria criteria = session.createCriteria(Attempt.class);
+            criteria.addOrder(Order.asc("id"));
+            criteria.add(Restrictions.eq("test", test));
+            return criteria.list();
+        });
+    }
+
+    public List<Attempt> getAttempts(Test test, Account examinee) {
+        return performTransaction((session) -> {
+            Criteria criteria = session.createCriteria(Attempt.class);
+            criteria.addOrder(Order.asc("id"));
+            criteria.add(Restrictions.eq("test", test));
+            criteria.add(Restrictions.eq("examinee", examinee));
+            return criteria.list();
+        });
     }
 }

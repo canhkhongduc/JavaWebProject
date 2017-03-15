@@ -4,9 +4,10 @@
 package controller;
 
 import dao.AccountManager;
-import dao.GroupManager;
+import dao.RoleManager;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,7 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.Account;
-import model.Group;
+import model.Role;
+import org.hibernate.Hibernate;
 
 /**
  *
@@ -34,10 +36,11 @@ public class ListMasterController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        AccountManager am = new AccountManager();
-        GroupManager gm = new GroupManager();
-        Group group = gm.getGroup("testmaster");
-        List<Account> masters = am.getAccountsByGroup(group);
+        RoleManager rm = new RoleManager();
+        Role testmasterRole = rm.getRole("testmaster");
+        Hibernate.initialize(testmasterRole.getAccounts());
+        Set<Account> masters = testmasterRole.getAccounts();
+        
         HttpSession session = request.getSession();
         session.setAttribute("masters", masters);
         response.sendRedirect("Settings.jsp");

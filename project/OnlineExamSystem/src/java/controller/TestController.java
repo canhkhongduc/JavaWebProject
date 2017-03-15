@@ -17,7 +17,6 @@ import javax.servlet.http.HttpSession;
 import model.Account;
 import model.Choice;
 import model.Course;
-import model.Permission;
 import model.Question;
 
 /**
@@ -38,6 +37,7 @@ public class TestController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        /*
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
@@ -58,7 +58,7 @@ public class TestController extends HttpServlet {
                 }
 
                 List<Question> questionList = questionManager.getAllQuestions();
-                List<Choice> choiceList = choiceManager.getAllChoice(questionList.get(currentQuestion));
+                List<Choice> choiceList = choiceManager.getChoices(questionList.get(currentQuestion));
 
                 request.setAttribute("questionList", questionList);
                 request.setAttribute("questionIndex", currentQuestion);
@@ -68,7 +68,7 @@ public class TestController extends HttpServlet {
             } else {
                 switch (action) {
                     case "add": {
-                        List<Course> courses = new CourseManager().getAllCourse();
+                        List<Course> courses = new CourseManager().getAllCourses();
                         request.setAttribute("courses", courses);
                         request.getRequestDispatcher("/WEB-INF/jsp/add_test.jsp").forward(request, response);
                         break;
@@ -76,6 +76,7 @@ public class TestController extends HttpServlet {
                 }
             }
         }
+        */
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -102,7 +103,7 @@ public class TestController extends HttpServlet {
         }
 
         List<Question> questionList = questionManager.getAllQuestions();
-        List<Choice> choiceList = choiceManager.getAllChoice(questionList.get(currentQuestion));
+        List<Choice> choiceList = choiceManager.getChoices(questionList.get(currentQuestion));
 
         request.setAttribute("questionList", questionList);
         request.setAttribute("questionIndex", currentQuestion);

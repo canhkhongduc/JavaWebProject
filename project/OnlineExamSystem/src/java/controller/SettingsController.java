@@ -3,14 +3,13 @@
  */
 package controller;
 
-import dao.AccountManager;
 import dao.CourseManager;
-import dao.GroupManager;
+import dao.RoleManager;
 import dao.QuestionManager;
 import dao.TestManager;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,10 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.Account;
 import model.Course;
-import model.Group;
-import model.Permission;
+import model.Role;
 import model.Question;
 import model.Test;
+import org.hibernate.Hibernate;
 
 /**
  *
@@ -47,42 +46,36 @@ public class SettingsController extends HttpServlet {
         if (account == null) {
             response.sendRedirect("oauth2login");
         } else {
-            ArrayList<Permission> permissions = new ArrayList<>(account.getGroup().getPermissions());
-            permissions.sort((Permission o1, Permission o2) -> o1.getName().compareTo(o2.getName()));
             String func = request.getParameter("func");
-            if (func == null) {
-                func = permissions.get(0).getName();
-            }
             if (func == null) {
                 request.getRequestDispatcher("/WEB-INF/jsp/error.jsp?error=Permission%20denied").forward(request, response);
                 return;
             }
-            request.setAttribute("permissions", permissions);
             switch (func) {
                 case "manage_test_masters": {
-                    AccountManager am = new AccountManager();
-                    GroupManager gm = new GroupManager();
-                    Group group = gm.getGroup("testmaster");
-                    List<Account> masters = am.getAccountsByGroup(group);
+                    RoleManager rm = new RoleManager();
+                    Role testmasterRole = rm.getRole("testmaster");
+                    Hibernate.initialize(testmasterRole.getAccounts());
+                    Set<Account> masters = testmasterRole.getAccounts();
                     request.setAttribute("masters", masters);
                     break;
                 }
                 case "manage_tests": {
                     TestManager testManager = new TestManager();
-                    List<Test> tests = testManager.getTestsByAccount(account);
+                    List<Test> tests = testManager.getTests(account);
                     request.setAttribute("tests", tests);
                     break;
                 }
                 case "manage_questions": {
                     String courseId = request.getParameter("course");
                     CourseManager cm = new CourseManager();
-                    List<Course> courses = cm.getAllCourse();
+                    List<Course> courses = cm.getAllCourses();
                     QuestionManager qm = new QuestionManager();
                     List<Question> questions;
                     if (courseId == null || cm.getCourse(courseId) == null) {
-                        questions = qm.getQuestionsByCourse(courses.get(0));
+                        questions = qm.getQuestions(courses.get(0));
                     } else {
-                        questions = qm.getQuestionsByCourse(cm.getCourse(courseId));
+                        questions = qm.getQuestions(cm.getCourse(courseId));
                     }
                     System.out.println(questions.size());
                     request.setAttribute("courses", courses);
@@ -92,7 +85,6 @@ public class SettingsController extends HttpServlet {
             }
             request.getRequestDispatcher("/WEB-INF/jsp/" + func + ".jsp?func=" + func).forward(request, response);
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

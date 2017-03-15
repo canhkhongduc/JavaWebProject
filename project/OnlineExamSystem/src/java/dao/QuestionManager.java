@@ -3,47 +3,40 @@
  */
 package dao;
 
-import util.hibernate.HibernateUtil;
 import java.util.List;
 import model.Course;
 import model.Question;
 import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import util.hibernate.transaction.TransactionPerformer;
 
 /**
  *
  * @author nguyen
  */
-public class QuestionManager {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(QuestionManager.class);
-
-    private final SessionFactory sessionFactory;
-
-    public QuestionManager() {
-        this.sessionFactory = HibernateUtil.getSessionFactory();
-    }
+public class QuestionManager extends TransactionPerformer {
 
     public List<Question> getAllQuestions() {
-        Session session = sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        Criteria criteria = session.createCriteria(Question.class);
-        List<Question> questions = criteria.list();
-        session.getTransaction().commit();
-        return questions;
+        return performTransaction((session) -> {
+            Criteria criteria = session.createCriteria(Question.class);
+            criteria.addOrder(Order.asc("id"));
+            return criteria.list();
+        });
     }
 
-    public List<Question> getQuestionsByCourse(Course course) {
-        Session session = sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        Criteria criteria = session.createCriteria(Question.class);
-        criteria.add(Restrictions.eq("course", course));
-        List<Question> questions = criteria.list();
-        session.getTransaction().commit();
-        return questions;
+    public List<Question> getQuestions(Course course) {
+        return performTransaction((session) -> {
+            Criteria criteria = session.createCriteria(Question.class);
+            criteria.addOrder(Order.asc("id"));
+            criteria.add(Restrictions.eq("course", course));
+            return criteria.list();
+        });
+    }
+    
+    public Question getQuestion(Long id) {
+        return performTransaction((session) -> {
+            return (Question) session.get(Question.class, id);
+        });
     }
 }

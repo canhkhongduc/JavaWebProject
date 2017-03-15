@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context path="/OnlineExamSystem">
-    
+    <Resource name="jdbc/OESDataSource"
+              factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+              auth="Container"
+              type="javax.sql.DataSource"
+              username="MinhCT"
+              password="Administrator$PRJ321"
+              driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+              url="jdbc:sqlserver://online-exam-server.database.windows.net:1433;databaseName=OnlineExamSystem"
+              maxTotal="100"
+              maxIdle="30"
+              maxWaitMillis="10000"/>
 </Context>
