@@ -64,13 +64,6 @@
             <page-encoding>UTF-8</page-encoding>
         </jsp-property-group>
     </jsp-config>
-    <login-config>
-        <auth-method>FORM</auth-method>
-        <form-login-config>
-            <form-login-page>/WEB-INF/jsp/login/index.jsp</form-login-page>
-            <form-error-page>/WEB-INF/jsp/error.jsp</form-error-page>
-        </form-login-config>
-    </login-config>
     <resource-ref>
         <description>A JNDI resource referred to the DataSource of this application.
 This will be used in Hibernate and realm configuration.</description>

@@ -44,6 +44,11 @@ public class OAuth2CallbackController extends ManagedServlet {
         response.sendError(400, "Error while logging in: " + error.getMessage());
     }
 
+    private boolean isValidDomain(String email) {
+        // TODO: Move allowed domain to controller parameter or application configuration
+        return email.endsWith("@fpt.edu.vn");
+    }
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String code = request.getParameter("code");
@@ -69,14 +74,18 @@ public class OAuth2CallbackController extends ManagedServlet {
                 GoogleOAuthService service = new GoogleOAuthService();
                 OAuth2AccessToken token = service.exchangeCodeForToken(code);
                 GoogleProfile profile = service.getGoogleProfile(token);
-                req.setAttribute("googleProfile", profile);
-                HttpServletRequestWrapper wrapper = new HttpServletRequestWrapper(req) {
-                    @Override
-                    public String getMethod() {
-                        return "POST";
-                    }
-                };
-                getServletDispatcher(LoginController.class).forward(wrapper, res);
+                if (isValidDomain(profile.getEmail())) {
+                    req.setAttribute("googleProfile", profile);
+                    HttpServletRequestWrapper wrapper = new HttpServletRequestWrapper(req) {
+                        @Override
+                        public String getMethod() {
+                            return "POST";
+                        }
+                    };
+                    getServletDispatcher(LoginController.class).forward(wrapper, res);
+                } else {
+                    redirectLoginError(res, LoginError.DOMAIN_NOT_ALLOWED);
+                }
             } catch (TokenExchangeException | GoogleAPIRequestException | GoogleAPIResponseParseException ex) {
                 try {
                     redirectLoginError(res, LoginError.GOOGLE_PROFILE_RETRIEVAL_ERROR);

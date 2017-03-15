@@ -41,8 +41,9 @@ import org.slf4j.LoggerFactory;
  */
 public class ManagedServlet extends HttpServlet {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ManagedServlet.class);
     private static final long serialVersionUID = 1L;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ManagedServlet.class);
 
     /**
      * Return whether the name and URL of the servlet must be strictly checked.

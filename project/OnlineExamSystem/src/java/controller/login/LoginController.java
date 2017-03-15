@@ -10,7 +10,6 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import model.Account;
 import model.Role;
 import util.HashingUtil;
@@ -23,44 +22,67 @@ import util.servlet.ManagedServlet;
  */
 @WebServlet("/login")
 public class LoginController extends ManagedServlet {
-
-    private final AccountManager accountManager = new AccountManager();
-
+    
     public void redirectLoginError(HttpServletResponse response, LoginError error)
             throws ServletException, IOException {
         response.sendError(400, "Error while logging in: " + error.getMessage());
     }
 
-    private boolean isValidDomain(String email) {
-        // TODO: Move allowed domain to controller parameter or application configuration
-        return email.endsWith("@fpt.edu.vn");
+    private String getPasswordFromGoogleProfile(GoogleProfile profile) {
+        return profile.getEmail();
     }
 
-    private LoginError verifyLogin(String username, String password) {
-        if (username == null || password == null) {
-            return LoginError.BAD_REQUEST;
-        }
-        Account account = accountManager.getAccount(username);
-        if (account == null) {
-            return LoginError.USERNAME_DOES_NOT_EXIST;
-        }
-        String passwordHash = HashingUtil.generateSHA512Hash(password);
-        if (!passwordHash.equals(account.getPassword())) {
-            return LoginError.INCORRECT_PASSWORD;
-        }
-        return LoginError.NONE;
-    }
-
-    private boolean addNewStudentAccount(AccountManager manager, GoogleProfile profile) {
+    private boolean addNewStudentAccount(GoogleProfile profile) {
+        AccountManager accountManager = new AccountManager();
         RoleManager roleManager = new RoleManager();
         Role studentRole = roleManager.getRole("student");
         Account account = new Account();
         account.setUsername(profile.getEmail());
-        account.setPassword(HashingUtil.generateSHA512Hash(profile.getEmail()));
+        account.setPassword(HashingUtil.generateSHA512Hash(getPasswordFromGoogleProfile(profile)));
         account.getProfile().setFullName(profile.getName());
         account.getProfile().setEmail(profile.getEmail());
         account.addRole(studentRole);
-        return manager.saveAccount(account);
+        return accountManager.saveAccount(account);
+    }
+
+    private LoginResult verifyCredential(String username, String password) {
+        LoginResult result = new LoginResult(LoginError.NONE, username, password, null);
+        if (username == null || password == null) {
+            result.setError(LoginError.BAD_REQUEST);
+            return result;
+        }
+        AccountManager accountManager = new AccountManager();
+        Account account = accountManager.getAccount(username);
+        if (account == null) {
+            result.setError(LoginError.USERNAME_DOES_NOT_EXIST);
+            return result;
+        }
+        String passwordHash = HashingUtil.generateSHA512Hash(password);
+        if (!passwordHash.equals(account.getPassword())) {
+            result.setError(LoginError.INCORRECT_PASSWORD);
+            return result;
+        }
+        result.setAccount(account);
+        return result;
+    }
+
+    private LoginResult verifyLoginRequest(HttpServletRequest request) throws ServletException {
+        AccountManager accountManager = new AccountManager();
+        GoogleProfile googleProfile = (GoogleProfile) request.getAttribute("googleProfile");
+        String username, password;
+        // 1. Verify the credential
+        if (googleProfile != null) {
+            username = googleProfile.getEmail();
+            password = getPasswordFromGoogleProfile(googleProfile);
+            if (!accountManager.hasAccount(username)) {
+                addNewStudentAccount(googleProfile);
+            }
+        } else {
+            username = request.getParameter("username");
+            password = request.getParameter("password");
+        }
+        LoginResult result = verifyCredential(username, password);
+        return result;
     }
 
     @Override
@@ -72,35 +94,17 @@ public class LoginController extends ManagedServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        GoogleProfile googleProfile = (GoogleProfile) request.getAttribute("googleProfile");
-        LoginError error;
-        String username, password;
-        if (googleProfile != null) {
-            username = googleProfile.getEmail();
-            if (isValidDomain(username)) {
-                error = LoginError.NONE;
-                if (!accountManager.hasAccount(username)) {
-                    addNewStudentAccount(accountManager, googleProfile);
-                }
-            } else {
-                error = LoginError.DOMAIN_NOT_ALLOWED;
-            }
-        } else {
-            request.setCharacterEncoding("UTF-8");
-            username = request.getParameter("username");
-            password = request.getParameter("password");
-            error = verifyLogin(username, password);
+        if (request.getUserPrincipal() != null) {
+            request.logout();
         }
-
-        switch (error) {
+        LoginResult result = verifyLoginRequest(request);
+        switch (result.getError()) {
             case NONE:
-                Account account = accountManager.getAccount(username);
-                session.setAttribute("currentUser", account);
+                request.login(result.getUsername(), result.getPassword());
                 redirect(response, "");
                 break;
             default:
-                redirectLoginError(response, error);
+                redirectLoginError(response, result.getError());
         }
     }
 }
