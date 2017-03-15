@@ -101,6 +101,7 @@ public class LoginController extends ManagedServlet {
         switch (result.getError()) {
             case NONE:
                 request.login(result.getUsername(), result.getPassword());
+                request.getSession().setAttribute("currentUser", result.getAccount());
                 redirect(response, "");
                 break;
             default:

@@ -3,7 +3,6 @@
  */
 package filter;
 
-import dao.AccountManager;
 import java.io.IOException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -13,7 +12,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
-import model.Account;
 
 /**
  *
@@ -66,12 +64,17 @@ public class CurrentUserUpdateFilter implements Filter {
         try {
             if (req instanceof HttpServletRequest) {
                 HttpServletRequest request = (HttpServletRequest) req;
+                /*
                 AccountManager manager = new AccountManager();
                 Account account = null;
                 if (request.getUserPrincipal() != null) {
                     account = manager.getAccount(request.getUserPrincipal().getName());
                 }
                 request.getSession().setAttribute("currentUser", account);
+                */
+                if (request.getUserPrincipal() == null) {
+                    request.getSession().setAttribute("currentUser", null);
+                }
             }
             chain.doFilter(req, res);
         } catch (Throwable t) {

@@ -69,14 +69,14 @@ public class SecurityTestController extends ManagedServlet {
             return;
         }
         if (account.hasRole("admin")) {
-            appendToResponse(response, "Admin cannot be promoted to testmaster.");
+            appendToResponse(response, "Admin cannot be promoted to testmaster!");
             return;
         }
         account.setRole(roleManager.getRole("testmaster"));
         if (accountManager.updateAccount(account)) {
-            appendToResponse(response, "%s has been promoted to testmaster.", username);
+            appendToResponse(response, "%s has been promoted to testmaster!", username);
         } else {
-            appendToResponse(response, "Failed to promote %s to testmaster.", username);
+            appendToResponse(response, "Failed to promote %s to testmaster!", username);
         }
     }
 
