@@ -3,6 +3,7 @@
  */
 package controller;
 
+import controller.login.LoginController;
 import dao.CourseManager;
 import dao.RoleManager;
 import dao.QuestionManager;
@@ -22,13 +23,14 @@ import model.Role;
 import model.Question;
 import model.Test;
 import org.hibernate.Hibernate;
+import util.servlet.ManagedServlet;
 
 /**
  *
  * @author Hai
  */
 @WebServlet("/settings")
-public class SettingsController extends HttpServlet {
+public class SettingsController extends ManagedServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,9 +44,9 @@ public class SettingsController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Account account = (Account) session.getAttribute("account");
+        Account account = (Account) session.getAttribute("currentUser");
         if (account == null) {
-            response.sendRedirect("oauth2login");
+            redirect(response, getServletURL(LoginController.class));
         } else {
             String func = request.getParameter("func");
             if (func == null) {

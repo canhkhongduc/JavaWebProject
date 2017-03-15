@@ -63,7 +63,14 @@ public class LoginController extends ManagedServlet {
         return manager.saveAccount(account);
     }
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        getCorrespondingViewDispatcher().forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         GoogleProfile googleProfile = (GoogleProfile) request.getAttribute("googleProfile");
@@ -89,23 +96,11 @@ public class LoginController extends ManagedServlet {
         switch (error) {
             case NONE:
                 Account account = accountManager.getAccount(username);
-                session.setAttribute("account", account);
+                session.setAttribute("currentUser", account);
                 redirect(response, "");
                 break;
             default:
                 redirectLoginError(response, error);
         }
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
     }
 }

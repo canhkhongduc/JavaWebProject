@@ -28,7 +28,7 @@ public class ViewTestReportController extends ManagedServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
-        Account account = (Account) session.getAttribute("account");
+        Account account = (Account) session.getAttribute("currentUser");
 //        if (account == null) {
 //            response.sendRedirect("oauth2login");
 //        } else if (!account.getGroup().getPermissions().stream().anyMatch((Permission t) -> t.getName().equals("manage_tests"))) {

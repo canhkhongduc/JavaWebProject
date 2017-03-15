@@ -4,7 +4,6 @@
 package controller;
 
 import dao.ChoiceManager;
-import dao.CourseManager;
 import dao.QuestionManager;
 import java.io.IOException;
 import java.util.List;
@@ -13,10 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import model.Account;
 import model.Choice;
-import model.Course;
 import model.Question;
 
 /**
@@ -40,7 +36,7 @@ public class TestController extends HttpServlet {
         /*
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
-        Account account = (Account) session.getAttribute("account");
+        Account account = (Account) session.getAttribute("currentUser");
         if (account == null) {
             response.sendRedirect("oauth2login");
         } else if (!account.getGroup().getPermissions().stream().anyMatch((Permission t) -> t.getName().equals("manage_tests"))) {

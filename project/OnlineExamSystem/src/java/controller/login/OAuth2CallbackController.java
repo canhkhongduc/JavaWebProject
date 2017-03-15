@@ -5,9 +5,12 @@ package controller.login;
 
 import com.github.scribejava.core.model.OAuth2AccessToken;
 import java.io.IOException;
+import java.util.logging.Level;
+import javax.servlet.AsyncContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,15 +35,16 @@ import util.servlet.ManagedServlet;
  *
  * @author nguyen
  */
-@WebServlet("/oauth2callback")
+@WebServlet(urlPatterns = "/oauth2callback", asyncSupported = true)
 public class OAuth2CallbackController extends ManagedServlet {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(OAuth2CallbackController.class);
 
     public void redirectLoginError(HttpServletResponse response, LoginError error)
             throws ServletException, IOException {
         redirect(response, getServletURL(LoginErrorController.class), "errorId", error.name().toLowerCase());
     }
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String code = request.getParameter("code");
@@ -58,16 +62,35 @@ public class OAuth2CallbackController extends ManagedServlet {
             }
         }
 
-        try {
-            GoogleOAuthService service = new GoogleOAuthService();
-            OAuth2AccessToken token = service.exchangeCodeForToken(code);
-            GoogleProfile profile = service.getGoogleProfile(token);
-            request.setAttribute("googleProfile", profile);
-            getServletDispatcher(LoginController.class).forward(request, response);
-        } catch (TokenExchangeException | GoogleAPIRequestException | GoogleAPIResponseParseException ex) {
-            redirectLoginError(response, LoginError.GOOGLE_PROFILE_RETRIEVAL_ERROR);
-            LOGGER.error(null, ex);
-        }
+        AsyncContext context = request.startAsync();
+        context.start(() -> {
+            HttpServletRequest req = (HttpServletRequest) context.getRequest();
+            HttpServletResponse res = (HttpServletResponse) context.getResponse();
+            try {
+                GoogleOAuthService service = new GoogleOAuthService();
+                OAuth2AccessToken token = service.exchangeCodeForToken(code);
+                GoogleProfile profile = service.getGoogleProfile(token);
+                req.setAttribute("googleProfile", profile);
+                HttpServletRequestWrapper wrapper = new HttpServletRequestWrapper(req) {
+                    @Override
+                    public String getMethod() {
+                        return "POST";
+                    }
+                };
+                getServletDispatcher(LoginController.class).forward(wrapper, res);
+            } catch (TokenExchangeException | GoogleAPIRequestException | GoogleAPIResponseParseException ex) {
+                try {
+                    redirectLoginError(res, LoginError.GOOGLE_PROFILE_RETRIEVAL_ERROR);
+                } catch (ServletException | IOException ex1) {
+                    LOGGER.error(null, ex1);
+                }
+                LOGGER.error(null, ex);
+            } catch (ServletException | IOException ex) {
+                LOGGER.error(null, ex);
+            }
+            context.complete();
+        });
+
     }
 
     @Override
