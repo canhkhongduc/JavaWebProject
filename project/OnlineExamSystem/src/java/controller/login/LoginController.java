@@ -28,7 +28,7 @@ public class LoginController extends ManagedServlet {
 
     public void redirectLoginError(HttpServletResponse response, LoginError error)
             throws ServletException, IOException {
-        redirect(response, getServletURL(LoginErrorController.class), "errorId", error.name().toLowerCase());
+        response.sendError(400, "Error while logging in: " + error.getMessage());
     }
 
     private boolean isValidDomain(String email) {

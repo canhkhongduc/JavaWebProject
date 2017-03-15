@@ -5,7 +5,6 @@ package controller.login;
 
 import com.github.scribejava.core.model.OAuth2AccessToken;
 import java.io.IOException;
-import java.util.logging.Level;
 import javax.servlet.AsyncContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -42,7 +41,7 @@ public class OAuth2CallbackController extends ManagedServlet {
 
     public void redirectLoginError(HttpServletResponse response, LoginError error)
             throws ServletException, IOException {
-        redirect(response, getServletURL(LoginErrorController.class), "errorId", error.name().toLowerCase());
+        response.sendError(400, "Error while logging in: " + error.getMessage());
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)

@@ -38,7 +38,7 @@ public class HibernateTestController extends ManagedServlet {
      */
     private void appendToResponse(HttpServletResponse response, String format, Object... args)
             throws ServletException, IOException {
-        response.getWriter().printf("<p>" + format + "</p>", args);
+        response.getWriter().printf("<p>" + format + "</p>\n", args);
     }
 
     /**
@@ -153,11 +153,6 @@ public class HibernateTestController extends ManagedServlet {
                 } else {
                     appendToResponse(response, "Failed to initialize data!");
                 }
-                break;
-            case "geturl":
-                String url = request.getParameter("url");
-                String resultUrl = getAbsoluteUrl(url);
-                appendToResponse(response, resultUrl);
                 break;
             default:
                 appendToResponse(response, "No action specified!");
