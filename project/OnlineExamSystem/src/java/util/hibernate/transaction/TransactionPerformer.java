@@ -22,7 +22,7 @@ public class TransactionPerformer {
     }
     
     public <T> T performTransaction(QueryTransaction<T> transaction) {
-        T result = null;
+        T result;
         Session session = sessionFactory.getCurrentSession();
         Transaction tx = null;
         try {
@@ -30,6 +30,7 @@ public class TransactionPerformer {
             result = transaction.apply(session);
             session.getTransaction().commit();
         } catch (RuntimeException ex) {
+            result = null;
             if (tx != null) tx.rollback();
             LoggerFactory.getLogger(this.getClass()).error(null, ex);
         }
@@ -37,13 +38,14 @@ public class TransactionPerformer {
     }
     
     public boolean performTransaction(UpdateTransaction transaction) {
-        boolean success = true;
+        boolean success;
         Session session = sessionFactory.getCurrentSession();
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
             transaction.apply(session);
             session.getTransaction().commit();
+            success = true;
         } catch (RuntimeException ex) {
             success = false;
             if (tx != null) tx.rollback();

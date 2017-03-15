@@ -6,7 +6,6 @@ package util.servlet;
 import io.mikael.urlbuilder.UrlBuilder;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.util.Optional;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -67,14 +66,18 @@ public class ManagedServlet extends HttpServlet {
 
     /**
      * Return the absolute URL of a relative URL.<br>
-     * This method will simply concatenate the context path with the relative
-     * URL.
+     * This method will check if the URL is relative or not. If so, it will
+     * concatenate the context path with the relative URL.
      *
      * @param relativeUrl The relative URL.
      * @return The absolute URL.
      */
     public String getAbsoluteUrl(String relativeUrl) {
-        return getContextPath() + relativeUrl;
+        String absoluteUrl = "";
+        if (!java.net.URI.create(relativeUrl).isAbsolute()) {
+            absoluteUrl = getContextPath();
+        }
+        return absoluteUrl + relativeUrl;
     }
 
     /**
@@ -259,10 +262,13 @@ public class ManagedServlet extends HttpServlet {
      * <h3>Details</h3>
      * This method will do the following steps:
      * <ol>
-     * <li>Check if the destination URL is absolute or not. If not, then convert it to absolute URL.</li>
-     * <li>Use {@link util.servlet.ManagedServlet#buildUrl(java.lang.String, java.lang.String...) buildUrl()}
+     * <li>Check if the destination URL is absolute or not. If not, then convert
+     * it to absolute URL.</li>
+     * <li>Use
+     * {@link util.servlet.ManagedServlet#buildUrl(java.lang.String, java.lang.String...) buildUrl()}
      * method to build the query URL.</li>
-     * <li>Perform redirection to the query URL, using the given response object.</li>
+     * <li>Perform redirection to the query URL, using the given response
+     * object.</li>
      * </ol>
      *
      * @param response The response object.
@@ -295,7 +301,7 @@ public class ManagedServlet extends HttpServlet {
     public static String buildUrl(String sourceUrl, String... params) {
         UrlBuilder builder = UrlBuilder.fromString(sourceUrl);
         for (int i = 0; i < params.length / 2; i++) {
-            builder.addParameter(params[2 * i], params[2 * i + 1]);
+            builder = builder.addParameter(params[2 * i], params[2 * i + 1]);
         }
         return builder.toString();
     }

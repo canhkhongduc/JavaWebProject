@@ -154,6 +154,11 @@ public class HibernateTestController extends ManagedServlet {
                     appendToResponse(response, "Failed to initialize data!");
                 }
                 break;
+            case "geturl":
+                String url = request.getParameter("url");
+                String resultUrl = getAbsoluteUrl(url);
+                appendToResponse(response, resultUrl);
+                break;
             default:
                 appendToResponse(response, "No action specified!");
         }
