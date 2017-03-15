@@ -9,6 +9,8 @@ import java.text.DateFormat;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.HttpConstraint;
+import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,6 +26,7 @@ import util.servlet.ManagedServlet;
  * @author Le Cao Nguyen
  */
 @WebServlet("/dev/hbtest")
+@ServletSecurity(@HttpConstraint(rolesAllowed = "admin"))
 public class HibernateTestController extends ManagedServlet {
 
     /**
@@ -50,7 +53,7 @@ public class HibernateTestController extends ManagedServlet {
     private boolean changeAdminPassword(String password) {
         AccountManager accountManager = new AccountManager();
         Account admin = accountManager.getAccount("admin");
-        admin.setPassword(HashingUtil.generateSHA512Hash("admin"));
+        admin.setPassword(HashingUtil.generateSHA512Hash(password));
         return accountManager.updateAccount(admin);
     }
 
