@@ -40,6 +40,9 @@
             <page-encoding>UTF-8</page-encoding>
         </jsp-property-group>
     </jsp-config>
+    <login-config>
+        <auth-method>BASIC</auth-method>
+    </login-config>
     <resource-ref>
         <description>A JNDI resource referred to the DataSource of this application.
 This will be used in Hibernate and realm configuration.</description>
