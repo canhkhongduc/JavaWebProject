@@ -330,7 +330,7 @@ public class ManagedServlet extends HttpServlet {
             if (!servletName.endsWith("Controller")) {
                 throw new ServletException("Servlet's name must end with 'Controller'.");
             }
-            if (!servletUrl.matches("^(\\/\\w+)+$")) {
+            if (!servletUrl.matches("^(\\/[\\w-]+)+$")) {
                 throw new ServletException("Servlet's URL must be in the form of .../category/action.");
             }
         }
