@@ -1,12 +1,8 @@
-$(document).ready(function () {
-    $("#account-dropdown-button").dropdown({
-        inDuration: 300,
-        outDuration: 225,
-        constrainWidth: true,
-        hover: true,
-        gutter: 0,
-        belowOrigin: true,
-        alignment: 'right',
-        stopPropagation: false
+$(document).ready(function() {
+    console.log(window.location.pathname);
+    $('ul.sidebar-menu li').each(function() {
+        if (window.location.pathname.startsWith($(this).find('a').attr('href'))) {
+            $(this).addClass('active');
+        }
     });
 });

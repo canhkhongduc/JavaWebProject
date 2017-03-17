@@ -1,39 +1,33 @@
-<%-- 
-    Document   : Homepage
-    Created on : Feb 15, 2017, 4:39:41 PM
-    Author     : Canh Khong Duc <canhkdse04533 at FPT University>
---%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="util.servlet.HttpStatus"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <%@include file="/WEB-INF/jspf/head.jspf" %>
-        <title>Error</title>
-        <%
-            int statusCode = (int) request.getAttribute("javax.servlet.error.status_code");
-            HttpStatus status = util.servlet.HttpStatus.getByCode(statusCode);
-            String name = status.getName();
-            String message = (String) request.getAttribute("javax.servlet.error.message");
-            if (message == null || message.isEmpty()) {
-                message = status.getDescription();
-            }
-        %>
-    </head>
-    <body>
-        <%@include file="/WEB-INF/jspf/navbar.jspf" %>
-        <main>
-            <div class="container">
-                <h3>Error</h3>
-                <p><%=message%></p>
-                <%if (statusCode >= 500) {%>
-                <p>Details of the error can be found in the server's log.</p>
-                <%}%>
-                <pre><i>Status code: <%=statusCode%> (<%=name%>).</i></pre>
-                <a class="btn waves-effect waves-light" href="${contextPath}/">Back to main page</a>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@taglib prefix="t" uri="/WEB-INF/tlds/template" %>
+<%
+    int statusCode = (int) request.getAttribute("javax.servlet.error.status_code");
+    HttpStatus status = util.servlet.HttpStatus.getByCode(statusCode);
+    String name = status.getName();
+    String message = (String) request.getAttribute("javax.servlet.error.message");
+    if (message == null || message.isEmpty()) {
+        message = status.getDescription();
+    }
+    pageContext.setAttribute("statusCode", statusCode);
+    pageContext.setAttribute("name", name);
+    pageContext.setAttribute("message", message);
+%>
+<t:oesPage pageTitle="Error">
+    <jsp:body>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-2"><h1 class="text-red" style="font-size: 6em;">${statusCode}</h1></div>
+                <div class="col-sm-10">
+                    <h3><i class="fa fa-warning text-red"></i>&nbsp;${name}</h3>
+                    <p>${message}</p>
+                    <c:if test="${statusCode >= 500}">
+                        <p>Details of the error can be found in server's log file.</p>
+                    </c:if>
+                    <a class="btn btn-default bg-yellow" href="${contextPath}/">Back to homepage</a>
+                </div>
             </div>
-        </main>
-        <%@include file="/WEB-INF/jspf/footer.jspf" %>
-    </body>
-</html>
+        </div>
+    </jsp:body>
+</t:oesPage>

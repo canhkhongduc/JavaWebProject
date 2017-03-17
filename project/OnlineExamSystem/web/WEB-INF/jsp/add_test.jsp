@@ -10,6 +10,7 @@
         </style>
     </head>
     <body>
+        
         <header>
             <%@include file="/WEB-INF/jspf/navbar.jspf" %>
         </header>

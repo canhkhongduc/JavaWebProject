@@ -1,0 +1,35 @@
+<aside class="main-sidebar">
+    <div class="sidebar">
+        <!--Disable search box
+        <form action="#" method="get" class="sidebar-form">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="Search...">
+                <span class="input-group-btn">
+                    <button type="submit" name="search" id="search-btn" class="btn btn-flat">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </span>
+            </div>
+        </form>
+        -->
+        <ul class="sidebar-menu">
+            <li class="header">NAVIGATION</li>
+            <li><a href="${contextPath}/client/dashboard"><i class="fa fa-circle-o"></i><span>Dashboard</span></a></li>
+            <li><a href="${contextPath}/client/course"><i class="fa fa-circle-o"></i><span>Courses</span></a></li>
+            <li class="treeview">
+                <a href="${contextPath}/client/test"><i class="fa fa-circle-o"></i><span>Tests</span><i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                    <li><a href="${contextPath}/client/test#"><i class="fa fa-circle-o"></i><span>All</span></a></li>
+                    <li><a href="${contextPath}/client/test#"><i class="fa fa-circle-o"></i><span>Incoming</span></a></li>
+                </ul>
+            </li>
+            <li><a href="${contextPath}/client/attempt"><i class="fa fa-circle-o"></i><span>Attempts</span></a></li>
+            <li class="header">ADMINISTRATION</li>
+            <li><a href="${contextPath}/oes-admin/account"><i class="fa fa-circle-o"></i><span>Manage accounts</span></a></li>
+            <li><a href="${contextPath}/oes-admin/course"><i class="fa fa-circle-o"></i><span>Manage courses</span></a></li>
+            <li><a href="${contextPath}/oes-admin/question"><i class="fa fa-circle-o"></i><span>Manage questions</span></a></li>
+            <li><a href="${contextPath}/oes-admin/test"><i class="fa fa-circle-o"></i><span>Manage tests</span></a></li>
+            <li><a href="${contextPath}/oes-admin/report"><i class="fa fa-circle-o"></i><span>Reporting</span></a></li>
+        </ul>
+    </div>
+</aside>
