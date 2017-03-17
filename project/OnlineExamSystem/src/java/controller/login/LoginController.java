@@ -86,12 +86,6 @@ public class LoginController extends ManagedServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        getCorrespondingViewDispatcher().forward(request, response);
-    }
-
-    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         if (request.getUserPrincipal() != null) {
