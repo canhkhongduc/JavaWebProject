@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context path="/OnlineExamSystem">
+<<<<<<< .mine
+  <Resource auth="Container" driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver" factory="org.apache.tomcat.jdbc.pool.DataSourceFactory" maxIdle="30" maxTotal="100" maxWaitMillis="10000" name="jdbc/OESDataSource" password="Administrator$PRJ321" type="javax.sql.DataSource" url="jdbc:sqlserver://online-exam-server.database.windows.net:1433;databaseName=OnlineExamSystem" username="MinhCT"/>
+||||||| .r44
+    <Resource name="jdbc/OESDataSource"
+              factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+              auth="Container"
+              type="javax.sql.DataSource"
+              username="MinhCT"
+              password="Administrator$PRJ321"
+              driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+              url="jdbc:sqlserver://online-exam-server.database.windows.net:1433;databaseName=OnlineExamSystem"
+              maxTotal="100"
+              maxIdle="30"
+              maxWaitMillis="10000"/>
+=======
     <Resource 
         name="jdbc/OESDataSource"
         factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
@@ -27,4 +42,5 @@
             algorithm="SHA-512" 
         />
     </Realm>
+>>>>>>> .r59
 </Context>

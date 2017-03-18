@@ -4,6 +4,9 @@
     Author     : Niles
 --%>
 
+<%@page import="java.util.List"%>
+<%@page import="model.Attempt"%>
+<%@page import="util.webcontrol.Pager"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -11,6 +14,10 @@
         <%@include file="/WEB-INF/jspf/head.jspf" %>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Test Report</title>
+        <%
+            List<Attempt> attempts = (List<Attempt>) request.getSession().getAttribute("attempts");
+            String pageIndex = String.valueOf(request.getSession().getAttribute("pageIndex"));
+        %>
     </head>
     <body>
         <%@include file="/WEB-INF/jspf/navbar.jspf" %>
@@ -49,6 +56,11 @@
                     </c:forEach>
                 </tbody>
             </table>
+        </div>
+        <div id="pager">
+            <ul class="pagination">
+                <%=Pager.render(Integer.parseInt(pageIndex), attempts.size(), 2, "viewtestreport", "page", false)%>
+            </ul>
         </div>
         <%@include file="/WEB-INF/jspf/footer.jspf" %>
     </body>
