@@ -25,18 +25,30 @@
                 </ul>
             </li>
             <li><a href="${contextPath}/client/attempt"><i class="fa fa-circle-o"></i><span>Attempts</span></a></li>
-            <c:if test="${sessionScope.currentUser.hasRole('admin') || sessionScope.currentUser.hasRole('testmaster')}">
+                        <c:if test="${sessionScope.currentUser.hasRole('admin') || sessionScope.currentUser.hasRole('testmaster')}">
                 <li class="header">ADMINISTRATION</li>
                     <c:if test="${sessionScope.currentUser.hasRole('admin')}">
-                    <li><a href="${contextPath}/oes-admin/account"><i class="fa fa-circle-o"></i><span>Manage accounts</span></a></li>
+                    <li class="treeview">
+                        <a href="#"><i class="ion ion-ios-people"></i><span>Manage Accounts</span> <i class="fa fa-angle-left pull-right"></i></a>
+                        <ul class="treeview-menu">
+                            <li><a href="${contextPath}/oes-admin/account"><i class="fa fa-circle-o"></i> List Accounts</a></li>
+                            <li><a href="${contextPath}/oes-admin/account/add"><i class="fa fa-circle-o"></i> New Account</a></li>
+                        </ul>
+                    </li>
                     <li><a href="${contextPath}/oes-admin/course"><i class="fa fa-circle-o"></i><span>Manage courses</span></a></li>
-                    </c:if>
-                    <c:if test="${sessionScope.currentUser.hasRole('testmaster')}">
+                            </c:if>
+                            <c:if test="${sessionScope.currentUser.hasRole('testmaster')}">
                     <li><a href="${contextPath}/oes-admin/question"><i class="fa fa-circle-o"></i><span>Manage questions</span></a></li>
-                    <li><a href="${contextPath}/oes-admin/test"><i class="fa fa-circle-o"></i><span>Manage tests</span></a></li>
+                    <li class="treeview">
+                        <a href="#"><i class="ion ion-android-create"></i><span>Manage Tests</span> <i class="fa fa-angle-left pull-right"></i></a>
+                        <ul class="treeview-menu">
+                            <li><a href="${contextPath}/oes-admin/test"><i class="fa fa-circle-o"></i> List Tests</a></li>
+                            <li><a href="${contextPath}/oes-admin/test/add"><i class="fa fa-circle-o"></i> New Test</a></li>
+                        </ul>
+                    </li>
                     <li><a href="${contextPath}/oes-admin/report"><i class="fa fa-circle-o"></i><span>Reporting</span></a></li>
-                    </c:if>
-            </c:if>
+                            </c:if>
+                        </c:if>
         </ul>
     </div>
 </aside>

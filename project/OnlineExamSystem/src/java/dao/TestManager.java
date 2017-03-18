@@ -7,6 +7,7 @@ import java.util.List;
 import model.Account;
 import model.Test;
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import util.hibernate.transaction.TransactionPerformer;
@@ -32,6 +33,19 @@ public class TestManager extends TransactionPerformer {
             criteria.add(Restrictions.eq("owner", owner));
             return criteria.list();
         });
+    }
+    
+    public List<Test> getAccessibleTests(Account account) {
+        return performTransaction((session) -> {
+            Criteria criteria = session.createCriteria(Test.class);
+            criteria.addOrder(Order.asc("id"));
+            criteria.add(Restrictions.or(Restrictions.eq("owner", account), Restrictions.eq("restricted", false)));
+            List<Test> tests = criteria.list();
+            for (Test test : tests) {
+                Hibernate.initialize(test.getOwner());
+            }
+            return tests;
+        });        
     }
 
     public Test getTest(Long id) {

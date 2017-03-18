@@ -134,7 +134,7 @@ public class Test implements Serializable {
         this.attemptLimit = attemptLimit;
     }
 
-    public Boolean isRestricted() {
+    public Boolean getRestricted() {
         return restricted;
     }
 
