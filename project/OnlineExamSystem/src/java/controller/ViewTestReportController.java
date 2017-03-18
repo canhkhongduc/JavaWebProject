@@ -26,6 +26,12 @@ public class ViewTestReportController extends ManagedServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        int pageSize = 10;
+        String strPageIndex = request.getParameter("page");
+        
+        if (strPageIndex == null) {
+            strPageIndex = "1";
+        }
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("currentUser");
@@ -43,6 +49,8 @@ public class ViewTestReportController extends ManagedServlet {
         Test test = tm.getTest(Long.parseLong(testIdStr));
 
         if (test != null) {
+            session.setAttribute("pageIndex", Integer.parseInt(strPageIndex));
+
             Hibernate.initialize(test.getAttempts());
             Set<Attempt> attempts = test.getAttempts();
 
