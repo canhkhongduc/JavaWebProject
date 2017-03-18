@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib prefix="t" uri="/WEB-INF/tlds/template" %>
-<t:oesPage pageTitle="Reporting">
+<t:oesPage pageTitle="View attempts">
     <jsp:attribute name="customHead">
         <link rel="stylesheet" type="text/css" href="${contextPath}/plugins/dataTables/media/css/dataTables.bootstrap.min.css">
     </jsp:attribute>
@@ -11,19 +11,17 @@
         <script src="${contextPath}/plugins/dataTables/media/js/dataTables.bootstrap.min.js"></script>
         <script>
             $(document).ready(function() {
-                $('#owned-test-table').DataTable({
-                    order: [[ 2, 'desc' ]]
-                });
+                var ownedTestTable = $('#owned-test-table').DataTable();
             });
         </script>
     </jsp:attribute>
     <jsp:body>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-12 col-md-9 col-lg-6">
+                <div class="col-sm-12 col-md-12 col-lg-9">
                     <div class="box">
                         <div class="box-header">
-                            <h3 class="box-title">List of your own test</h3>
+                            <h3 class="box-title">Attempts submitted for '${test.name}'</h3>
                             <div class="box-tools">
                             </div>
                         </div>
@@ -32,20 +30,20 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Name</th>
+                                        <th>Examinee</th>
                                         <th>Start time</th>
-                                        <th>Time length</th>
-                                        <th>Actions</th>
+                                        <th>End time</th>
+                                        <th>Score</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <c:forEach var="test" items="${ownedTests}">
+                                    <c:forEach var="attempt" items="${testAttempts}">
                                         <tr>
-                                            <td>${test.id}</td>
-                                            <td>${test.name}</td>
-                                            <td><fmt:formatDate type="both" value="${test.joinStartTime}"/></td>
-                                            <td>${test.timeLength}&nbsp;${test.timeLength <= 1 ? 'minute' : 'minutes'}</td>
-                                            <td><a role="button" href="report/attempt/view?testId=${test.id}">View attempts</a></td>
+                                            <td>${attempt.id}</td>
+                                            <td>${attempt.examinee.profile.fullName} (${attempt.examinee.username})</td>
+                                            <td><fmt:formatDate type="both" value="${attempt.startTime}"/></td>
+                                            <td><fmt:formatDate type="both" value="${attempt.endTime}"/></td>
+                                            <td><fmt:formatNumber type="number" maxFractionDigits="2" value="${attempt.score}"/></td>
                                         </tr>
                                     </c:forEach>
                                 </tbody>
