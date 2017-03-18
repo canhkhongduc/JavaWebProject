@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <aside class="main-sidebar">
     <div class="sidebar">
         <!--Disable search box
@@ -24,12 +25,18 @@
                 </ul>
             </li>
             <li><a href="${contextPath}/client/attempt"><i class="fa fa-circle-o"></i><span>Attempts</span></a></li>
-            <li class="header">ADMINISTRATION</li>
-            <li><a href="${contextPath}/oes-admin/account"><i class="fa fa-circle-o"></i><span>Manage accounts</span></a></li>
-            <li><a href="${contextPath}/oes-admin/course"><i class="fa fa-circle-o"></i><span>Manage courses</span></a></li>
-            <li><a href="${contextPath}/oes-admin/question"><i class="fa fa-circle-o"></i><span>Manage questions</span></a></li>
-            <li><a href="${contextPath}/oes-admin/test"><i class="fa fa-circle-o"></i><span>Manage tests</span></a></li>
-            <li><a href="${contextPath}/oes-admin/report"><i class="fa fa-circle-o"></i><span>Reporting</span></a></li>
+            <c:if test="${sessionScope.currentUser.hasRole('admin') || sessionScope.currentUser.hasRole('testmaster')}">
+                <li class="header">ADMINISTRATION</li>
+                    <c:if test="${sessionScope.currentUser.hasRole('admin')}">
+                    <li><a href="${contextPath}/oes-admin/account"><i class="fa fa-circle-o"></i><span>Manage accounts</span></a></li>
+                    <li><a href="${contextPath}/oes-admin/course"><i class="fa fa-circle-o"></i><span>Manage courses</span></a></li>
+                    </c:if>
+                    <c:if test="${sessionScope.currentUser.hasRole('testmaster')}">
+                    <li><a href="${contextPath}/oes-admin/question"><i class="fa fa-circle-o"></i><span>Manage questions</span></a></li>
+                    <li><a href="${contextPath}/oes-admin/test"><i class="fa fa-circle-o"></i><span>Manage tests</span></a></li>
+                    <li><a href="${contextPath}/oes-admin/report"><i class="fa fa-circle-o"></i><span>Reporting</span></a></li>
+                    </c:if>
+            </c:if>
         </ul>
     </div>
 </aside>
