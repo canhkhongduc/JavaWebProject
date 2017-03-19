@@ -28,8 +28,8 @@
             <c:if test="${sessionScope.currentUser.hasRole('admin') || sessionScope.currentUser.hasRole('testmaster')}">
                 <li class="header">ADMINISTRATION</li>
                 <c:if test="${sessionScope.currentUser.hasRole('admin')}">
-                <li><a href="${contextPath}/oes-admin/account"><i class="fa fa-users"></i><span>Manage accounts</span></a></li>
-                <li><a href="${contextPath}/oes-admin/course"><i class="fa fa-circle-o"></i><span>Manage courses</span></a></li>
+                <li><a href="${contextPath}/oes-admin/account"><i class="fa fa-user-o"></i><span>Manage accounts</span></a></li>
+                <li><a href="${contextPath}/oes-admin/course"><i class="fa fa-folder-o"></i><span>Manage courses</span></a></li>
                 </c:if>
                 <c:if test="${sessionScope.currentUser.hasRole('testmaster')}">
                 <li><a href="${contextPath}/oes-admin/question"><i class="fa fa-circle-o"></i><span>Manage questions</span></a></li>
