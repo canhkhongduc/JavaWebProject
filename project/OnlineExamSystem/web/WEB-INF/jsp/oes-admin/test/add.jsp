@@ -5,30 +5,104 @@
 <t:oesPage pageTitle="Manage tests">
     <jsp:attribute name="customHead">
         <link rel="stylesheet" type="text/css" href="${contextPath}/plugins/dataTables/media/css/dataTables.bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="${contextPath}/plugins/select2/css/select2.min.css">
+        <link rel="stylesheet" type="text/css" href="${contextPath}/plugins/daterangepicker/daterangepicker.css">
+        <style>
+            table.dataTable tbody tr.selected {
+                background-color: #acbad4;
+            }
+        </style>
     </jsp:attribute>
     <jsp:attribute name="customBeginning">
     </jsp:attribute>
     <jsp:attribute name="customEnding">
         <script src="${contextPath}/plugins/dataTables/media/js/jquery.dataTables.min.js"></script>
         <script src="${contextPath}/plugins/dataTables/media/js/dataTables.bootstrap.min.js"></script>
+        <script src="${contextPath}/plugins/select2/js/select2.min.js"></script>
+        <script src="${contextPath}/plugins/daterangepicker/moment.min.js"></script>
+        <script src="${contextPath}/plugins/daterangepicker/daterangepicker.js"></script>
         <script src="${contextPath}/plugins/bootstrap-validator/validator.min.js"></script>
         <script>
+            var setTableSelectListener = function (table) {
+                table.find('tbody').on('click', 'tr', function () {
+                    var table = $(this).closest('table');
+                    var count = $('#' + table.attr('data-count'));
+                    var list = $('#' + table.attr('data-list'));
+                    $(this).toggleClass('selected');
+                    var id = $(this).attr('data-id');
+                    if ($(this).hasClass('selected')) {
+                        list.append($('<li>')
+                                .addClass('list-group-item')
+                                .text($(this).children('td').eq(1).text())
+                                .append($('<input>').attr('type', 'hidden').attr('name', 'selectedQuestion').val(id))
+                                .append($('<i>').addClass('btn fa fa-times fa-pull-right btnRemove'))
+                                .attr('data-id', id));
+                        count.text(parseInt(count.text()) + 1);
+                    } else {
+                        list.children().each(function () {
+                            if ($(this).attr('data-id') === id) {
+                                $(this).remove();
+                            }
+                        });
+                        count.text(parseInt(count.text()) - 1);
+                    }
+                });
+            };
+            var setListRemoveListener = function (list) {
+                list.on('click', '.btnRemove', function () {
+                    var table = $('#' + list.attr('data-table'));
+                    var count = $('#' + list.attr('data-count'));
+                    var id = $(this).parent().attr('data-id');
+                    $(this).parent().remove();
+                    count.text(parseInt(count.text()) - 1);
+                    table.find('tbody').children('.selected').each(function () {
+                        if ($(this).attr('data-id') === id) {
+                            $(this).removeClass('selected');
+                        }
+                    });
+                });
+            };
+            var toggleRestricted = function() {
+                $('#studentBox').slideToggle();
+            }
             $(document).ready(function () {
-                $('table').DataTable();
+                $('.dataTable').DataTable();
+                setTableSelectListener($('#questionTable'));
+                setListRemoveListener($('#questionList'));
+                setTableSelectListener($('#studentTable'));
+                setListRemoveListener($('#studentList'));
+                $('.select2').select2();
+                $('#joinTime').daterangepicker({
+                    timePicker: true,
+                    timePicker24Hour: true,
+                    timePickerIncrement: 1,
+                    timePickerSeconds: true,
+                    locale: {
+                        format: 'MM/DD/YYYY HH:mm:ss'}
+                });
             });
         </script>
     </jsp:attribute>
     <jsp:body>
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-sm-10 col-md-8 col-lg-6">
-                    <div class="box box-primary">
-                        <form class="form-horizontal" role="form" data-toggle="validator">
+            <form class="form-horizontal" role="form" data-toggle="validator">
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <!-- Info Box -->
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Test info</h3>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
                             <div class="box-body">
                                 <div class="form-group">
                                     <label class="col-sm-3 col-md-2 control-label">Course</label>
                                     <div class="col-sm-9 col-md-10">
-                                        <select name="course" class="form-control">
+                                        <select name="course" class="form-control select2" style="width: 100%;">
                                             <c:forEach items="${courses}" var="course">
                                                 <option value="${course.id}">${course.name}</option>
                                             </c:forEach>
@@ -42,20 +116,15 @@
                                         <div class="help-block with-errors"></div>
                                     </div>
                                 </div>
-                                <!--Note: a date-time range picker control can be useful-->
-                                <!--Look at: https://almsaeedstudio.com/themes/AdminLTE/pages/forms/advanced.html -->
                                 <div class="form-group">
-                                    <label for="startTime" class="col-sm-3 col-md-2 control-label">Start Join Time</label>
+                                    <label class="col-sm-3 col-md-2 control-label">Join Time Range:</label>
                                     <div class="col-sm-9 col-md-10">
-                                        <input placeholder="e.g. 2017-03-14 10:00:00" id="startTime" name="startTime" type="text" class="form-control" pattern="(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})" required data-pattern-error="Time must be formatted as yyyy-MM-dd hh:mm:ss">
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="endTime" class="col-sm-3 col-md-2 control-label">End Join Time</label>
-                                    <div class="col-sm-9 col-md-10">
-                                        <input placeholder="e.g. 2017-03-14 12:00:00" id="endTime" name="endTime" type="text" class="form-control" pattern="(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})" required data-pattern-error="Time must be formatted as yyyy-MM-dd hh:mm:ss">
-                                        <div class="help-block with-errors"></div>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-clock-o"></i>
+                                            </div>
+                                            <input type="text" class="form-control pull-right" name="joinTime" id="joinTime">
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -72,11 +141,89 @@
                                         <div class="help-block with-errors"></div>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label for="restricted" class="col-sm-3 col-md-2 control-label">Restricted?</label>
+                                    <div class="col-sm-9 col-md-10">
+                                        <input id="restricted" name="restricted" type="checkbox" class="minimal" value="restricted" onchange="toggleRestricted();">
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                </div>
                             </div>
-                        </form>
+                        </div> <!-- /Info Box -->
+                        <!-- Question Box-->
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Questions</h3>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div><i><i class="fa fa-info-circle"></i> Click on a question to add it to selection list</i></div>
+                                <br>
+                                <div><b><span id="questionCount">0</span></b> question(s) selected.</div>
+                                <br>
+                                <ul id="questionList" class="list-group" data-table="questionTable" data-count="questionCount"></ul>
+                                <table id="questionTable" class="table display table-striped dataTable" data-count="questionCount" data-list="questionList">
+                                    <thead>
+                                        <tr>
+                                            <th>Course</th>
+                                            <th>Content</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach items="${questions}" var="question">
+                                            <tr data-id="${question.id}">
+                                                <td>${question.course.id}</td>
+                                                <td>${question.content}</td>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> <!-- /Question Box -->
+                        <!-- Student Box-->
+                        <div id="studentBox" class="box box-primary" style="display: none;">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Students</h3>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div><i><i class="fa fa-info-circle"></i> Click on a student to add he/she to selection list</i></div>
+                                <br>
+                                <div><b><span id="studentCount">0</span></b> student(s) selected.</div>
+                                <br>
+                                <ul id="studentList" class="list-group" data-table="studentTable" data-count="studentCount"></ul>
+                                <table id="studentTable" class="table display table-striped dataTable" data-count="studentCount" data-list="studentList">
+                                    <thead>
+                                        <tr>
+                                            <th>Username</th>
+                                            <th>Full name</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach items="${students}" var="student">
+                                            <tr data-id="${student.username}">
+                                                <td>${student.username}</td>
+                                                <td>${student.profile.fullName}</td>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> <!-- /Student Box -->
+                        <div class="box no-border">
+                            <button type="submit" class="btn btn-info pull-right">Create test</button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </jsp:body>
 </t:oesPage>

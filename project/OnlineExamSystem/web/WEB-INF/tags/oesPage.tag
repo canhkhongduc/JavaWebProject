@@ -33,7 +33,7 @@
     </jsp:attribute>
     <jsp:attribute name="ending">
         <%@include file="/WEB-INF/jspf/scripts.jspf" %>
-        <script>$('body').addClass('skin-blue sidebar-mini');</script>
+        <script>$('body').addClass('skin-blue sidebar-mini fixed');</script>
         <jsp:invoke fragment="customEnding"/>
     </jsp:attribute>
 </t:genericPage>

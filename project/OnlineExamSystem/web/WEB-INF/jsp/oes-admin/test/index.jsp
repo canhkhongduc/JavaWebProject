@@ -27,7 +27,7 @@
                             <div class="box-tools">
                             </div>
                         </div>
-                        <div class="box-body table-responsive">
+                        <div class="box-body table-responsive table-hover">
                             <table class="table table-hover dataTable" id="table">
                                 <thead>
                                     <tr>
