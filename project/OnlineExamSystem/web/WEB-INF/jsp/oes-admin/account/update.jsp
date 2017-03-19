@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="model.AccountProfile"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="util.CommonUtil"%>
@@ -8,8 +9,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib prefix="t" uri="/WEB-INF/tlds/template" %>
 <%
-    Account currentUser = (Account) session.getAttribute("currentUser");
-    AccountProfile profile = currentUser.getProfile();
+    Account account = (Account) request.getAttribute("account");
+    AccountProfile profile = account.getProfile();
 
     String fullName = CommonUtil.getNullable(profile.getFullName(), "");
     String email = CommonUtil.getNullable(profile.getEmail(), "");
@@ -17,7 +18,7 @@
     String birthDate = CommonUtil.convertNullable(
             profile.getBirthdate(),
             "",
-            ( date) -> new SimpleDateFormat("dd/MM/yyyy").format(date)
+            (date) -> new SimpleDateFormat("dd/MM/yyyy").format(date)
     );
 
     pageContext.setAttribute("fullName", fullName);
@@ -25,7 +26,7 @@
     pageContext.setAttribute("gender", gender);
     pageContext.setAttribute("birthDate", birthDate);
 %>
-<t:oesPage pageTitle="Update profile">
+<t:oesPage pageTitle="Update account">
     <jsp:attribute name="customHead">
         <link rel="stylesheet" href="${contextPath}/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
     </jsp:attribute>
@@ -48,14 +49,19 @@
                 <div class="col-sm-8 col-md-6 col-lg-4">
                     <div class="box box-primary">
                         <form action="update" method="POST" accept-charset="UTF-8">
+                            <input type="hidden" name="username" value="${account.username}">
                             <div class="box-body">
+                                <div class="form-group">
+                                    <label for="inpUsername">Username</label>
+                                    <input type="text" id="inpUsername" class="form-control" placeholder="Username" value="${account.username}" readonly>
+                                </div>
                                 <div class="form-group">
                                     <label for="inpFullName">Full name</label>
                                     <input type="text" name="fullName" id="inpFullName" class="form-control" placeholder="Full name" value="${fullName}" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="inpEmail">Email</label>
-                                    <input type="email" name="email" id="inpEmail" class="form-control" placeholder="Email" value="${email}" >
+                                    <input type="email" name="email" id="inpEmail" class="form-control" placeholder="Email" value="${email}">
                                 </div>
                                 <div class="form-group">
                                     <label for="grpGender">Gender</label>
@@ -70,7 +76,15 @@
                                 </div>
                                 <div class="form-group date" data-provider="datepicker">
                                     <label for="inpBirthDate">Birth date</label>
-                                    <input type="text" name="birthDate" id="inpBirthDate" class="form-control" placeholder="dd/mm/yyyy" value="${birthDate}" >
+                                    <input type="text" name="birthDate" id="inpBirthDate" class="form-control" placeholder="dd/mm/yyyy" value="${birthDate}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="cbxRole">Role</label>
+                                    <select name="role" id="cbxRole" class="form-control">
+                                        <c:forEach var="role" items="${roles}">
+                                            <option value="${role.name}" ${account.hasRole(role) ? 'selected' : ''}>${role.description}</option>
+                                        </c:forEach>
+                                    </select>
                                 </div>
                             </div>
                             <div class="box-footer">
