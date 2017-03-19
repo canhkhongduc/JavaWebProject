@@ -31,7 +31,6 @@
                             <table id="owned-test-table" class="table table-hover dataTable">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
                                         <th>Name</th>
                                         <th>Start time</th>
                                         <th>Time length</th>
@@ -41,7 +40,6 @@
                                 <tbody>
                                     <c:forEach var="test" items="${ownedTests}">
                                         <tr>
-                                            <td>${test.id}</td>
                                             <td>${test.name}</td>
                                             <td><fmt:formatDate type="both" value="${test.joinStartTime}"/></td>
                                             <td>${test.timeLength}&nbsp;${test.timeLength <= 1 ? 'minute' : 'minutes'}</td>

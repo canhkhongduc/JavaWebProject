@@ -17,7 +17,7 @@
     String birthDate = CommonUtil.convertNullable(
             profile.getBirthdate(),
             "01/01/2000",
-            (date) -> new SimpleDateFormat("dd/MM/yyyy").format(date)
+            ( date) -> new SimpleDateFormat("dd/MM/yyyy").format(date)
     );
 
     pageContext.setAttribute("fullName", fullName);
@@ -38,7 +38,7 @@
             $('#inpBirthDate').datepicker({
                 format: 'dd/mm/yyyy',
                 endDate: '0d',
-                defaultViewDate: { year: 2000, month: 1, day: 1 }
+                defaultViewDate: {year: 2000, month: 1, day: 1}
             });
         </script>
     </jsp:attribute>
@@ -48,34 +48,34 @@
                 <div class="col-sm-8 col-md-6 col-lg-4">
                     <div class="box box-primary">
                         <form action="update" method="POST" accept-charset="UTF-8">
-                                <div class="box-body">
-                                    <div class="form-group">
-                                        <label for="inpFullName">Full name</label>
-                                        <input type="text" name="fullName" id="inpFullName" class="form-control" placeholder="Full name" value="${fullName}" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="inpEmail">Email</label>
-                                        <input type="email" name="email" id="inpEmail" class="form-control" placeholder="Email" value="${email}" >
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="grpGender">Gender</label>
-                                        <div id="grpGender">
-                                            <label class="radio-inline">
-                                                <input type="radio" name="gender" value="true" ${gender ? 'checked' : ''}>Male
-                                            </label>
-                                            <label class="radio-inline">
-                                                <input type="radio" name="gender" value="false" ${!gender ? 'checked' : ''}>Female
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group date" data-provider="datepicker">
-                                        <label for="inpBirthDate">Birth date</label>
-                                        <input type="text" name="birthDate" id="inpBirthDate" class="form-control" placeholder="dd/mm/yyyy" value="${birthDate}" >
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label for="inpFullName">Full name</label>
+                                    <input type="text" name="fullName" id="inpFullName" class="form-control" placeholder="Full name" value="${fullName}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inpEmail">Email</label>
+                                    <input type="email" name="email" id="inpEmail" class="form-control" placeholder="Email" value="${email}" >
+                                </div>
+                                <div class="form-group">
+                                    <label for="grpGender">Gender</label>
+                                    <div id="grpGender">
+                                        <label class="radio-inline">
+                                            <input type="radio" name="gender" value="true" ${gender ? 'checked' : ''}>Male
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="gender" value="false" ${!gender ? 'checked' : ''}>Female
+                                        </label>
                                     </div>
                                 </div>
-                                <div class="box-footer">
-                                    <button type="submit" class="btn btn-primary">Update</button>
+                                <div class="form-group date" data-provider="datepicker">
+                                    <label for="inpBirthDate">Birth date</label>
+                                    <input type="text" name="birthDate" id="inpBirthDate" class="form-control" placeholder="dd/mm/yyyy" value="${birthDate}" >
                                 </div>
+                            </div>
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </div>
                         </form>
                     </div>
                 </div>
