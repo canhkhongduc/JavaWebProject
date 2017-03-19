@@ -3,6 +3,7 @@
  */
 package dao;
 
+import java.sql.Date;
 import java.util.List;
 import model.Account;
 import model.Question;
@@ -58,7 +59,19 @@ public class TestManager extends TransactionPerformer {
             return tests;
         });        
     }
-
+    public List<Test> getIncomingTest(Date date){
+        return performTransaction((session) -> {
+            
+            Criteria criteria = session.createCriteria(Test.class);
+            criteria.addOrder(Order.asc("id"));
+            criteria.add(Restrictions.or(Restrictions.gt("joinStartTime", date)));
+            List<Test> tests = criteria.list();
+            for (Test test : tests) {
+                Hibernate.initialize(test.getOwner());
+            }
+            return tests;
+        }); 
+    }
     public Test getTest(Long id) {
         return performTransaction((session) -> {
             Test test = (Test) session.get(Test.class, id);
