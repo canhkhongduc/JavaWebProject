@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Account;
+import model.Attempt;
 import model.Choice;
 import model.Question;
 import model.Test;
@@ -128,8 +129,17 @@ public class TestMarkController extends HttpServlet {
             }
         }
 
-        long attemptId = attemptManager
-                .addAttempt(score, startTime, endTime, account, test, allChoiceList);
+        Attempt attempt = new Attempt();
+        attempt.setScore(score);
+        attempt.setStartTime(startTime);
+        attempt.setEndTime(endTime);
+        attempt.setExaminee(account);
+        attempt.setTest(test);
+        for (Choice choice : allChoiceList) {
+            attempt.addChoice(choice);
+        }
+
+        long attemptId = attemptManager.addAttempt(attempt);
 
         request.getSession().setAttribute("testStartTime", null);
         request.getSession().setAttribute("questionList", null);
