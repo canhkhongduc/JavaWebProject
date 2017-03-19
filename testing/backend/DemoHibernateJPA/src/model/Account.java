@@ -70,7 +70,20 @@ public class Account implements Serializable {
     public void removeRole(Role role) {
         this.roles.remove(role);
     }
-
+    
+    public void setRole(Role role) {
+        this.roles.clear();
+        this.roles.add(role);
+    }
+    
+    public boolean hasRole(Role role) {
+        return this.roles.contains(role);
+    }
+    
+    public boolean hasRole(String roleName) {
+        return this.roles.contains(new Role(roleName, null));
+    }
+    
     public AccountProfile getProfile() {
         return profile;
     }

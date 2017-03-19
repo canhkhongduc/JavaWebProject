@@ -24,7 +24,7 @@ public class AccountProfile implements Serializable {
     @JoinColumn(name = "username", referencedColumnName = "username")
     private Account account;
 
-    @Column(columnDefinition = "nvarchar(255)")
+    @Column(columnDefinition = "nvarchar(255)", nullable = false)
     private String fullName;
 
     private Boolean gender;

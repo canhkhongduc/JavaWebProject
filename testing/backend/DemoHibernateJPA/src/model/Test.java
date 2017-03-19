@@ -32,6 +32,10 @@ public class Test implements Serializable {
     @ManyToOne
     @JoinColumn(name = "owner")
     private Account owner;
+    
+    @ManyToOne
+    @JoinColumn(name = "courseId")
+    private Course course;
 
     @Column(columnDefinition = "nvarchar(255)")
     private String name;
@@ -94,6 +98,14 @@ public class Test implements Serializable {
         this.owner = owner;
     }
 
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
     public String getName() {
         return this.name;
     }
@@ -134,7 +146,7 @@ public class Test implements Serializable {
         this.attemptLimit = attemptLimit;
     }
 
-    public Boolean isRestricted() {
+    public Boolean getRestricted() {
         return restricted;
     }
 
