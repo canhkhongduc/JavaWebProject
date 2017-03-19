@@ -10,9 +10,9 @@
         <script src="${contextPath}/plugins/dataTables/media/js/jquery.dataTables.min.js"></script>
         <script src="${contextPath}/plugins/dataTables/media/js/dataTables.bootstrap.min.js"></script>
         <script>
-            $(document).ready(function() {
+            $(document).ready(function () {
                 $('#tblOwnedTests').DataTable({
-                    order: [[ 2, 'desc' ]]
+                    order: [[2, 'desc']]
                 });
             });
         </script>

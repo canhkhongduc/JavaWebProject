@@ -14,6 +14,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import util.CommonUtil;
 
 @Entity
 public class Account implements Serializable {
@@ -82,6 +83,10 @@ public class Account implements Serializable {
     
     public boolean hasRole(String roleName) {
         return this.roles.contains(new Role(roleName, null));
+    }
+    
+    public String getRolesDescription() {
+        return CommonUtil.toSequenceString(roles, (role) -> role.getDescription());
     }
     
     public AccountProfile getProfile() {

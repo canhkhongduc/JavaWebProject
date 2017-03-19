@@ -29,7 +29,7 @@
                                 <form id="frmViewMode" class="form-inline" action="view" method="GET">
                                     <input type="hidden" name="testId" value="${test.id}">
                                     <div class="form-group">
-                                        <label class="control-label" for="cbxViewMode">For each student, view</label>
+                                        <label class="control-label" for="cbxViewMode">For each examinee, view</label>
                                         <select id="cbxViewMode" class="form-control input-sm" name="viewMode">
                                             <option value="latest" ${((empty viewMode) || !(viewMode ne 'all')) ? 'selected' : ''}>Only the latest attempt</option>
                                             <option value="all" ${viewMode eq 'all' ? 'selected' : ''}>All attempts</option>
@@ -43,7 +43,7 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Student</th>
+                                        <th>Examinee</th>
                                         <th>Submitted time</th>
                                         <th>Score</th>
                                     </tr>

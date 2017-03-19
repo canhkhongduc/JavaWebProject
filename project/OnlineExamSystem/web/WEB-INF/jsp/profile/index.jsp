@@ -25,14 +25,14 @@
             NULL_STRING,
             ( date) -> SimpleDateFormat.getDateInstance().format(date)
     );
-    String roles = CommonUtil.toSequenceString(currentUser.getRoles(), ( role) -> role.getDescription());
+    String roleDesc = currentUser.getRolesDescription();
 
     pageContext.setAttribute("username", username);
     pageContext.setAttribute("fullName", fullName);
     pageContext.setAttribute("email", email);
     pageContext.setAttribute("gender", gender);
     pageContext.setAttribute("birthDate", birthDate);
-    pageContext.setAttribute("roles", roles);
+    pageContext.setAttribute("roleDesc", roleDesc);
 %>
 <t:oesPage pageTitle="View profile">
     <jsp:attribute name="customHead">
@@ -51,7 +51,7 @@
                     <div class="box box-widget widget-user">
                         <div class="widget-user-header bg-blue">
                             <h3 class="widget-user-username">${fullName}</h3>
-                            <h5 class="widget-user-desc">${roles}</h5>
+                            <h5 class="widget-user-desc">${roleDesc}</h5>
                         </div>
                         <div class="box-body no-padding">
                             <ul class="nav nav-stacked">
