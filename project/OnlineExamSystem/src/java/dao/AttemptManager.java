@@ -3,11 +3,12 @@
  */
 package dao;
 
-import java.util.LinkedHashSet;
+import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import model.Account;
 import model.Attempt;
+import model.Choice;
 import model.Test;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
@@ -42,6 +43,13 @@ public class AttemptManager extends TransactionPerformer {
             criteria.add(Restrictions.eq("test", test));
             criteria.add(Restrictions.eq("examinee", examinee));
             return criteria.list();
+        });
+    }
+    
+    public Long addAttempt(Attempt attempt){
+        return performTransaction((session) -> {
+            session.save(attempt);
+            return attempt.getId();
         });
     }
 }

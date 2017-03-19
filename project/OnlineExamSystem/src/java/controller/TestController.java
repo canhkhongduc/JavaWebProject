@@ -33,46 +33,6 @@ public class TestController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        /*
-        response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession();
-        Account account = (Account) session.getAttribute("currentUser");
-        if (account == null) {
-            response.sendRedirect("oauth2login");
-        } else if (!account.getGroup().getPermissions().stream().anyMatch((Permission t) -> t.getName().equals("manage_tests"))) {
-            request.getRequestDispatcher("/WEB-INF/jsp/error.jsp?error=Permission%20denied").forward(request, response);
-        } else {
-            String action = request.getParameter("action");
-            if (action == null) {
-                QuestionManager questionManager = new QuestionManager();
-                ChoiceManager choiceManager = new ChoiceManager();
-
-                int currentQuestion = 0;
-
-                if (request.getParameter("question") != null) {
-                    currentQuestion = Integer.parseInt(request.getParameter("question"));
-                }
-
-                List<Question> questionList = questionManager.getAllQuestions();
-                List<Choice> choiceList = choiceManager.getChoices(questionList.get(currentQuestion));
-
-                request.setAttribute("questionList", questionList);
-                request.setAttribute("questionIndex", currentQuestion);
-                request.setAttribute("choiceList", choiceList);
-
-                request.getRequestDispatcher("test.jsp").forward(request, response);
-            } else {
-                switch (action) {
-                    case "add": {
-                        List<Course> courses = new CourseManager().getAllCourses();
-                        request.setAttribute("courses", courses);
-                        request.getRequestDispatcher("/WEB-INF/jsp/add_test.jsp").forward(request, response);
-                        break;
-                    }
-                }
-            }
-        }
-        */
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
