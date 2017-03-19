@@ -10,8 +10,11 @@
         <script src="${contextPath}/plugins/dataTables/media/js/jquery.dataTables.min.js"></script>
         <script src="${contextPath}/plugins/dataTables/media/js/dataTables.bootstrap.min.js"></script>
         <script>
-            $(document).ready(function() {
-                var ownedTestTable = $('#owned-test-table').DataTable();
+            $(document).ready(function () {
+                $('#tblAttempts').DataTable();
+                $('#cbxViewMode').change(function() {
+                    $('#frmViewMode').submit();
+                });
             });
         </script>
     </jsp:attribute>
@@ -23,16 +26,25 @@
                         <div class="box-header">
                             <h3 class="box-title">Attempts submitted for '${test.name}'</h3>
                             <div class="box-tools">
+                                <form id="frmViewMode" class="form-inline" action="view" method="GET">
+                                    <input type="hidden" name="testId" value="${test.id}">
+                                    <div class="form-group">
+                                        <label class="control-label" for="cbxViewMode">For each student, view</label>
+                                        <select id="cbxViewMode" class="form-control input-sm" name="viewMode">
+                                            <option value="latest" ${((empty viewMode) || !(viewMode ne 'all')) ? 'selected' : ''}>Only the latest attempt</option>
+                                            <option value="all" ${viewMode eq 'all' ? 'selected' : ''}>All attempts</option>
+                                        </select>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <div class="box-body table-responsive">
-                            <table id="owned-test-table" class="table table-hover dataTable">
+                            <table id="tblAttempts" class="table table-hover dataTable">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Examinee</th>
-                                        <th>Start time</th>
-                                        <th>End time</th>
+                                        <th>Student</th>
+                                        <th>Submitted time</th>
                                         <th>Score</th>
                                     </tr>
                                 </thead>
@@ -41,7 +53,6 @@
                                         <tr>
                                             <td>${attempt.id}</td>
                                             <td>${attempt.examinee.profile.fullName} (${attempt.examinee.username})</td>
-                                            <td><fmt:formatDate type="both" value="${attempt.startTime}"/></td>
                                             <td><fmt:formatDate type="both" value="${attempt.endTime}"/></td>
                                             <td><fmt:formatNumber type="number" maxFractionDigits="2" value="${attempt.score}"/></td>
                                         </tr>
@@ -53,5 +64,6 @@
                 </div>
             </div>
         </div>
-    </jsp:body>
+    </div>
+</jsp:body>
 </t:oesPage>

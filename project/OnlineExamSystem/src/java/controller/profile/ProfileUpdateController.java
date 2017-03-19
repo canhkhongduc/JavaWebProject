@@ -13,7 +13,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Account;
-import model.AccountProfile;
 import util.servlet.ManagedServlet;
 
 /**
@@ -44,7 +43,7 @@ public class ProfileUpdateController extends ManagedServlet {
         String birthDateStr = request.getParameter("birthDate");
         // Validation
         if (fullName == null) {
-            response.sendError(400);
+            response.sendError(400, "Full name must not be empty.");
             return;
         }
         Boolean gender = (genderStr == null) ? null : Boolean.parseBoolean(genderStr);
@@ -53,7 +52,7 @@ public class ProfileUpdateController extends ManagedServlet {
         try {
             birthDate = (birthDateStr == null) ? null : formatter.parse(birthDateStr);
         } catch (ParseException ex) {
-            response.sendError(400);
+            response.sendError(400, "Invalid birth date.");
             return;
         }
         // Update profile

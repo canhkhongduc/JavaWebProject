@@ -3,9 +3,10 @@
  */
 package dao;
 
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import model.Account;
 import model.Attempt;
 import model.Test;
@@ -34,6 +35,30 @@ public class AttemptManager extends TransactionPerformer {
             return criteria.list();
         });
     }
+    
+    public List<Attempt> getAttempts(Test test, boolean onlyLatestByExaminee) {
+        return performTransaction((session) -> {
+            Criteria criteria = session.createCriteria(Attempt.class);
+            criteria.addOrder(Order.asc("id"));
+            criteria.add(Restrictions.eq("test", test));
+            List<Attempt> attempts = criteria.list();
+            if (onlyLatestByExaminee) {
+                Map<Account, Optional<Attempt>> latestAttemptOptionals = attempts.stream().collect(
+                        Collectors.groupingBy(
+                                (attempt) -> attempt.getExaminee(),
+                                Collectors.maxBy((attempt1, attempt2) -> Long.compare(attempt1.getId(), attempt2.getId()))
+                        )
+                );
+                List<Attempt> latestAttempts = latestAttemptOptionals.values().stream()
+                        .map((optional) -> optional.get())
+                        .sorted((attempt1, attempt2) -> Long.compare(attempt1.getId(), attempt2.getId()))
+                        .collect(Collectors.toList());
+                return latestAttempts;
+            } else {
+                return attempts;
+            }
+        });
+    }
 
     public List<Attempt> getAttempts(Test test, Account examinee) {
         return performTransaction((session) -> {
@@ -42,6 +67,18 @@ public class AttemptManager extends TransactionPerformer {
             criteria.add(Restrictions.eq("test", test));
             criteria.add(Restrictions.eq("examinee", examinee));
             return criteria.list();
+        });
+    }
+        
+    public Attempt getOnlyLatestAttempt(Test test, Account examinee) {
+        return performTransaction((session) -> {
+            Criteria criteria = session.createCriteria(Attempt.class);
+            criteria.addOrder(Order.asc("id"));
+            criteria.add(Restrictions.eq("test", test));
+            criteria.add(Restrictions.eq("examinee", examinee));
+            List<Attempt> attempts = criteria.list();
+            Optional<Attempt> optional = attempts.stream().collect(Collectors.maxBy((attempt1, attempt2) -> Long.compare(attempt1.getId(), attempt2.getId())));
+            return optional.orElse(null);
         });
     }
 }
