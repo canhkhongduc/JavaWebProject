@@ -15,32 +15,32 @@
         -->
         <ul class="sidebar-menu">
             <li class="header">NAVIGATION</li>
-            <li><a href="${contextPath}/client/dashboard"><i class="fa fa-circle-o"></i><span>Dashboard</span></a></li>
-            <li><a href="${contextPath}/client/course"><i class="fa fa-circle-o"></i><span>Courses</span></a></li>
+            <li><a href="${contextPath}/client/dashboard"><i class="fa fa-tachometer"></i><span>Dashboard</span></a></li>
+            <li><a href="${contextPath}/client/course"><i class="fa fa-leanpub"></i><span>Courses</span></a></li>
             <li class="treeview">
-                <a href="${contextPath}/client/test"><i class="fa fa-circle-o"></i><span>Tests</span><i class="fa fa-angle-left pull-right"></i></a>
+                <a href="${contextPath}/client/test"><i class="fa fa-pencil"></i><span>Tests</span><i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                     <li><a href="${contextPath}/client/test#"><i class="fa fa-circle-o"></i><span>All</span></a></li>
                     <li><a href="${contextPath}/client/test#"><i class="fa fa-circle-o"></i><span>Incoming</span></a></li>
                 </ul>
             </li>
-            <li><a href="${contextPath}/client/attempt"><i class="fa fa-circle-o"></i><span>Attempts</span></a></li>
+            <li><a href="${contextPath}/client/attempt"><i class="fa fa-check-square"></i><span>Attempts</span></a></li>
             <c:if test="${sessionScope.currentUser.hasRole('admin') || sessionScope.currentUser.hasRole('testmaster')}">
                 <li class="header">ADMINISTRATION</li>
                 <c:if test="${sessionScope.currentUser.hasRole('admin')}">
                 <li><a href="${contextPath}/oes-admin/account"><i class="fa fa-user-o"></i><span>Manage accounts</span></a></li>
-                <li><a href="${contextPath}/oes-admin/course"><i class="fa fa-folder-o"></i><span>Manage courses</span></a></li>
+                <li><a href="${contextPath}/oes-admin/course"><i class="fa fa-leanpub"></i><span>Manage courses</span></a></li>
                 </c:if>
                 <c:if test="${sessionScope.currentUser.hasRole('testmaster')}">
-                <li><a href="${contextPath}/oes-admin/question"><i class="fa fa-circle-o"></i><span>Manage questions</span></a></li>
+                <li><a href="${contextPath}/oes-admin/question"><i class="fa fa-question-circle-o"></i><span>Manage questions</span></a></li>
                 <li class="treeview">
-                    <a href="#"><i class="ion ion-android-create"></i><span>Manage Tests</span> <i class="fa fa-angle-left pull-right"></i></a>
+                    <a href="#"><i class="fa fa-list"></i><span>Manage Tests</span> <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
                         <li><a href="${contextPath}/oes-admin/test"><i class="fa fa-circle-o"></i> List Tests</a></li>
                         <li><a href="${contextPath}/oes-admin/test/add"><i class="fa fa-circle-o"></i> New Test</a></li>
                     </ul>
                 </li>
-                <li><a href="${contextPath}/oes-admin/report"><i class="fa fa-circle-o"></i><span>Reporting</span></a></li>
+                <li><a href="${contextPath}/oes-admin/report"><i class="fa fa-table"></i><span>Reporting</span></a></li>
                 </c:if>
             </c:if>
         </ul>
