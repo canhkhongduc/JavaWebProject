@@ -5,6 +5,7 @@ package dao;
 
 import java.util.List;
 import model.Account;
+import model.Question;
 import model.Course;
 import model.Test;
 import org.hibernate.Criteria;
@@ -60,7 +61,12 @@ public class TestManager extends TransactionPerformer {
 
     public Test getTest(Long id) {
         return performTransaction((session) -> {
-            return (Test) session.get(Test.class, id);
+            Test test = (Test) session.get(Test.class, id);
+            Hibernate.initialize(test.getQuestions());
+            for (Question q : test.getQuestions()) {
+                Hibernate.initialize(q.getChoices());
+            }
+            return test;
         });
     }
 

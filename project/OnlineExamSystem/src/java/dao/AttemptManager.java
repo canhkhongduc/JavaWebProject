@@ -4,13 +4,19 @@
 package dao;
 
 import java.util.List;
+
+
+import java.util.Set;
+
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 import model.Account;
 import model.Attempt;
 import model.Test;
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import util.hibernate.transaction.TransactionPerformer;
@@ -23,7 +29,10 @@ public class AttemptManager extends TransactionPerformer {
 
     public Attempt getAttempt(Long id) {
         return performTransaction((session) -> {
-            return (Attempt) session.get(Attempt.class, id);
+            Attempt attempt = (Attempt) session.get(Attempt.class, id);
+            Hibernate.initialize(attempt.getChoices());
+            
+            return attempt;
         });
     }
 
