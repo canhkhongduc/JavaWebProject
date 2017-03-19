@@ -5,6 +5,7 @@ package dao;
 
 import java.util.List;
 import model.Account;
+import model.Course;
 import model.Test;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
@@ -31,6 +32,15 @@ public class TestManager extends TransactionPerformer {
             Criteria criteria = session.createCriteria(Test.class);
             criteria.addOrder(Order.asc("id"));
             criteria.add(Restrictions.eq("owner", owner));
+            return criteria.list();
+        });
+    }
+    
+    public List<Test> getTests(Course course) {
+        return performTransaction((session) -> {
+            Criteria criteria = session.createCriteria(Test.class);
+            criteria.addOrder(Order.asc("id"));
+            criteria.add(Restrictions.eq("course", course));
             return criteria.list();
         });
     }

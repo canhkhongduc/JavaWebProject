@@ -47,7 +47,7 @@
     <jsp:body>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-10 col-md-8 col-lg-6">
+                <div class="col-sm-8 col-md-6 col-lg-4">
                     <div class="box box-widget widget-user">
                         <div class="widget-user-header bg-blue">
                             <h3 class="widget-user-username">${fullName}</h3>
