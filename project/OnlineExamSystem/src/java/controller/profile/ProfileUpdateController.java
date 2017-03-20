@@ -13,7 +13,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Account;
-import model.AccountProfile;
 import util.servlet.ManagedServlet;
 
 /**
@@ -35,16 +34,22 @@ public class ProfileUpdateController extends ManagedServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Extract parameters
         Account currentUser = (Account) request.getSession().getAttribute("currentUser");
+        // Extract parameters
         request.setCharacterEncoding("UTF-8");
         String fullName = request.getParameter("fullName");
         String email = request.getParameter("email");
         String genderStr = request.getParameter("gender");
         String birthDateStr = request.getParameter("birthDate");
+        
+        if (fullName.isEmpty()) fullName = null;
+        if (email.isEmpty()) email = null;
+        if (genderStr.isEmpty()) genderStr = null;
+        if (birthDateStr.isEmpty()) birthDateStr = null;
+        
         // Validation
         if (fullName == null) {
-            response.sendError(400);
+            response.sendError(400, "Full name must not be empty.");
             return;
         }
         Boolean gender = (genderStr == null) ? null : Boolean.parseBoolean(genderStr);
@@ -53,7 +58,7 @@ public class ProfileUpdateController extends ManagedServlet {
         try {
             birthDate = (birthDateStr == null) ? null : formatter.parse(birthDateStr);
         } catch (ParseException ex) {
-            response.sendError(400);
+            response.sendError(400, "Invalid birth date.");
             return;
         }
         // Update profile
@@ -63,7 +68,7 @@ public class ProfileUpdateController extends ManagedServlet {
         currentUser.getProfile().setGender(gender);
         currentUser.getProfile().setBirthdate(birthDate);
         accountManager.updateAccount(currentUser);
-        
+
         redirect(response, getServletURL(ProfileController.class));
     }
 }

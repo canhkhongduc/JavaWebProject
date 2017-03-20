@@ -5,6 +5,7 @@ package dao;
 
 import java.util.List;
 import model.Account;
+import model.Role;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -56,6 +57,16 @@ public class AccountManager extends TransactionPerformer {
     public boolean deleteAccount(Account account) {
         return performTransaction((session) -> {
             session.delete(account);
+        });
+    }
+    
+    public List<Account> getAccountsByRole(String role) {
+        return performTransaction((session) -> {
+            Criteria criteria = session.createCriteria(Account.class);
+            criteria.createAlias("roles", "rolesAlias");
+            criteria.add(Restrictions.eq("rolesAlias.name", role));
+            criteria.addOrder(Order.asc("username"));
+            return criteria.list();
         });
     }
 }

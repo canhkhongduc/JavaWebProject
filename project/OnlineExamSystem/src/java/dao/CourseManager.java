@@ -28,4 +28,22 @@ public class CourseManager extends TransactionPerformer {
             return (Course) session.get(Course.class, id);
         });
     }
+    
+    public boolean saveCourse(Course course) {
+        return performTransaction((session) -> {
+            session.save(course);
+        });
+    }
+    
+    public boolean updateCourse(Course course) {
+        return performTransaction((session) -> {
+            session.update(course);
+        });
+    }
+    
+    public boolean deleteCourse(Course course) {
+        return performTransaction((session) -> {
+            session.delete(course);
+        });
+    }
 }

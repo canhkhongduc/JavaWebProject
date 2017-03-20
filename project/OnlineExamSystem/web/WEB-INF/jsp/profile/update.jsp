@@ -16,7 +16,7 @@
     boolean gender = CommonUtil.getNullable(profile.getGender(), true);
     String birthDate = CommonUtil.convertNullable(
             profile.getBirthdate(),
-            "01/01/2000",
+            "",
             ( date) -> new SimpleDateFormat("dd/MM/yyyy").format(date)
     );
 
@@ -45,7 +45,7 @@
     <jsp:body>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-8 col-md-6 col-lg-4">
+                <div class="col-sm-10 col-md-8 col-lg-6">
                     <div class="box box-primary">
                         <form action="update" method="POST" accept-charset="UTF-8">
                             <div class="box-body">

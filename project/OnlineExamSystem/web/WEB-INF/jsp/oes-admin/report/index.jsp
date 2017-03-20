@@ -10,9 +10,9 @@
         <script src="${contextPath}/plugins/dataTables/media/js/jquery.dataTables.min.js"></script>
         <script src="${contextPath}/plugins/dataTables/media/js/dataTables.bootstrap.min.js"></script>
         <script>
-            $(document).ready(function() {
-                $('#owned-test-table').DataTable({
-                    order: [[ 2, 'desc' ]]
+            $(document).ready(function () {
+                $('#tblOwnedTests').DataTable({
+                    order: [[1, 'desc']]
                 });
             });
         </script>
@@ -20,15 +20,15 @@
     <jsp:body>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-12 col-md-9 col-lg-6">
+                <div class="col-sm-12">
                     <div class="box">
                         <div class="box-header">
-                            <h3 class="box-title">List of your own test</h3>
+                            <h3 class="box-title">List of your own test(s)</h3>
                             <div class="box-tools">
                             </div>
                         </div>
                         <div class="box-body table-responsive">
-                            <table id="owned-test-table" class="table table-hover dataTable">
+                            <table id="tblOwnedTests" class="table table-hover dataTable">
                                 <thead>
                                     <tr>
                                         <th>Name</th>

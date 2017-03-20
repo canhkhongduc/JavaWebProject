@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Objects;
@@ -192,6 +193,27 @@ public class Test implements Serializable {
         this.examinees.remove(examinee);
     }
 
+    public boolean isJoinable() {
+        Date now = new Date();
+        return (now.compareTo(joinStartTime) >= 0) && (now.compareTo(joinEndTime) <= 0);
+    }
+    
+    public TestStatus getStatus() {
+        Calendar calendar = Calendar.getInstance();
+        Date now = calendar.getTime();
+        calendar.setTime(joinEndTime);
+        calendar.roll(Calendar.MINUTE, timeLength);
+        Date finishTime = calendar.getTime();
+        
+        if (now.compareTo(joinStartTime) < 0) {
+            return TestStatus.PENDING;
+        } else if (now.compareTo(finishTime) < 0) {
+            return TestStatus.ONGOING;
+        } else {
+            return TestStatus.FINISHED;
+        }
+    }
+    
     @Override
     public int hashCode() {
         return Objects.hash(this.id);

@@ -61,15 +61,16 @@ public class AttemptViewController extends ManagedServlet {
             response.sendError(400, "Test does not belong to the current user.");
             return;
         }
-        List<Attempt> testAttempts = attemptManager.getAttempts(test);
+        // Get viewMode
+        String viewMode = request.getParameter("viewMode");
+        if ((viewMode == null) || !(viewMode.equals("all") || viewMode.equals("latest"))) {
+            viewMode = "latest";
+        }
+        
+        List<Attempt> testAttempts = attemptManager.getAttempts(test, viewMode.equals("latest"));
         request.setAttribute("test", test);
         request.setAttribute("testAttempts", testAttempts);
+        request.setAttribute("viewMode", viewMode);
         getCorrespondingViewDispatcher().forward(request, response);
     }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
-
 }
