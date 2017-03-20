@@ -20,8 +20,7 @@
             <li class="treeview">
                 <a href="${contextPath}/client/test"><i class="fa fa-pencil"></i><span>Tests</span><i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
-                    <li><a href="${contextPath}/client/testlist#"><i class="fa fa-circle-o"></i><span>All</span></a></li>
-                    <li><a href="${contextPath}/client/testlist#"><i class="fa fa-circle-o"></i><span>Incoming</span></a></li>
+                    <li><a href="${contextPath}/client/test/list"><i class="fa fa-circle-o"></i><span>All</span></a></li>
                 </ul>
             </li>
             <li><a href="${contextPath}/client/attempt"><i class="fa fa-check-square"></i><span>Attempts</span></a></li>
