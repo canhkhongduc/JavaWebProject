@@ -111,7 +111,7 @@
     <jsp:body>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-10 col-md-11 col-lg-10">
                     <div class="box">
                         <div class="box-header">
                             <h3 class="box-title">List of courses</h3>

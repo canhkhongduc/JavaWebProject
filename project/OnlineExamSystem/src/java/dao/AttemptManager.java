@@ -51,6 +51,7 @@ public class AttemptManager extends TransactionPerformer {
             criteria.addOrder(Order.asc("id"));
             criteria.add(Restrictions.eq("test", test));
             List<Attempt> attempts = criteria.list();
+            attempts.removeIf((attempt) -> attempt.getExaminee() == null);
             if (onlyLatestByExaminee) {
                 Map<Account, Optional<Attempt>> latestAttemptOptionals = attempts.stream().collect(
                         Collectors.groupingBy(

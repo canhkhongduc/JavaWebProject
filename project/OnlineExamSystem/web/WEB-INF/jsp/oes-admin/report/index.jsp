@@ -12,7 +12,7 @@
         <script>
             $(document).ready(function () {
                 $('#tblOwnedTests').DataTable({
-                    order: [[2, 'desc']]
+                    order: [[1, 'desc']]
                 });
             });
         </script>
@@ -20,7 +20,7 @@
     <jsp:body>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-12 col-md-9 col-lg-6">
+                <div class="col-sm-12">
                     <div class="box">
                         <div class="box-header">
                             <h3 class="box-title">List of your own test(s)</h3>

@@ -32,7 +32,7 @@
                 <li><a href="${contextPath}/oes-admin/course"><i class="fa fa-leanpub"></i><span>Manage courses</span></a></li>
                 </c:if>
                 <c:if test="${sessionScope.currentUser.hasRole('testmaster')}">
-                <li><a href="${contextPath}/oes-admin/question"><i class="fa fa-question-circle-o"></i><span>Manage questions</span></a></li>
+                <li><a href="${contextPath}/oes-admin/question"><i class="fa fa-question-circle"></i><span>Manage questions</span></a></li>
                 <li class="treeview">
                     <a href="#"><i class="fa fa-list"></i><span>Manage Tests</span> <i class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">

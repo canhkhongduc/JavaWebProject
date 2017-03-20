@@ -25,7 +25,7 @@ public class DashboardController extends ManagedServlet {
 
     private TimeRange fromStartToEndOfToday() {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         Date timeFrom = calendar.getTime();

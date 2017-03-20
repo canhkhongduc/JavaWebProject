@@ -11,7 +11,9 @@
         <script src="${contextPath}/plugins/dataTables/media/js/dataTables.bootstrap.min.js"></script>
         <script>
             $(document).ready(function () {
-                $('#tblAttempts').DataTable();
+                $('#tblAttempts').DataTable({
+                    order: [[0, 'asc'], [1, 'asc']]
+                });
                 $('#cbxViewMode').change(function() {
                     $('#frmViewMode').submit();
                 });
@@ -21,7 +23,7 @@
     <jsp:body>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-12 col-md-12 col-lg-9">
+                <div class="col-sm-12">
                     <div class="box">
                         <div class="box-header">
                             <h3 class="box-title">Attempts submitted for '${test.name}'</h3>
@@ -42,7 +44,6 @@
                             <table id="tblAttempts" class="table table-hover dataTable">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
                                         <th>Examinee</th>
                                         <th>Submitted time</th>
                                         <th>Score</th>
@@ -51,9 +52,8 @@
                                 <tbody>
                                     <c:forEach var="attempt" items="${testAttempts}">
                                         <tr>
-                                            <td>${attempt.id}</td>
                                             <td>${attempt.examinee.profile.fullName} (${attempt.examinee.username})</td>
-                                            <td><fmt:formatDate type="both" value="${attempt.endTime}"/></td>
+                                            <td><fmt:formatDate pattern="yyyy/mm/dd  hh:mm:ss" value="${attempt.endTime}"/></td>
                                             <td><fmt:formatNumber type="number" maxFractionDigits="2" value="${attempt.score}"/></td>
                                         </tr>
                                     </c:forEach>
