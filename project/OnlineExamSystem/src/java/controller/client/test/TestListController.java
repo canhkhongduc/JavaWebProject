@@ -33,13 +33,6 @@ public class TestListController extends ManagedServlet {
             List<Test> testList2 = testManager.getAllTests(true);
             List<Test> testList = new ArrayList<>();
             for (Test test : testList2) {
-//                Logger.getLogger(TestListController.class.getName()).log(Logger.Level.WARN, test.getExaminees().size());
-                List<Account> temp = new ArrayList<>(test.getExaminees());
-                for(Account a : temp){
-                    Logger.getLogger(TestListController.class.getName()).log(Logger.Level.WARN, a.getUsername());
-                }
-                Logger.getLogger(TestListController.class.getName()).log(Logger.Level.WARN, ((Account) request.getSession().getAttribute("currentUser")).getUsername());
-                
                 if (test.getExaminees().contains(
                         (Account) request.getSession().getAttribute("currentUser"))) {
                     testList.add(test);
