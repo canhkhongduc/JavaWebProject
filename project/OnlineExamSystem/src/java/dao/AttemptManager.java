@@ -79,6 +79,39 @@ public class AttemptManager extends TransactionPerformer {
         });
     }
 
+    public List<Attempt> getAttemptsByExaminee(Account examinee) {
+        return getAttemptsByExaminee(examinee, false);
+    }
+    
+    public List<Attempt> getAttemptsByExaminee(Account examinee, boolean fetch) {
+        return performTransaction((session) -> {
+            Criteria criteria = session.createCriteria(Attempt.class);
+            criteria.addOrder(Order.asc("id"));
+            criteria.add(Restrictions.eq("examinee", examinee));
+            List<Attempt> attempts = criteria.list();
+            if (fetch) {
+                attempts.forEach((attempt) -> {
+                    initializeProperties(attempt);
+                });
+            }
+            return attempts;
+        });
+    }
+    
+    public List<Attempt> filterLatestAttemptOfTest(List<Attempt> attempts) {
+        Map<Test, Optional<Attempt>> latestAttemptOptionals = attempts.stream().collect(
+                Collectors.groupingBy(
+                        (attempt) -> attempt.getTest(),
+                        Collectors.maxBy((attempt1, attempt2) -> Long.compare(attempt1.getId(), attempt2.getId()))
+                )
+        );
+        List<Attempt> latestAttempts = latestAttemptOptionals.values().stream()
+                .map((optional) -> optional.get())
+                .sorted((attempt1, attempt2) -> Long.compare(attempt1.getId(), attempt2.getId()))
+                .collect(Collectors.toList());
+        return latestAttempts;
+    }
+    
     public List<Attempt> filterLatestAttemptOfExaminee(List<Attempt> attempts) {
         attempts.removeIf((attempt) -> attempt.getExaminee() == null);
         Map<Account, Optional<Attempt>> latestAttemptOptionals = attempts.stream().collect(

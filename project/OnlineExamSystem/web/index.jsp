@@ -31,16 +31,15 @@
                             </div>
                         </div>
                         <div class="box-body">
-                            <p style="font-size: 1.2em">
+                            <p style="font-size: 1.2em; text-align: justify;">
                                 <span style="font-weight: bold">Online Exam System (OES)</span> is a Java 
                                 web application that provide online examination 
                                 services to students in FPT University.<br>
                                 The application is developed by Six Idiots Team, 
                                 a group of five students from SE1101 and one student 
-                                from IA1101. All these students are studying Java 
-                                Web Application Development (PRJ321) in their 4th 
-                                semester, under the instruction of Mr. Ngo Tung Son.<br>
-                                One day, Mr. Son offered them a request to develop 
+                                from IA1101. We are studying Java Web Application Development 
+                                (PRJ321) in our 4th semester, under the instruction of Mr. Ngo Tung Son.<br>
+                                One day, Mr. Son offered us a request to develop 
                                 an examination website that he can use for his classes. 
                                 This project can be considered as a final project 
                                 for the PRJ321 course, and is allowed to do in group.<br>
