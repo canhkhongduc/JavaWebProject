@@ -7,6 +7,7 @@ import java.util.List;
 import model.Course;
 import model.Question;
 import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import util.hibernate.transaction.TransactionPerformer;
@@ -37,6 +38,24 @@ public class QuestionManager extends TransactionPerformer {
     public Question getQuestion(Long id) {
         return performTransaction((session) -> {
             return (Question) session.get(Question.class, id);
+        });
+    }
+    
+    public boolean saveQuestion(Question question) {
+        return performTransaction((session) -> {
+            session.save(question);
+        });
+    }
+
+    public boolean updateQuestion(Question question) {
+        return performTransaction((session) -> {
+            session.update(question);
+        });
+    }
+
+    public boolean deleteQuestion(Question question) {
+        return performTransaction((session) -> {
+            session.delete(question);
         });
     }
 }
