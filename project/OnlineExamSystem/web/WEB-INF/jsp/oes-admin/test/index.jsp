@@ -53,12 +53,10 @@
                                         <th>Actions</th>
                                     </tr>
                                 </tfoot>
-
-
                                 <tbody>
                                     <c:forEach items="${tests}" var="test">
                                         <tr>
-                                            <td>${test.name}</td>
+                                            <td><a href="${contextPath}/oes-admin/test/view?id=${test.id}">${test.name}</a></td>
                                             <td><fmt:formatDate type="both" value="${test.joinStartTime}"/></td>
                                             <td><fmt:formatDate type="both" value="${test.joinEndTime}"/></td>
                                             <td>${test.timeLength}</td>
@@ -72,7 +70,7 @@
                                             </td>
                                             <td>
                                                 <div class="btn-group">
-                                                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button"><span class="fa fa-gear"></span><span class="caret"></span></button>
+                                                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button" <c:if test="${test.owner.username != sessionScope.currentUser.username}">disabled</c:if>><span class="fa fa-gear"></span><span class="caret"></span></button>
                                                     <ul class="dropdown-menu dropdown-menu-right">
                                                         <li><a href="${contextPath}/oes-admin/test/edit?id=${test.id}"><i class="fa fa-edit"></i> Edit</a></li>
                                                         <li><a href="${contextPath}/oes-admin/test/delete?id=${test.id}"><i class="fa fa-remove"></i> Delete</a></li>

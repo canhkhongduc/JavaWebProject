@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 import model.Account;
 import model.Course;
 import model.Question;
-import model.Role;
 import model.Test;
 import util.servlet.ManagedServlet;
 
@@ -32,17 +31,15 @@ import util.servlet.ManagedServlet;
  * @author Hai
  */
 @WebServlet("/oes-admin/test/add")
-@ServletSecurity(
-        @HttpConstraint(rolesAllowed = "testmaster"))
+@ServletSecurity(@HttpConstraint(rolesAllowed = "testmaster"))
 public class TestAddController extends ManagedServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Role studentRole = new RoleManager().getRole("student");
         List<Course> courses = new CourseManager().getAllCourses();
         List<Question> questions = new QuestionManager().getAllQuestions();
-        List<Account> students = new AccountManager().getAccountsByRole(studentRole);
+        List<Account> students = new AccountManager().getAccountsByRole(new RoleManager().getRole("student"));
         request.setAttribute("questions", questions);
         request.setAttribute("courses", courses);
         request.setAttribute("students", students);
@@ -86,7 +83,7 @@ public class TestAddController extends ManagedServlet {
                 }
             }
         }
-        test.setOwner(owner);
+        test.setOwner(accountManager.getAccount(owner.getUsername()));
         testManager.saveTest(test);
         redirect(response, getServletURL(TestController.class));
     }

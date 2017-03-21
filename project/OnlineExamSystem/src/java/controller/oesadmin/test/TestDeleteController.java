@@ -11,6 +11,8 @@ import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Account;
+import model.Test;
 import util.servlet.ManagedServlet;
 
 /**
@@ -18,7 +20,8 @@ import util.servlet.ManagedServlet;
  * @author Hai
  */
 @WebServlet("/oes-admin/test/delete")
-@ServletSecurity(@HttpConstraint(rolesAllowed = "testmaster"))
+@ServletSecurity(
+        @HttpConstraint(rolesAllowed = "testmaster"))
 public class TestDeleteController extends ManagedServlet {
 
     @Override
@@ -26,7 +29,11 @@ public class TestDeleteController extends ManagedServlet {
             throws ServletException, IOException {
         TestManager testManager = new TestManager();
         String testId = request.getParameter("id");
-        testManager.deleteTest(testManager.getTest(Long.parseLong(testId)));
+        Account currentUser = (Account) request.getSession().getAttribute("currentUser");
+        Test test = testManager.getTest(Long.parseLong(testId));
+        if (test.getOwner().getUsername().equals(currentUser.getUsername())) {
+            testManager.deleteTest(test);
+        }
         redirect(response, getServletURL(TestController.class));
     }
 }
