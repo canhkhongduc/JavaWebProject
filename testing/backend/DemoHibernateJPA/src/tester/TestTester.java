@@ -3,12 +3,15 @@
  */
 package tester;
 
-import java.util.Random;
-import java.util.Set;
-import java.util.stream.Collectors;
+import dao.AccountManager;
+import dao.CourseManager;
+import dao.QuestionManager;
+import dao.RoleManager;
+import dao.TestManager;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import model.Account;
-import model.Attempt;
-import model.Choice;
 import model.Course;
 import model.Question;
 import model.Test;
@@ -19,52 +22,80 @@ import util.hibernate.transaction.TransactionPerformer;
  * @author Le Cao Nguyen
  */
 public class TestTester extends TransactionPerformer implements Runnable {
-
-    private void initData() {
-        performTransaction((session) -> {
-            Course course = (Course) new Course("PRO192", "OOP with Java");
-            session.save(course);
-
-            Account owner = (Account) session.get(Account.class, "admin");
-            Test test = new Test();
-            test.setOwner(owner);
-            test.setName("PRO192 FE (Spring 2017)");
-
-            Question q1 = new Question(owner, course, "Question 1");
-            q1.addChoice(new Choice("Answer 1.1", Boolean.TRUE));
-            q1.addChoice(new Choice("Answer 1.2", Boolean.FALSE));
-            q1.addChoice(new Choice("Answer 1.3", Boolean.FALSE));
-            q1.addChoice(new Choice("Answer 1.4", Boolean.FALSE));
-
-            Question q2 = new Question(owner, course, "Question 2");
-            q2.addChoice(new Choice("Answer 2.1", Boolean.FALSE));
-            q2.addChoice(new Choice("Answer 2.2", Boolean.TRUE));
-            q2.addChoice(new Choice("Answer 2.3", Boolean.FALSE));
-            q2.addChoice(new Choice("Answer 2.4", Boolean.FALSE));
-
-            test.addQuestion(q1);
-            test.addQuestion(q2);
-
-            session.save(test);
+    private final QuestionManager questionManager = new QuestionManager();
+    private final TestManager testManager = new TestManager();
+    private final CourseManager courseManager = new CourseManager();
+    private final AccountManager accountManager = new AccountManager();
+    private final RoleManager roleManager = new RoleManager();
+    
+    public boolean createTest() {
+        boolean success = true;
+        Course c01 = courseManager.getCourse("C01");
+        Course c02 = courseManager.getCourse("C02");
+        List<Question> questions = questionManager.getQuestionsByCourse(c01);
+        List<Question> questions2 = questionManager.getQuestionsByCourse(c02);
+        Account testmaster1 = accountManager.getAccount("testmaster1");
+        Account testmaster2 = accountManager.getAccount("testmaster2");
+        
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2017, 3, 21, 9, 0, 0);
+        Date joinStartTime = calendar.getTime();
+        calendar.set(2017, 3, 21, 9, 10, 0);
+        Date joinEndTime = calendar.getTime();
+        
+        Test test1 = new Test(testmaster1, "Test 1", joinStartTime, joinEndTime, 30, 3, true, c01);
+        questions.forEach((q) -> {
+            test1.addQuestion(q);
         });
+        List<Account> students = accountManager.getAccountsByRole(roleManager.getRole("student"));
+        for (Account examinee : students) {
+            test1.addExaminee(examinee);
+        }
+        
+        calendar.set(2017, 3, 22, 9, 0, 0);
+        joinStartTime = calendar.getTime();
+        calendar.set(2017, 3, 22, 9, 10, 0);
+        joinEndTime = calendar.getTime();
+        
+        Test test2 = new Test(testmaster2, "Test 2", joinStartTime, joinEndTime, 30, 1, true, c02);
+        questions2.forEach((q) -> {
+            test2.addQuestion(q);
+        });
+        for (Account examinee : students) {
+            test2.addExaminee(examinee);
+        }
+        
+        success &= testManager.saveTest(test1);
+        success &= testManager.saveTest(test2);
+        return success;
     }
 
-    private void createAttempts() {
-        performTransaction((session) -> {
-            Test test = (Test) session.createCriteria(Test.class).list().get(0);
-            Account examinee = (Account) session.get(Account.class, "nguyen");
-            Attempt a1 = new Attempt(examinee, test);
-            Set<Choice> allChoices = test.getQuestions().stream().map(Question::getChoices).flatMap(Set::stream).collect(Collectors.toSet());
-            Random random = new Random();
-            allChoices.stream().filter((choice) -> random.nextBoolean()).forEach((choice) -> a1.addChoice(choice));
-            session.save(a1);
-        });
+    public boolean updateTestQuestions() {
+        boolean success = true;
+        Course c01 = courseManager.getCourse("C01");
+        Test test1 = testManager.getTestsByCourse(c01, true).get(0);
+        Question q1 = questionManager.getQuestionsByCourse(c01).get(0);
+        test1.removeQuestion(q1);
+        success &= testManager.updateTest(test1);
+        return success;
     }
-
+    
+    public boolean deleteTest() {
+        boolean success = true;
+        List<Test> tests = testManager.getAllTests();
+        for (Test test : tests) {
+            success &= testManager.deleteTest(test);
+        }
+        return success;
+    }
+    
     @Override
     public void run() {
-        initData();
-        createAttempts();
+        System.out.println("Creating test... " + (createTest() ? "Success!" : "Failed!"));
+        System.out.println("Updating test questions... " + (updateTestQuestions() ? "Success!" : "Failed!"));
+        System.out.println("Deleting test... " + (deleteTest() ? "Success!" : "Failed!"));
     }
+
+    
 
 }
