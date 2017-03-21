@@ -10,6 +10,7 @@ import model.Question;
 import model.Role;
 import model.Test;
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -20,28 +21,59 @@ import util.hibernate.transaction.TransactionPerformer;
  * @author nguyen
  */
 public class AccountManager extends TransactionPerformer {
-
+    public static void initializeProperties(Account account) {
+        Hibernate.initialize(account.getRoles());
+    }
+    
     public List<Account> getAllAccounts() {
+        return getAllAccounts(false);
+    }
+    
+    public List<Account> getAllAccounts(boolean fetch) {
         return performTransaction((session) -> {
             Criteria criteria = session.createCriteria(Account.class);
             criteria.addOrder(Order.asc("username"));
-            return criteria.list();
+            List<Account> accounts = criteria.list();
+            if (fetch) {
+                accounts.forEach((account) -> {
+                    initializeProperties(account);
+                });
+            }
+            return accounts;
         });
     }
 
     public Account getAccount(String username) {
+        return getAccount(username, false);
+    }
+    
+    public Account getAccount(String username, boolean fetch) {
         return performTransaction((session) -> {
-            return (Account) session.get(Account.class, username);
+            Account account = (Account) session.get(Account.class, username);
+            if (fetch) {
+                initializeProperties(account);
+            }
+            return account;
         });
     }
 
     public List<Account> getAccountsByRole(Role role) {
+        return getAccountsByRole(role, false);
+    }
+    
+    public List<Account> getAccountsByRole(Role role, boolean fetch) {
         return performTransaction((session) -> {
             Criteria criteria = session.createCriteria(Account.class);
             criteria.createAlias("roles", "rolesAlias");
             criteria.add(Restrictions.eq("rolesAlias.name", role.getName()));
             criteria.addOrder(Order.asc("username"));
-            return criteria.list();
+            List<Account> accounts = criteria.list();
+            if (fetch) {
+                accounts.forEach((account) -> {
+                    initializeProperties(account);
+                });
+            }
+            return accounts;
         });
     }
 

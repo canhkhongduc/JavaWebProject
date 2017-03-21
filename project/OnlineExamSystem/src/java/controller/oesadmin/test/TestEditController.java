@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 import model.Account;
 import model.Course;
 import model.Question;
-import model.Role;
 import model.Test;
 import util.servlet.ManagedServlet;
 
@@ -41,18 +40,21 @@ public class TestEditController extends ManagedServlet {
         Long id = Long.parseLong(request.getParameter("id"));
         TestManager testManager = new TestManager();
         Test test = testManager.getTest(id, true);
+        RoleManager roleManager = new RoleManager();
+        Account currentUser = (Account) request.getSession().getAttribute("currentUser");
         if (test == null) {
             redirect(response, getServletURL(TestController.class));
-        } else {
-            Role studentRole = new RoleManager().getRole("student");
+        } else if (test.getOwner().getUsername().equals(currentUser.getUsername())){
             List<Course> courses = new CourseManager().getAllCourses();
             List<Question> questions = new QuestionManager().getAllQuestions();
-            List<Account> students = new AccountManager().getAccountsByRole(studentRole);
+            List<Account> students = new AccountManager().getAccountsByRole(roleManager.getRole("student"));
             request.setAttribute("questions", questions);
             request.setAttribute("courses", courses);
             request.setAttribute("students", students);
             request.setAttribute("test", test);
             getCorrespondingViewDispatcher().forward(request, response);
+        } else {
+            redirect(response, getServletURL(TestController.class));
         }
     }
 
@@ -94,7 +96,7 @@ public class TestEditController extends ManagedServlet {
                 }
             }
         }
-        test.setOwner(accountManager.getAccount(owner.getUsername()));
+        test.setOwner(owner);
         testManager.updateTest(test);
         redirect(response, getServletURL(TestController.class));
     }

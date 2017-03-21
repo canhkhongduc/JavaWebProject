@@ -31,7 +31,7 @@ public class AccountController extends ManagedServlet {
         List<Role> roles = roleManager.getAllRoles();
         Role adminRole = roleManager.getRole("admin");
         AccountManager accountManager = new AccountManager();
-        List<Account> accounts = accountManager.getAllAccounts();
+        List<Account> accounts = accountManager.getAllAccounts(true);
         roles.remove(adminRole);
         accounts.removeIf((account) -> account.hasRole(adminRole));
         

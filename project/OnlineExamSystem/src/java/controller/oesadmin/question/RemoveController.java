@@ -18,7 +18,7 @@ import util.servlet.ManagedServlet;
  *
  * @author Quang Minh
  */
-@WebServlet("/oes-admin/question/remove")
+@WebServlet("/oes-admin/question/delete")
 public class RemoveController extends ManagedServlet {
 
     /**
@@ -47,14 +47,11 @@ public class RemoveController extends ManagedServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
-        String questionID = request.getParameter("questionID");
+        String questionID = request.getParameter("id");
         QuestionManager qm = new QuestionManager();
         Question question = qm.getQuestion(Long.parseLong(questionID));
-        System.out.println(""+question.getContent());
         boolean del = qm.deleteQuestion(question);
-        System.out.println(""+del);
-        redirect(response, "/oes-admin/question/edit");
+        redirect(response, getServletURL(QuestionController.class));
     }
 
     /**
