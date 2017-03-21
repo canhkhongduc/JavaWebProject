@@ -11,6 +11,8 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Set;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.HttpConstraint;
+import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +28,7 @@ import util.servlet.ManagedServlet;
  * @author Quang Minh
  */
 @WebServlet("/oes-admin/question/edit")
+@ServletSecurity(@HttpConstraint(rolesAllowed = "testmaster"))
 public class EditQuestionController extends ManagedServlet {
 
     @Override

@@ -22,7 +22,7 @@ import util.servlet.ManagedServlet;
  * @author Le Cao Nguyen
  */
 @WebServlet("/dev/sectest")
-@ServletSecurity(@HttpConstraint(rolesAllowed = {"admin", "testmaster"}))
+@ServletSecurity(@HttpConstraint(rolesAllowed = "admin"))
 public class SecurityTestController extends ManagedServlet {
 
     private void appendToResponse(HttpServletResponse response, String format, Object... args)

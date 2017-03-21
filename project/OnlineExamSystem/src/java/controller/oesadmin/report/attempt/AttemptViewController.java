@@ -23,8 +23,7 @@ import util.servlet.ManagedServlet;
  * @author Le Cao Nguyen
  */
 @WebServlet("/oes-admin/report/attempt/view")
-@ServletSecurity(
-        @HttpConstraint(rolesAllowed = "testmaster"))
+@ServletSecurity(@HttpConstraint(rolesAllowed = "testmaster"))
 public class AttemptViewController extends ManagedServlet {
 
     private Long getAndValidateTestId(HttpServletRequest request, HttpServletResponse response) throws IOException {

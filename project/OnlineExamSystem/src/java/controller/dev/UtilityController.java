@@ -5,6 +5,8 @@ package controller.dev;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.HttpConstraint;
+import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +18,7 @@ import util.servlet.ManagedServlet;
  * @author Le Cao Nguyen
  */
 @WebServlet("/dev/util")
+@ServletSecurity(@HttpConstraint(rolesAllowed = "admin"))
 public class UtilityController extends ManagedServlet {
 
     /**

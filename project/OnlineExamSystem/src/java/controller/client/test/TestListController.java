@@ -9,13 +9,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.function.Predicate;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.HttpConstraint;
+import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Account;
-import model.Attempt;
 import model.Test;
 import util.servlet.ManagedServlet;
 
@@ -24,6 +24,7 @@ import util.servlet.ManagedServlet;
  * @author Le Cao Nguyen
  */
 @WebServlet("/client/test/list")
+@ServletSecurity(@HttpConstraint(rolesAllowed = "student"))
 public class TestListController extends ManagedServlet {
 
     @Override

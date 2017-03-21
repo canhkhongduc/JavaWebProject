@@ -4,15 +4,15 @@
 package controller.client.test;
 
 import dao.ChoiceManager;
-import dao.QuestionManager;
 import dao.TestManager;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.HttpConstraint;
+import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +25,7 @@ import util.servlet.ManagedServlet;
  * @author Le Cao Nguyen
  */
 @WebServlet("/client/test")
+@ServletSecurity(@HttpConstraint(rolesAllowed = "student"))
 public class TestController extends ManagedServlet {
 
     private final long ONE_MINUTE_IN_MILLIS = 60000;
