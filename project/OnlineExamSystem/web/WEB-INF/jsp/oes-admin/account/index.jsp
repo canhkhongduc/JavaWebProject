@@ -71,7 +71,7 @@
                                             </td>
                                             <td>${empty account.profile.email ? 'Unknown' : account.profile.email}</td>
                                             <td>${account.getRolesDescription()}</td>
-                                            <td><a role="button" href="account/update?username=${account.username}">Update</a></td>
+                                            <td><a role="button" class="btn btn-warning btn-xs" href="account/update?username=${account.username}">Update</a></td>
                                         </tr>
                                     </c:forEach>
                                 </tbody>
