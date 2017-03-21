@@ -82,6 +82,13 @@ public class QuestionManager extends TransactionPerformer {
         });
     }
 
+    public Question getQuestion(Long id) {
+        return performTransaction((session) -> {
+            Question question = (Question) session.get(Question.class, id);
+            return question;
+        });
+    }
+    
     public Question getQuestion(Long id, boolean fetch) {
         return performTransaction((session) -> {
             Question question = (Question) session.get(Question.class, id);

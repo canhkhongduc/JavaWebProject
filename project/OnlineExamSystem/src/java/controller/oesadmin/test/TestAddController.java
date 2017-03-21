@@ -72,7 +72,7 @@ public class TestAddController extends ManagedServlet {
         String[] selectedQuestions = request.getParameterValues("selectedQuestion");
         if (selectedQuestions != null) {
             for (String question : selectedQuestions) {
-                test.addQuestion(questionManager.getQuestion(Long.parseLong(question),true));
+                test.addQuestion(questionManager.getQuestion(Long.parseLong(question)));
             }
         }
         if (test.getRestricted()) {

@@ -25,69 +25,37 @@ import util.servlet.ManagedServlet;
  *
  * @author Quang Minh
  */
-@WebServlet("/oes-admin/question/editquestion")
+@WebServlet("/oes-admin/question/edit")
 public class EditQuestionController extends ManagedServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         QuestionManager qm = new QuestionManager();
-        long questionID = Long.parseLong(request.getParameter("questionID"));
-        Question question = qm.getQuestion(questionID,true);
-        System.out.println("q: "+question.getContent());
+        long questionID = Long.parseLong(request.getParameter("id"));
+        Question question = qm.getQuestion(questionID, true);
         Set<Choice> choices = question.getChoices();
         request.setAttribute("question", question);
         request.setAttribute("choices", choices);
         getCorrespondingViewDispatcher().forward(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         QuestionManager qm = new QuestionManager();
+        QuestionManager qm = new QuestionManager();
         HttpSession session = request.getSession(true);
-        Account owner = (Account)session.getAttribute("currentUser");     
-        long questionID = Long.parseLong(request.getParameter("questionID"));
-        Question question = qm.getQuestion(questionID,true);
+        Account owner = (Account) session.getAttribute("currentUser");
+        long questionID = Long.parseLong(request.getParameter("id"));
+        Question question = qm.getQuestion(questionID);
         question.setContent(request.getParameter("content"));
         boolean result = false;
         ChoiceManager cm = new ChoiceManager();
         List<Choice> choices = cm.getChoices(question);
         for (int i = 0; i < choices.size(); i++) {
-            String answer = request.getParameter("answer"+(i+1));
-            String correct = request.getParameter("correct"+(i+1));
-            if(correct==null){
+            String answer = request.getParameter("answer" + (i + 1));
+            String correct = request.getParameter("correct" + (i + 1));
+            if (correct == null) {
                 result = false;
             } else if (correct.equalsIgnoreCase("true")) {
                 result = true;
@@ -98,17 +66,6 @@ public class EditQuestionController extends ManagedServlet {
             cm.updateChoice(choices.get(i));
         }
         qm.updateQuestion(question);
-        redirect(response, "/oes-admin/question/edit");
+        redirect(response, getServletURL(QuestionController.class));
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }
