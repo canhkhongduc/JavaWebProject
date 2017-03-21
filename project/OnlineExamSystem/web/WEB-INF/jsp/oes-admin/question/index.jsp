@@ -31,6 +31,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Question</th>
+                                    <th>Owner</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -38,6 +39,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Question</th>
+                                    <th>Owner</th>
                                     <th>Actions</th>
                                 </tr>
                             </tfoot>
@@ -46,6 +48,7 @@
                                     <tr>
                                         <td>${question.id}</td>
                                         <td>${question.content}</td>
+                                        <td>${question.owner.username}</td>
                                         <td>
                                             <div class="btn-group">
                                                 <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" type="button" ${question.owner.username ne sessionScope.currentUser.username ? 'disabled' : ''}><span class="fa fa-gear"></span><span class="caret"></span></button>

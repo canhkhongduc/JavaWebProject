@@ -9,13 +9,11 @@ import dao.QuestionManager;
 import dao.RoleManager;
 import dao.TestManager;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.HttpConstraint;
 import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Account;
@@ -41,18 +39,20 @@ public class TestViewController extends ManagedServlet {
         RoleManager roleManager = new RoleManager();
         Account currentUser = (Account) request.getSession().getAttribute("currentUser");
         if (test == null) {
-            redirect(response, getServletURL(TestController.class));
-        } else if (test.getOwner().getUsername().equals(currentUser.getUsername()) || !test.getRestricted()) {
-            List<Course> courses = new CourseManager().getAllCourses();
-            List<Question> questions = new QuestionManager().getAllQuestions();
-            List<Account> students = new AccountManager().getAccountsByRole(roleManager.getRole("student"));
-            request.setAttribute("questions", questions);
-            request.setAttribute("courses", courses);
-            request.setAttribute("students", students);
-            request.setAttribute("test", test);
-            getCorrespondingViewDispatcher().forward(request, response);
-        } else {
-            redirect(response, getServletURL(TestController.class));
+            response.sendError(400, "Invalid test ID.");
+            return;
         }
+        if (test.getRestricted() && (!test.getOwner().equals(currentUser))) {
+            response.sendError(403, "You do not have permission to view the test.");
+            return;
+        }
+        List<Course> courses = new CourseManager().getAllCourses();
+        List<Question> questions = new QuestionManager().getAllQuestions();
+        List<Account> students = new AccountManager().getAccountsByRole(roleManager.getRole("student"));
+        request.setAttribute("questions", questions);
+        request.setAttribute("courses", courses);
+        request.setAttribute("students", students);
+        request.setAttribute("test", test);
+        getCorrespondingViewDispatcher().forward(request, response);
     }
 }

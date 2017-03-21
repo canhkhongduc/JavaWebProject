@@ -54,7 +54,7 @@ public class TestAddController extends ManagedServlet {
         CourseManager courseManager = new CourseManager();
         QuestionManager questionManager = new QuestionManager();
         AccountManager accountManager = new AccountManager();
-        Account owner = (Account) request.getSession().getAttribute("currentUser");
+        Account currentUser = (Account) request.getSession().getAttribute("currentUser");
 
         test.setName(request.getParameter("name"));
         test.setCourse(courseManager.getCourse(request.getParameter("course")));
@@ -83,7 +83,7 @@ public class TestAddController extends ManagedServlet {
                 }
             }
         }
-        test.setOwner(accountManager.getAccount(owner.getUsername()));
+        test.setOwner(currentUser);
         testManager.saveTest(test);
         redirect(response, getServletURL(TestController.class));
     }

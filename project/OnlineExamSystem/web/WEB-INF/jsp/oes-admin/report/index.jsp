@@ -41,7 +41,7 @@
                                     <c:forEach var="test" items="${ownedTests}">
                                         <tr>
                                             <td>${test.name}</td>
-                                            <td><fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${test.joinStartTime}"/></td>
+                                            <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${test.joinStartTime}"/></td>
                                             <td>${test.timeLength}&nbsp;${test.timeLength > 1 ? 'mins' : 'min'}</td>
                                             <td><a role="button" class="btn btn-primary btn-xs" href="report/attempt/view?testId=${test.id}">View attempts</a></td>
                                         </tr>

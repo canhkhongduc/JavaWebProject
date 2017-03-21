@@ -39,7 +39,7 @@ public class TestController extends ManagedServlet {
         long testLength = (long) request.getSession().getAttribute("testLength");
         Date currentTime = (Date) request.getSession().getAttribute("testStartTime");
         Date endTime = new Date(currentTime.getTime() + testLength * ONE_MINUTE_IN_MILLIS);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy hh:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
         String endTimeString = dateFormat.format(endTime);
 
         List<Question> questionList;

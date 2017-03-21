@@ -32,7 +32,7 @@
                                     <table class="table no-margin">
                                         <thead>
                                             <tr>
-                                                <th>Name</th>
+                                                <th>Test name</th>
                                                 <th>Join time</th>
                                                 <th>Time length</th>
                                                 <th>Created by</th>
@@ -76,7 +76,7 @@
                             </div>
                         </div>
                         <div class="box-footer clearfix">
-                            <a href="test" class="btn btn-sm btn-default btn-flat pull-right">View all tests</a>
+                            <a href="test/list" class="btn btn-sm btn-default btn-flat pull-right">View all tests</a>
                         </div>
                     </div>
                 </div>

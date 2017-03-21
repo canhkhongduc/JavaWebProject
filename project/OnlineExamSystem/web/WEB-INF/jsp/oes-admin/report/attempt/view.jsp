@@ -54,8 +54,8 @@
                                     <c:forEach var="attempt" items="${testAttempts}">
                                         <tr>
                                             <td>${attempt.examinee.profile.fullName} (${attempt.examinee.username})</td>
-                                            <td><fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${attempt.startTime}"/></td>
-                                            <td><fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${attempt.endTime}"/></td>
+                                            <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${attempt.startTime}"/></td>
+                                            <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${attempt.endTime}"/></td>
                                             <td><fmt:formatNumber type="number" maxFractionDigits="2" value="${attempt.score}"/></td>
                                         </tr>
                                     </c:forEach>
