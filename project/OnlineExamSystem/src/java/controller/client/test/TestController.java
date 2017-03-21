@@ -33,6 +33,7 @@ public class TestController extends ManagedServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ChoiceManager choiceManager = new ChoiceManager();
         TestManager testManager = new TestManager();
+        int numberOfCorrectChoices = 0;
         
         long testLength = (long) request.getSession().getAttribute("testLength");
         Date currentTime = (Date) request.getSession().getAttribute("testStartTime");
@@ -63,6 +64,13 @@ public class TestController extends ManagedServlet {
             choiceList = choiceManager.getChoices(questionList.get(currentQuestion));
         }
 
+        for(Choice c : choiceList){
+            if(c.isCorrect()){
+                numberOfCorrectChoices++;
+            }
+        }
+        
+        request.setAttribute("noOfCorrect", numberOfCorrectChoices);
         request.setAttribute("questionList", questionList);
         request.setAttribute("questionIndex", currentQuestion);
         request.setAttribute("choiceList", choiceList);

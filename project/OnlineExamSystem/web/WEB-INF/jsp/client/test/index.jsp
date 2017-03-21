@@ -222,7 +222,8 @@
                                 ${choice.getContent()}
                             </label>
                         </div>
-                    </c:forEach>                   
+                    </c:forEach>
+                    <span>(Choose ${noOfCorrect} answer(s))</span>
                 </div>
             </div>
             <div id="testAction" class="row">

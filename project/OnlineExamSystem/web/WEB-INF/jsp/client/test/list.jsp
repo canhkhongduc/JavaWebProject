@@ -13,8 +13,8 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>Course</th>
                         <th>Test name</th>
+                        <th>Course</th>
                         <th>Your attempts</th>
                         <th>Test attempt limit</th>
                         <th>Test length</th>
@@ -26,8 +26,8 @@
                 <tbody>
                     <c:forEach items="${testList}" var="test" varStatus="stt">
                         <tr>
-                            <td>${test.getCourse().getName()}</td>
                             <td>${test.getName()}</td>
+                            <td>${test.getCourse().getId()}</td>
                             <td>${attemptList.get(stt.index)}</td>
                             <td>${test.getAttemptLimit()}</td>
                             <td>${test.getTimeLength()}</td>
