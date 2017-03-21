@@ -111,7 +111,7 @@ public class AccountUpdateController extends ManagedServlet {
         account.getProfile().setEmail(email);
         account.getProfile().setGender(gender);
         account.getProfile().setBirthdate(birthDate);
-        account.setRole(role);
+        account.setOnlyOneRole(role);
         accountManager.updateAccount(account);
         
         redirect(response, getServletURL(AccountController.class));

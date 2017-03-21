@@ -13,7 +13,7 @@ import util.hibernate.transaction.TransactionPerformer;
 
 /**
  *
- * @author Lam
+ * @author Le Cao Nguyen
  */
 public class ChoiceManager extends TransactionPerformer {
 
@@ -25,7 +25,7 @@ public class ChoiceManager extends TransactionPerformer {
             return criteria.list();
         });
     }
-    
+
     public Choice getChoice(Long id) {
         return performTransaction((session) -> {
             return (Choice) session.get(Choice.class, id);

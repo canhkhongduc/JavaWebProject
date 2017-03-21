@@ -67,7 +67,10 @@ public class AttemptViewController extends ManagedServlet {
             viewMode = "latest";
         }
         
-        List<Attempt> testAttempts = attemptManager.getAttempts(test, viewMode.equals("latest"));
+        List<Attempt> testAttempts = attemptManager.getAttemptsByTest(test);
+        if (viewMode.equals("latest")) {
+            testAttempts = attemptManager.filterLatestAttemptOfExaminee(testAttempts);
+        }
         request.setAttribute("test", test);
         request.setAttribute("testAttempts", testAttempts);
         request.setAttribute("viewMode", viewMode);

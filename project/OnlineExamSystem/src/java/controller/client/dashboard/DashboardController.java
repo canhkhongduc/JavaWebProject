@@ -38,7 +38,7 @@ public class DashboardController extends ManagedServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         TestManager testManager = new TestManager();
         TimeRange timeRange = fromStartToEndOfToday();
-        List<Test> tests = testManager.getTests(timeRange.getTimeFrom(), timeRange.getTimeTo());
+        List<Test> tests = testManager.getTestsByDateRange(timeRange.getTimeFrom(), timeRange.getTimeTo());
         request.setAttribute("tests", tests);
         getCorrespondingViewDispatcher().forward(request, response);
     }

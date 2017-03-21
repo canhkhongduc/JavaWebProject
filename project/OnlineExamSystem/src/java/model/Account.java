@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,7 +15,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import util.CommonUtil;
 
 @Entity
 public class Account implements Serializable {
@@ -64,6 +64,14 @@ public class Account implements Serializable {
         return roles;
     }
 
+    public Role getFirstRole() {
+        return roles.stream().findFirst().orElse(null);
+    }
+    
+    public String getRolesDescription() {
+        return roles.stream().map(Role::getDescription).collect(Collectors.joining(", "));
+    }
+    
     public void addRole(Role role) {
         this.roles.add(role);
     }
@@ -72,7 +80,7 @@ public class Account implements Serializable {
         this.roles.remove(role);
     }
     
-    public void setRole(Role role) {
+    public void setOnlyOneRole(Role role) {
         this.roles.clear();
         this.roles.add(role);
     }
@@ -82,20 +90,11 @@ public class Account implements Serializable {
     }
     
     public boolean hasRole(String roleName) {
-        return this.roles.contains(new Role(roleName, null));
-    }
-    
-    public String getRolesDescription() {
-        return CommonUtil.toSequenceString(roles, (role) -> role.getDescription());
+        return this.roles.stream().anyMatch((role) -> role.getName().equals(roleName));
     }
     
     public AccountProfile getProfile() {
         return profile;
-    }
-
-    public void setProfile(AccountProfile profile) {
-        this.profile = profile;
-        profile.setAccount(this);
     }
 
     @Override

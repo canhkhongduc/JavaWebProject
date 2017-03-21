@@ -6,6 +6,7 @@ package controller.oesadmin.test;
 import dao.AccountManager;
 import dao.CourseManager;
 import dao.QuestionManager;
+import dao.RoleManager;
 import dao.TestManager;
 import java.io.IOException;
 import java.text.ParseException;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import model.Account;
 import model.Course;
 import model.Question;
+import model.Role;
 import model.Test;
 import util.servlet.ManagedServlet;
 
@@ -40,11 +42,12 @@ public class TestEditController extends ManagedServlet {
         TestManager testManager = new TestManager();
         Test test = testManager.getTest(id, true);
         if (test == null) {
-            response.sendRedirect(getContextPath() + "/oes-admin/test");
+            redirect(response, getServletURL(TestController.class));
         } else {
+            Role studentRole = new RoleManager().getRole("student");
             List<Course> courses = new CourseManager().getAllCourses();
             List<Question> questions = new QuestionManager().getAllQuestions();
-            List<Account> students = new AccountManager().getAccountsByRole("student");
+            List<Account> students = new AccountManager().getAccountsByRole(studentRole);
             request.setAttribute("questions", questions);
             request.setAttribute("courses", courses);
             request.setAttribute("students", students);
@@ -93,6 +96,6 @@ public class TestEditController extends ManagedServlet {
         }
         test.setOwner(accountManager.getAccount(owner.getUsername()));
         testManager.updateTest(test);
-        response.sendRedirect(getContextPath() + "/oes-admin/test");
+        redirect(response, getServletURL(TestController.class));
     }
 }

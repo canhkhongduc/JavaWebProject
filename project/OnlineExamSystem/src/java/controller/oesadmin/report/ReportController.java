@@ -28,14 +28,8 @@ public class ReportController extends ManagedServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Account owner = (Account) request.getSession().getAttribute("currentUser");
         TestManager testManager = new TestManager();
-        List<Test> ownedTests = testManager.getTests(owner);
+        List<Test> ownedTests = testManager.getTestsByOwner(owner);
         request.setAttribute("ownedTests", ownedTests);
         getCorrespondingViewDispatcher().forward(request, response);
     }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
-    }
-    
 }
