@@ -41,7 +41,7 @@ public class AccountUpdateController extends ManagedServlet {
             response.sendError(400, "No username specified.");
             return;
         }
-        Account account = accountManager.getAccount(username);
+        Account account = accountManager.getAccount(username, true);
         if (account == null) {
             response.sendError(400, "Username does not exist.");
             return;
@@ -100,7 +100,7 @@ public class AccountUpdateController extends ManagedServlet {
             response.sendError(400, "Invalid role specified.");
             return;
         }
-        Account account = accountManager.getAccount(username);
+        Account account = accountManager.getAccount(username, true);
         if (account == null) {
             response.sendError(400, "Username does not exist.");
             return;

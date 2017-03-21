@@ -232,7 +232,7 @@ public class Test implements Serializable {
             return false;
         }
         final Test other = (Test) obj;
-        return Objects.equals(this.id, other.id);
+        return (this.id != null) && Objects.equals(this.id, other.id);
     }
 
 }
