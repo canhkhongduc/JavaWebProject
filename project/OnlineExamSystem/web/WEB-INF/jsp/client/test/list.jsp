@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="t" uri="/WEB-INF/tlds/template" %>
 <t:oesPage pageTitle="Dashboard">
     <jsp:attribute name="customHead">
@@ -32,11 +33,10 @@
                                     <th>Test name</th>
                                     <th>Course</th>
                                     <th>Your attempts</th>
-                                    <th>Test attempt limit</th>
-                                    <th>Test length</th>
-                                    <th>Test start time</th>
-                                    <th>Test end time</th>
-                                    <th></th>
+                                    <th>Attempt limit</th>
+                                    <th>Time length</th>
+                                    <th>Join time</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -46,10 +46,9 @@
                                         <td>${test.getCourse().getId()}</td>
                                         <td>${attemptList.get(stt.index)}</td>
                                         <td>${test.getAttemptLimit()}</td>
-                                        <td>${test.getTimeLength()}</td>
-                                        <td>${test.getJoinStartTime()}</td>
-                                        <td>${test.getJoinEndTime()}</td>
-                                        <td><a class="btn btn-primary" href="list?id=${test.getId()}">Join</a></td>
+                                        <td>${test.getTimeLength()} mins</td>
+                                        <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${test.joinStartTime}"></fmt:formatDate> - <fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${test.joinEndTime}"></fmt:formatDate></td>
+                                        <td><a class="btn btn-xs btn-primary" href="list?id=${test.getId()}">Join</a></td>
                                     </tr>
                                 </c:forEach>
                             </tbody>
