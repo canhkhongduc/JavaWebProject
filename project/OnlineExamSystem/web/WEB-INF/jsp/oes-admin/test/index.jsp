@@ -31,24 +31,26 @@
                             <table class="table table-hover dataTable" id="table">
                                 <thead>
                                     <tr>
-                                        <th data-field="name">Name</th>
-                                        <th data-field="start">Join Start Time</th>
-                                        <th data-field="end"> Join End Time</th>
-                                        <th data-field="length">Length</th>
-                                        <th data-field="attempt">Attempts</th>
-                                        <th data-field="owner">Owner</th>
-                                        <th data-field="status">Status</th>
+                                        <th>Name</th>
+                                        <th>Join Start Time</th>
+                                        <th>Join End Time</th>
+                                        <th>Length</th>
+                                        <th>Attempts</th>
+                                        <th>Owner</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th data-field="name">Name</th>
-                                        <th data-field="start">Join Start Time</th>
-                                        <th data-field="end"> Join End Time</th>
-                                        <th data-field="length">Length</th>
-                                        <th data-field="attempt">Attempts</th>
-                                        <th data-field="owner">Owner</th>
-                                        <th data-field="status">Status</th>
+                                        <th>Name</th>
+                                        <th>Join Start Time</th>
+                                        <th>Join End Time</th>
+                                        <th>Length</th>
+                                        <th>Attempts</th>
+                                        <th>Owner</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </tfoot>
 
@@ -67,6 +69,15 @@
                                                     <c:when test="${test.restricted}">Private</c:when>
                                                     <c:otherwise>Public</c:otherwise>
                                                 </c:choose>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button"><span class="fa fa-gear"></span><span class="caret"></span></button>
+                                                    <ul class="dropdown-menu dropdown-menu-right">
+                                                        <li><a href="${contextPath}/oes-admin/test/edit?id=${test.id}"><i class="fa fa-edit"></i> Edit</a></li>
+                                                        <li><a href="${contextPath}/oes-admin/test/delete?id=${test.id}"><i class="fa fa-remove"></i> Delete</a></li>
+                                                    </ul>
+                                                </div>
                                             </td>
                                         </tr>
                                     </c:forEach>
