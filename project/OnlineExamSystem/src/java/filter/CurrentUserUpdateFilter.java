@@ -69,7 +69,7 @@ public class CurrentUserUpdateFilter implements Filter {
                 AccountManager manager = new AccountManager();
                 Account account = null;
                 if (request.getUserPrincipal() != null) {
-                    account = manager.getAccount(request.getUserPrincipal().getName());
+                    account = manager.getAccount(request.getUserPrincipal().getName(), true);
                 }
                 request.getSession().setAttribute("currentUser", account);
             }

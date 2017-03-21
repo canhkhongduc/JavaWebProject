@@ -52,7 +52,7 @@ public class SecurityTestController extends ManagedServlet {
             appendToResponse(response, "Need 'username' parameter!");
             return;
         }
-        Account account = accountManager.getAccount(username);
+        Account account = accountManager.getAccount(username, true);
         if (account == null) {
             appendToResponse(response, "Username does not exist!");
             return;

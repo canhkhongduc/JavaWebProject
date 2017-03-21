@@ -94,7 +94,7 @@ public class TestEditController extends ManagedServlet {
                 }
             }
         }
-        test.setOwner(accountManager.getAccount(owner.getUsername()));
+        test.setOwner(owner);
         testManager.updateTest(test);
         redirect(response, getServletURL(TestController.class));
     }

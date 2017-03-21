@@ -69,7 +69,7 @@ public class HibernateTestController extends ManagedServlet {
             throws ServletException, IOException {
         AccountManager accountManager = new AccountManager();
         if (accountManager.hasAccount(username)) {
-            Account a = accountManager.getAccount(username);
+            Account a = accountManager.getAccount(username, true);
             appendToResponse(response, "Username: %s", a.getUsername());
             appendToResponse(response, "Full name: %s",
                     Optional.ofNullable(a.getProfile().getFullName())
