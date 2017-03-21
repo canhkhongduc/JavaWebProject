@@ -27,7 +27,7 @@
                 $('#frmJoinCourse').attr('method', 'POST');
                 $('#inpCourseId').val(courseId);
                 $('#frmJoinCourse').submit();
-            }
+            });
         </script>
     </jsp:attribute>
     <jsp:body>
