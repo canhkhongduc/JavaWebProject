@@ -37,7 +37,7 @@
                                 services to students in FPT University.<br>
                                 The application is developed by Six Idiots Team, 
                                 a group of five students from SE1101 and one student 
-                                from SE1102. All these students are studying Java 
+                                from IA1101. All these students are studying Java 
                                 Web Application Development (PRJ321) in their 4th 
                                 semester, under the instruction of Mr. Ngo Tung Son.<br>
                                 One day, Mr. Son offered them a request to develop 
@@ -139,7 +139,7 @@
                                     <div class="item">
                                         <img src="${contextPath}/resources/images/nguyenlc.jpg" alt="Lê Cao Nguyên">
                                         <div class="carousel-caption">
-                                            <h3>Lê Cao Nguyên (SE1102)</h3>
+                                            <h3>Lê Cao Nguyên (IA1101)</h3>
                                             <p>Full-stack Developer, Technical Advisor</p>
                                         </div>
                                     </div>
