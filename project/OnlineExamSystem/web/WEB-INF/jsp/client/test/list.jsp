@@ -29,8 +29,7 @@
                             <td>${test.getTimeLength()}</td>
                             <td>${test.getJoinStartTime()}</td>
                             <td>${test.getJoinEndTime()}</td>
-                            <td><input type="button" class="btn btn-primary" value="Join"
-                                       onclick="location.href='testlist?id=${test.getId()}'"></td>
+                            <td><a class="btn btn-primary" href="list?id=${test.getId()}">Join</a></td>
                         </tr>
                     </c:forEach>
                 </tbody>

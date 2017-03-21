@@ -2,6 +2,8 @@
 <%@taglib prefix="t" uri="/WEB-INF/tlds/template" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="custom" uri="/WEB-INF/tlds/custom" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <t:oesPage pageTitle="Manage tests">
     <jsp:attribute name="customHead">
         <link rel="stylesheet" type="text/css" href="${contextPath}/plugins/dataTables/media/css/dataTables.bootstrap.min.css">
@@ -103,12 +105,13 @@
                                 </div>
                             </div>
                             <div class="box-body">
+                                <input type="hidden" name="id" value="${test.id}">
                                 <div class="form-group">
                                     <label class="col-sm-3 col-md-2 control-label">Course</label>
                                     <div class="col-sm-9 col-md-10">
                                         <select name="course" class="form-control select2" style="width: 100%;">
                                             <c:forEach items="${courses}" var="course">
-                                                <option value="${course.id}">${course.name}</option>
+                                                <option value="${course.id}" <c:if test="${test.course.id == course.id}">selected</c:if>>${course.name}</option>
                                             </c:forEach>
                                         </select>
                                     </div>
@@ -116,7 +119,7 @@
                                 <div class="form-group">
                                     <label for="name" class="col-sm-3 col-md-2 control-label">Test Name</label>
                                     <div class="col-sm-9 col-md-10">
-                                        <input placeholder="e.g. Progress Test 1" id="name" name="name" type="text" class="form-control" required>
+                                        <input placeholder="e.g. Progress Test 1" id="name" name="name" type="text" class="form-control" required value="${test.name}">
                                         <div class="help-block with-errors"></div>
                                     </div>
                                 </div>
@@ -127,28 +130,28 @@
                                             <div class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </div>
-                                            <input type="text" class="form-control pull-right" name="joinTime" id="joinTime">
+                                            <input type="text" class="form-control pull-right" name="joinTime" id="joinTime" value="<fmt:formatDate pattern="MM/dd/yyyy HH:mm:ss" value="${test.joinStartTime}"></fmt:formatDate> - <fmt:formatDate pattern="MM/dd/yyyy HH:mm:ss" value="${test.joinEndTime}"></fmt:formatDate>">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="length" class="col-sm-3 col-md-2 control-label">Length</label>
                                     <div class="col-sm-9 col-md-10">
-                                        <input placeholder="in minutes, e.g. 120" id="length" name="length" type="number" class="form-control" step="1" min="1" required>
+                                        <input placeholder="in minutes, e.g. 120" id="length" name="length" type="number" class="form-control" step="1" min="1" required value="${test.timeLength}">
                                         <div class="help-block with-errors"></div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="attempt" class="col-sm-3 col-md-2 control-label">Attempt Limit</label>
                                     <div class="col-sm-9 col-md-10">
-                                        <input placeholder="e.g. 5" id="attemptLimit" name="attempt" type="number" class="form-control" step="1" min="1" required>
+                                        <input placeholder="e.g. 5" id="attemptLimit" name="attempt" type="number" class="form-control" step="1" min="1" required value="${test.attemptLimit}">
                                         <div class="help-block with-errors"></div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="restricted" class="col-sm-3 col-md-2 control-label">Restricted?</label>
                                     <div class="col-sm-9 col-md-10">
-                                        <input id="restricted" name="restricted" type="checkbox" class="minimal" value="restricted" onchange="toggleRestricted();">
+                                        <input id="restricted" name="restricted" type="checkbox" class="minimal" value="restricted" onchange="toggleRestricted();" <c:if test="${test.restricted}">checked</c:if>>
                                         <div class="help-block with-errors"></div>
                                     </div>
                                 </div>
@@ -167,9 +170,17 @@
                             <div class="box-body">
                                 <div><i><i class="fa fa-info-circle"></i> Click on a question to add it to selection list</i></div>
                                 <br>
-                                <div><b><span id="questionCount">0</span></b> question(s) selected.</div>
+                                <div><b><span id="questionCount">${fn:length(test.questions)}</span></b> question(s) selected.</div>
                                 <br>
-                                <ul id="questionList" class="list-group" data-table="questionTable" data-count="questionCount"></ul>
+                                <ul id="questionList" class="list-group" data-table="questionTable" data-count="questionCount">
+                                    <c:forEach items="${test.questions}" var="question">
+                                        <li class="list-group-item" data-id="${question.id}">
+                                            ${question.content}
+                                            <input type="hidden" name="selectedQuestion" value="${question.id}">
+                                            <i class="fa fa-times fa-pull-right btnRemove"></i>
+                                        </li>
+                                    </c:forEach>
+                                </ul>
                                 <table id="questionTable" class="table display table-striped dataTable" data-count="questionCount" data-list="questionList">
                                     <thead>
                                         <tr>
@@ -179,7 +190,7 @@
                                     </thead>
                                     <tbody>
                                         <c:forEach items="${questions}" var="question">
-                                            <tr data-id="${question.id}">
+                                            <tr data-id="${question.id}" <c:if test="${custom:contains(test.questions, question)}">class="selected"</c:if>>
                                                 <td>${question.course.id}</td>
                                                 <td>${question.content}</td>
                                             </tr>
@@ -201,9 +212,17 @@
                             <div class="box-body">
                                 <div><i><i class="fa fa-info-circle"></i> Click on a student to add he/she to selection list</i></div>
                                 <br>
-                                <div><b><span id="studentCount">0</span></b> student(s) selected.</div>
+                                <div><b><span id="studentCount">${fn:length(test.examinees)}</span></b> student(s) selected.</div>
                                 <br>
-                                <ul id="studentList" class="list-group" data-table="studentTable" data-count="studentCount"></ul>
+                                <ul id="studentList" class="list-group" data-table="studentTable" data-count="studentCount">
+                                    <c:forEach items="${test.examinees}" var="examinee">
+                                        <li class="list-group-item" data-id="${examinee.username}">
+                                            ${examinee.profile.fullName}
+                                            <input type="hidden" name="selectedStudent" value="${examinee.username}">
+                                            <i class="fa fa-times fa-pull-right btnRemove"></i>
+                                        </li>
+                                    </c:forEach>
+                                </ul>
                                 <table id="studentTable" class="table display table-striped dataTable" data-count="studentCount" data-list="studentList">
                                     <thead>
                                         <tr>
@@ -213,7 +232,7 @@
                                     </thead>
                                     <tbody>
                                         <c:forEach items="${students}" var="student">
-                                            <tr data-id="${student.username}">
+                                            <tr data-id="${student.username}" <c:if test="${custom:contains(test.examinees, student)}">class="selected"</c:if>>
                                                 <td>${student.username}</td>
                                                 <td>${student.profile.fullName}</td>
                                             </tr>
@@ -223,7 +242,7 @@
                             </div>
                         </div> <!-- /Student Box -->
                         <div class="box no-border">
-                            <button type="submit" class="btn btn-info pull-right">Create test</button>
+                            <button type="submit" class="btn btn-info pull-right">Save test</button>
                         </div>
                     </div>
                 </div>

@@ -3,6 +3,7 @@
  */
 package controller.oesadmin.test;
 
+import dao.AccountManager;
 import dao.QuestionManager;
 import dao.TestManager;
 import java.io.IOException;
@@ -24,13 +25,14 @@ import util.servlet.ManagedServlet;
  * @author Hai
  */
 @WebServlet("/oes-admin/test")
-@ServletSecurity(@HttpConstraint(rolesAllowed = {"admin", "testmaster"}))
+@ServletSecurity(@HttpConstraint(rolesAllowed = "testmaster"))
 public class TestController extends ManagedServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Account account = (Account) session.getAttribute("account");
+        AccountManager accountManager = new AccountManager();
+        Account account = (Account) session.getAttribute("currentUser");
         TestManager testManager = new TestManager();
         List<Test> tests = testManager.getAccessibleTests(account);
         request.setAttribute("tests", tests);

@@ -25,7 +25,7 @@ public class AccountProfile implements Serializable {
     private Account account;
 
     @Column(columnDefinition = "nvarchar(255)", nullable = false)
-    private String fullName;
+    private String fullName = "Anonymous";
 
     private Boolean gender;
 

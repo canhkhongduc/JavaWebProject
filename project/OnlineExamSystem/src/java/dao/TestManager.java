@@ -3,11 +3,9 @@
  */
 package dao;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import model.Account;
-import model.Question;
 import model.Course;
 import model.Question;
 import model.Test;
@@ -39,7 +37,7 @@ public class TestManager extends TransactionPerformer {
             return criteria.list();
         });
     }
-    
+
     public List<Test> getTests(Course course) {
         return performTransaction((session) -> {
             Criteria criteria = session.createCriteria(Test.class);
@@ -48,7 +46,7 @@ public class TestManager extends TransactionPerformer {
             return criteria.list();
         });
     }
-    
+
     public List<Test> getAccessibleTests(Account account) {
         return performTransaction((session) -> {
             Criteria criteria = session.createCriteria(Test.class);
@@ -56,24 +54,36 @@ public class TestManager extends TransactionPerformer {
             criteria.add(Restrictions.or(Restrictions.eq("owner", account), Restrictions.eq("restricted", false)));
             List<Test> tests = criteria.list();
             return tests;
-        });        
+        });
     }
-    public List<Test> getTests(Date timeFrom, Date timeTo){
+
+    public List<Test> getTests(Date timeFrom, Date timeTo) {
         return performTransaction((session) -> {
             Criteria criteria = session.createCriteria(Test.class);
             criteria.addOrder(Order.asc("id"));
             criteria.add(Restrictions.between("joinStartTime", timeFrom, timeTo));
             List<Test> tests = criteria.list();
             return tests;
-        }); 
+        });
     }
-    
+
     public Test getTest(Long id) {
         return performTransaction((session) -> {
             Test test = (Test) session.get(Test.class, id);
             Hibernate.initialize(test.getQuestions());
             for (Question q : test.getQuestions()) {
                 Hibernate.initialize(q.getChoices());
+            }
+            return test;
+        });
+    }
+
+    public Test getTest(Long id, boolean fetch) {
+        return performTransaction((session) -> {
+            Test test = (Test) session.get(Test.class, id);
+            if (fetch) {
+                Hibernate.initialize(test.getQuestions());
+                Hibernate.initialize(test.getExaminees());
             }
             return test;
         });

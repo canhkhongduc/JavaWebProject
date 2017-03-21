@@ -29,33 +29,41 @@ import util.servlet.ManagedServlet;
  *
  * @author Hai
  */
-@WebServlet("/oes-admin/test/add")
-@ServletSecurity(
-        @HttpConstraint(rolesAllowed = "testmaster"))
-public class TestAddController extends ManagedServlet {
+@WebServlet("/oes-admin/test/edit")
+@ServletSecurity(@HttpConstraint(rolesAllowed = "testmaster"))
+public class TestEditController extends ManagedServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Course> courses = new CourseManager().getAllCourses();
-        List<Question> questions = new QuestionManager().getAllQuestions();
-        List<Account> students = new AccountManager().getAccountsByRole("student");
-        request.setAttribute("questions", questions);
-        request.setAttribute("courses", courses);
-        request.setAttribute("students", students);
-        getCorrespondingViewDispatcher().forward(request, response);
+        Long id = Long.parseLong(request.getParameter("id"));
+        TestManager testManager = new TestManager();
+        Test test = testManager.getTest(id, true);
+        if (test == null) {
+            response.sendRedirect(getContextPath() + "/oes-admin/test");
+        } else {
+            List<Course> courses = new CourseManager().getAllCourses();
+            List<Question> questions = new QuestionManager().getAllQuestions();
+            List<Account> students = new AccountManager().getAccountsByRole("student");
+            request.setAttribute("questions", questions);
+            request.setAttribute("courses", courses);
+            request.setAttribute("students", students);
+            request.setAttribute("test", test);
+            getCorrespondingViewDispatcher().forward(request, response);
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Test test = new Test();
+        String testId = request.getParameter("id");
         TestManager testManager = new TestManager();
         CourseManager courseManager = new CourseManager();
         QuestionManager questionManager = new QuestionManager();
         AccountManager accountManager = new AccountManager();
         Account owner = (Account) request.getSession().getAttribute("currentUser");
 
+        Test test = testManager.getTest(Long.parseLong(testId), true);
         test.setName(request.getParameter("name"));
         test.setCourse(courseManager.getCourse(request.getParameter("course")));
         SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
@@ -84,8 +92,7 @@ public class TestAddController extends ManagedServlet {
             }
         }
         test.setOwner(accountManager.getAccount(owner.getUsername()));
-        testManager.addTest(test);
+        testManager.updateTest(test);
         response.sendRedirect(getContextPath() + "/oes-admin/test");
     }
-
 }
