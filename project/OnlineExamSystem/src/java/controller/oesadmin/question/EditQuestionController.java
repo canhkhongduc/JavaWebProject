@@ -4,10 +4,8 @@
 package controller.oesadmin.question;
 
 import dao.ChoiceManager;
-import dao.CourseManager;
 import dao.QuestionManager;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import java.util.Set;
 import javax.servlet.ServletException;
