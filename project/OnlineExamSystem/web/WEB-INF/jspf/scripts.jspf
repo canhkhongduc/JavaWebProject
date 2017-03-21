@@ -1,5 +1,9 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <script src="${contextPath}/plugins/jQuery/jquery-3.1.1.min.js"></script>
 <script src="${contextPath}/plugins/bootstrap/js/bootstrap.min.js"></script>
 <script src="${contextPath}/plugins/slimScroll/jquery.slimscroll.min.js"></script>
 <script src="${contextPath}/plugins/adminLTE/js/app.min.js"></script>
 <script src="${contextPath}/resources/js/main.js"></script>
+<c:if test="${empty sessionScope.currentUser}">
+<script>$('body').addClass('sidebar-collapse');</script>
+</c:if>
