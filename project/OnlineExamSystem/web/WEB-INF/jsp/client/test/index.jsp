@@ -223,7 +223,7 @@
                             </label>
                         </div>
                     </c:forEach>
-                    <span>(Choose ${noOfCorrect} answer(s))</span>
+                    <span>(Choose ${noOfCorrect} answer${noOfCorrect > 1 ? 's' : ''})</span>
                 </div>
             </div>
             <div id="testAction" class="row">
