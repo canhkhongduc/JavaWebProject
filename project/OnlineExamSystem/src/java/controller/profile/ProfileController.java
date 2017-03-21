@@ -5,6 +5,8 @@ package controller.profile;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.HttpConstraint;
+import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +18,7 @@ import util.servlet.ManagedServlet;
  * @author Le Cao Nguyen
  */
 @WebServlet("/profile")
+@ServletSecurity(@HttpConstraint(rolesAllowed = {"admin", "testmaster", "student"}))
 public class ProfileController extends ManagedServlet {
 
     @Override

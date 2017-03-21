@@ -25,7 +25,7 @@ import util.servlet.ManagedServlet;
  * @author Le Cao Nguyen
  */
 @WebServlet("/client/dashboard")
-@ServletSecurity(@HttpConstraint(rolesAllowed = "student"))
+@ServletSecurity(@HttpConstraint(rolesAllowed = {"admin", "testmaster", "student"}))
 public class DashboardController extends ManagedServlet {
 
     private TimeRange fromStartToEndOfToday() {
@@ -43,15 +43,13 @@ public class DashboardController extends ManagedServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Account currentUser = (Account) request.getSession().getAttribute("currentUser");
-        if (!currentUser.hasRole("student")) {
-            response.sendError(403, "You must be a student to view dashboard.");
-            return;
-        }
         TestManager testManager = new TestManager();
         TimeRange timeRange = fromStartToEndOfToday();
         List<Test> tests = testManager.getTestsByDateRange(timeRange.getTimeFrom(), timeRange.getTimeTo(), true);
-        tests = tests.stream().filter(test -> Boolean.FALSE.equals(test.getRestricted()) 
+        if (currentUser.hasRole("student")) {
+            tests = tests.stream().filter(test -> Boolean.FALSE.equals(test.getRestricted()) 
                 || test.getExaminees().contains(currentUser)).collect(Collectors.toList());
+        }
         request.setAttribute("tests", tests);
         getCorrespondingViewDispatcher().forward(request, response);
     }

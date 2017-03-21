@@ -64,8 +64,8 @@
                                                     </c:choose>
                                                 </td>
                                                 <td>
-                                                    <c:if test="${test.isJoinable()}">
-                                                        <a href="javascript:void(0)" class="btn btn-primary btn-xs" data-test-id="${test.id}">Join</a>
+                                                    <c:if test="${sessionScope.currentUser.hasRole('student') && test.isJoinable()}">
+                                                        <a href="test/list?id=${test.getId()}" class="btn btn-primary btn-xs">Join</a>
                                                     </c:if>
                                                 </td>
                                             </tr>

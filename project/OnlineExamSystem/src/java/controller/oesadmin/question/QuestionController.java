@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.HttpConstraint;
+import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +22,7 @@ import util.servlet.ManagedServlet;
  * @author Quang Minh
  */
 @WebServlet("/oes-admin/question")
+@ServletSecurity(@HttpConstraint(rolesAllowed = "testmaster"))
 public class QuestionController extends ManagedServlet {
 
     /**
