@@ -34,7 +34,7 @@ public class TestController extends ManagedServlet {
         long testId = (long) request.getSession().getAttribute("testId");
 
         if (request.getSession().getAttribute("questionList") == null) {
-            questionList = new ArrayList<>(testManager.getTest(testId).getQuestions());
+            questionList = new ArrayList<>(testManager.getTest(testId, true).getQuestions());
             request.getSession().setAttribute("questionList", questionList);
         } else {
             questionList = (List<Question>) request.getSession().getAttribute("questionList");

@@ -14,6 +14,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import model.Account;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -85,9 +86,10 @@ public class CurrentUserUpdateFilter implements Filter {
         if (problem != null) {
             if (problem instanceof ServletException) {
                 throw (ServletException) problem;
-            }
-            if (problem instanceof IOException) {
+            } else if (problem instanceof IOException) {
                 throw (IOException) problem;
+            } else {
+                LoggerFactory.getLogger(this.getClass()).error(null, problem);
             }
         }
     }

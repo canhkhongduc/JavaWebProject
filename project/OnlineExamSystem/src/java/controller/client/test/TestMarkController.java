@@ -6,6 +6,7 @@
 package controller.client.test;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import dao.AttemptManager;
 import dao.ChoiceManager;
 import dao.TestManager;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -44,28 +46,20 @@ public class TestMarkController extends HttpServlet {
         TestManager testManager = new TestManager();
         AttemptManager attemptManager = new AttemptManager();
 
-        Test test = testManager.getTest(Long.parseLong(request.getParameter("testId")));
-        List<Question> questionList;
+        Test test = testManager.getTest(Long.parseLong(request.getParameter("testId")), true);
+        ;
         List<Choice> allChoiceList = new ArrayList<>();
 
+        Gson gson = new Gson();
         String choiceList = request.getParameter("choiceList");
-        choiceList = choiceList.substring(1);
-        choiceList = choiceList.substring(0, choiceList.length() - 1);
-        if (choiceList.length() == 0) {
-            response.getWriter().write(new Gson().toJson(0));
-            return;
-        }
-        String[] choiceArray = choiceList.split(",");
-
+        JsonArray choiceListJson = gson.fromJson(choiceList, JsonArray.class);
         List<Long> choiceIdList = new ArrayList<>();
-
-        for (int i = 0; i < choiceArray.length; i++) {
-            choiceIdList.add(Long.parseLong(choiceArray[i]));
-        }
-
-        questionList = new ArrayList<>(test.getQuestions());
-
-        for (Question question : questionList) {
+        choiceListJson.forEach((element) -> {
+            choiceIdList.add(element.getAsLong());
+        });
+        Set<Question> questionSet = test.getQuestions();
+        
+        for (Question question : questionSet) {
             int noOfTrueAnswer = 0;
             int noOfChoice = 0;
             int noOfCorrectChoice = 0;
@@ -86,11 +80,11 @@ public class TestMarkController extends HttpServlet {
             }
 
             if (noOfChoice <= noOfTrueAnswer) {
-                score += (float) noOfCorrectChoice / noOfTrueAnswer;
+                score += (double) noOfCorrectChoice / noOfTrueAnswer;
             }
         }
         
-        score = score / questionList.size() * 10;
+        score = score / questionSet.size() * 10;
 
         Attempt attempt = new Attempt();
         attempt.setScore(score);

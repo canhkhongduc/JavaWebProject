@@ -97,6 +97,10 @@ public class Question implements java.io.Serializable {
         this.choices.remove(choice);
         choice.setQuestion(null);
     }
+    
+    public int getTotalCorrectChoices() {
+        return (int) this.choices.stream().filter(choice -> choice.isCorrect()).count();
+    }
 
     @Override
     public int hashCode() {
