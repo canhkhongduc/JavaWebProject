@@ -44,7 +44,7 @@ public class TestMarkController extends HttpServlet {
         TestManager testManager = new TestManager();
         AttemptManager attemptManager = new AttemptManager();
 
-        Test test = testManager.getTest(Long.parseLong(request.getParameter("testId")));
+        Test test = testManager.getTest(Long.parseLong(request.getParameter("testId")), true);
         List<Question> questionList;
         List<Choice> allChoiceList = new ArrayList<>();
 
@@ -108,6 +108,7 @@ public class TestMarkController extends HttpServlet {
         request.getSession().setAttribute("testStartTime", null);
         request.getSession().setAttribute("questionList", null);
         request.getSession().setAttribute("testId", null);
+        request.getSession().setAttribute("testLength", null);
 
         response.getWriter().write(new Gson().toJson(attemptId));
     }

@@ -98,6 +98,17 @@ public class Question implements java.io.Serializable {
         choice.setQuestion(null);
     }
 
+    public int getTotalCorrectChoices() {
+        int correctChoices = 0;
+        for (Choice c : choices) {
+            if (c.isCorrect()) {
+                correctChoices++;
+            }
+        }
+
+        return correctChoices;
+    }
+
     @Override
     public int hashCode() {
         return 7;

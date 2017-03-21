@@ -154,8 +154,27 @@
                         $('#main').removeClass('blur');
                         $('#mess').addClass('hidden');
                         alert('AJAX failed');
+                        console.log('AJAX failed');
                     }
                 });
+            }
+
+            var endTime = new Date(Date.parse(document.getElementById("time").innerHTML));
+            checkTime();
+
+            var timeCheck = setInterval((function () {
+                checkTime();
+            }), 1000);
+            
+            function checkTime(){
+                var currentTime = new Date();
+                var remainingTime = new Date(endTime.getTime() - currentTime.getTime());
+                document.getElementById("remain").innerHTML = remainingTime.getMinutes() + ":" + remainingTime.getSeconds();
+                if (remainingTime <= 0) {
+                    submit(${testId});
+                    clearInterval(timeCheck);
+                    return;
+                }
             }
         </script>
     </jsp:attribute>
@@ -232,6 +251,12 @@
                     </div>
                 </div>
             </div>
+            <br>
+            <div class="row" style="color: red; text-align: center">
+                Your test will be submitted at <span id="time">${endTime}</span>
+                <br>
+                Remaining time: <span id="remain"></span>
+            </div>                           
         </main>
 
         <div class="mess hidden" id="mess">
