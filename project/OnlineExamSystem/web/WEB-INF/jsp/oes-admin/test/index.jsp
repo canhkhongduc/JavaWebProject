@@ -32,9 +32,9 @@
                                 <thead>
                                     <tr>
                                         <th>Name</th>
-                                        <th>Join Start Time</th>
-                                        <th>Join End Time</th>
-                                        <th>Length</th>
+                                        <th>Course</th>
+                                        <th>Join time</th>
+                                        <th>Time length</th>
                                         <th>Attempt limit</th>
                                         <th>Owner</th>
                                         <th>Status</th>
@@ -44,9 +44,9 @@
                                 <tfoot>
                                     <tr>
                                         <th>Name</th>
-                                        <th>Join Start Time</th>
-                                        <th>Join End Time</th>
-                                        <th>Length</th>
+                                        <th>Course</th>
+                                        <th>Join time</th>
+                                        <th>Time length</th>
                                         <th>Attempt limit</th>
                                         <th>Owner</th>
                                         <th>Status</th>
@@ -57,17 +57,12 @@
                                     <c:forEach items="${tests}" var="test">
                                         <tr>
                                             <td><a href="${contextPath}/oes-admin/test/view?id=${test.id}">${test.name}</a></td>
-                                            <td><fmt:formatDate type="both" value="${test.joinStartTime}"/></td>
-                                            <td><fmt:formatDate type="both" value="${test.joinEndTime}"/></td>
-                                            <td>${test.timeLength}&nbsp;${test.timeLength > 1 ? 'minutes' : 'minute'}</td>
+                                            <td>${test.course.id}</td>
+                                            <td><fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${test.joinStartTime}"/>&nbsp;-&nbsp;<fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${test.joinEndTime}"/></td>
+                                            <td>${test.timeLength}&nbsp;${test.timeLength > 1 ? 'mins' : 'min'}</td>
                                             <td>${test.attemptLimit}</td>
                                             <td>${test.owner.username}</td>
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="${test.restricted}">Private</c:when>
-                                                    <c:otherwise>Public</c:otherwise>
-                                                </c:choose>
-                                            </td>
+                                            <td>${test.restricted ? 'Private' : 'Public'}</td>
                                             <td>
                                                 <div class="btn-group">
                                                     <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" type="button" ${test.owner.username ne sessionScope.currentUser.username ? 'disabled' : ''}><span class="fa fa-gear"></span><span class="caret"></span></button>
