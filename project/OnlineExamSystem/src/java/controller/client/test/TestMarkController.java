@@ -89,6 +89,8 @@ public class TestMarkController extends HttpServlet {
                 score += (float) noOfCorrectChoice / noOfTrueAnswer;
             }
         }
+        
+        score = score / questionList.size() * 10;
 
         Attempt attempt = new Attempt();
         attempt.setScore(score);
