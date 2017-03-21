@@ -22,20 +22,9 @@ import util.servlet.ManagedServlet;
  * @author Le Cao Nguyen
  */
 @WebServlet("/dev/sectest")
-@ServletSecurity(
-        @HttpConstraint(rolesAllowed = {"admin", "testmaster"}))
+@ServletSecurity(@HttpConstraint(rolesAllowed = {"admin", "testmaster"}))
 public class SecurityTestController extends ManagedServlet {
 
-    /**
-     * Append a line constructed from format string and arguments to response
-     * body.
-     *
-     * @param response The response object.
-     * @param format The format string.
-     * @param args The arguments to be included.
-     * @throws ServletException
-     * @throws IOException
-     */
     private void appendToResponse(HttpServletResponse response, String format, Object... args)
             throws ServletException, IOException {
         response.getWriter().printf("<p>" + format + "</p>\n", args);
@@ -72,7 +61,7 @@ public class SecurityTestController extends ManagedServlet {
             appendToResponse(response, "Admin cannot be promoted to testmaster.");
             return;
         }
-        account.setRole(roleManager.getRole("testmaster"));
+        account.setOnlyOneRole(roleManager.getRole("testmaster"));
         if (accountManager.updateAccount(account)) {
             appendToResponse(response, "%s has been promoted to testmaster.", username);
         } else {
@@ -80,14 +69,6 @@ public class SecurityTestController extends ManagedServlet {
         }
     }
 
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");

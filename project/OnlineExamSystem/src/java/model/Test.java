@@ -57,7 +57,7 @@ public class Test implements Serializable {
     @Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
     @OrderBy("id")
     private Set<Attempt> attempts = new LinkedHashSet<>(0);
-
+    
     @ManyToMany
     @JoinTable(name = "Test_Question", joinColumns = @JoinColumn(name = "testId"), inverseJoinColumns = @JoinColumn(name = "questionId"))
     @Cascade(CascadeType.SAVE_UPDATE)
@@ -73,7 +73,7 @@ public class Test implements Serializable {
     public Test() {
     }
 
-    public Test(Account owner, String name, Date joinStartTime, Date joinEndTime, Integer timeLength, Integer attemptLimit, Boolean restricted) {
+    public Test(Account owner, String name, Date joinStartTime, Date joinEndTime, Integer timeLength, Integer attemptLimit, Boolean restricted, Course course) {
         this.owner = owner;
         this.name = name;
         this.joinStartTime = joinStartTime;
@@ -81,6 +81,7 @@ public class Test implements Serializable {
         this.timeLength = timeLength;
         this.attemptLimit = attemptLimit;
         this.restricted = restricted;
+        this.course = course;
     }
 
     public Long getId() {

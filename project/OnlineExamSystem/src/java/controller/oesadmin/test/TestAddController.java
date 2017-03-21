@@ -6,6 +6,7 @@ package controller.oesadmin.test;
 import dao.AccountManager;
 import dao.CourseManager;
 import dao.QuestionManager;
+import dao.RoleManager;
 import dao.TestManager;
 import java.io.IOException;
 import java.text.ParseException;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import model.Account;
 import model.Course;
 import model.Question;
+import model.Role;
 import model.Test;
 import util.servlet.ManagedServlet;
 
@@ -37,9 +39,10 @@ public class TestAddController extends ManagedServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        Role studentRole = new RoleManager().getRole("student");
         List<Course> courses = new CourseManager().getAllCourses();
         List<Question> questions = new QuestionManager().getAllQuestions();
-        List<Account> students = new AccountManager().getAccountsByRole("student");
+        List<Account> students = new AccountManager().getAccountsByRole(studentRole);
         request.setAttribute("questions", questions);
         request.setAttribute("courses", courses);
         request.setAttribute("students", students);
@@ -83,9 +86,9 @@ public class TestAddController extends ManagedServlet {
                 }
             }
         }
-        test.setOwner(accountManager.getAccount(owner.getUsername()));
-        testManager.addTest(test);
-        response.sendRedirect(getContextPath() + "/oes-admin/test");
+        test.setOwner(owner);
+        testManager.saveTest(test);
+        redirect(response, getServletURL(TestController.class));
     }
 
 }

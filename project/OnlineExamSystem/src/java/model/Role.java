@@ -25,7 +25,7 @@ public class Role implements Serializable {
     @ManyToMany(mappedBy = "roles")
     @OrderBy("username")
     private Set<Account> accounts = new LinkedHashSet<>(0);
-
+    
     public Role() {
     }
 
@@ -53,7 +53,7 @@ public class Role implements Serializable {
     public Set<Account> getAccounts() {
         return accounts;
     }
-
+    
     @Override
     public int hashCode() {
         return Objects.hash(this.name);
