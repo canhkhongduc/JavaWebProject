@@ -36,7 +36,7 @@ public class TestListController extends ManagedServlet {
             request.getSession().setAttribute("testId", Long.parseLong(testId));
             request.getSession().setAttribute("testStartTime", new Date());
             
-            response.sendRedirect("test");
+            response.sendRedirect("../test");
         }
     }
 
