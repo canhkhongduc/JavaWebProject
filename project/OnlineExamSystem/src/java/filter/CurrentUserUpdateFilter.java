@@ -14,6 +14,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import model.Account;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -22,7 +23,8 @@ import org.slf4j.LoggerFactory;
  */
 @WebFilter(urlPatterns = "/*", asyncSupported = true)
 public class CurrentUserUpdateFilter implements Filter {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(CurrentUserUpdateFilter.class);
+    
     private static final boolean debug = false;
 
     private FilterConfig filterConfig = null;
@@ -33,14 +35,14 @@ public class CurrentUserUpdateFilter implements Filter {
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("AccountRetrievalFilter:DoBeforeProcessing");
+            LOGGER.debug("AccountRetrievalFilter:DoBeforeProcessing");
         }
     }
 
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("AccountRetrievalFilter:DoAfterProcessing");
+            LOGGER.debug("AccountRetrievalFilter:DoAfterProcessing");
         }
     }
 
@@ -58,7 +60,7 @@ public class CurrentUserUpdateFilter implements Filter {
             FilterChain chain)
             throws IOException, ServletException {
         if (debug) {
-            log("AccountRetrievalFilter:doFilter()");
+            LOGGER.debug("AccountRetrievalFilter:doFilter()");
         }
 
         doBeforeProcessing(req, res);
@@ -89,7 +91,7 @@ public class CurrentUserUpdateFilter implements Filter {
             } else if (problem instanceof IOException) {
                 throw (IOException) problem;
             } else {
-                LoggerFactory.getLogger(this.getClass()).error(null, problem);
+                LOGGER.error(null, problem);
             }
         }
     }
@@ -129,13 +131,8 @@ public class CurrentUserUpdateFilter implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {
-                log("AccountRetrievalFilter:Initializing filter");
+                LOGGER.debug("AccountRetrievalFilter:Initializing filter");
             }
         }
     }
-
-    public void log(String msg) {
-        filterConfig.getServletContext().log(msg);
-    }
-
 }
