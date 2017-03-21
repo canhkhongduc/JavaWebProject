@@ -14,10 +14,8 @@ import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import model.Account;
 import model.Choice;
-import model.Course;
 import model.Question;
 import util.servlet.ManagedServlet;
 
@@ -35,6 +33,10 @@ public class EditQuestionController extends ManagedServlet {
         QuestionManager qm = new QuestionManager();
         long questionID = Long.parseLong(request.getParameter("id"));
         Question question = qm.getQuestion(questionID, true);
+        if (question == null) {
+            response.sendError(400, "Invalid question ID.");
+            return;
+        }
         Set<Choice> choices = question.getChoices();
         request.setAttribute("question", question);
         request.setAttribute("choices", choices);
@@ -44,11 +46,19 @@ public class EditQuestionController extends ManagedServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        Account currentUser = (Account) request.getSession().getAttribute("currentUser");
         QuestionManager qm = new QuestionManager();
-        HttpSession session = request.getSession(true);
-        Account owner = (Account) session.getAttribute("currentUser");
         long questionID = Long.parseLong(request.getParameter("id"));
         Question question = qm.getQuestion(questionID);
+        if (question == null) {
+            response.sendError(400, "Invalid question ID.");
+            return;
+        }
+        if (!question.getOwner().equals(currentUser)) {
+            response.sendError(403, "You do not have permission to edit the question.");
+            return;
+        }
+        
         question.setContent(request.getParameter("content"));
         boolean result = false;
         ChoiceManager cm = new ChoiceManager();

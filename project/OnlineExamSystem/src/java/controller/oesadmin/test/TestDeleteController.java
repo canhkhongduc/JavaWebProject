@@ -27,13 +27,19 @@ public class TestDeleteController extends ManagedServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        Account currentUser = (Account) request.getSession().getAttribute("currentUser");
         TestManager testManager = new TestManager();
         String testId = request.getParameter("id");
-        Account currentUser = (Account) request.getSession().getAttribute("currentUser");
         Test test = testManager.getTest(Long.parseLong(testId));
-        if (test.getOwner().getUsername().equals(currentUser.getUsername())) {
-            testManager.deleteTest(test);
+        if (test == null) {
+            response.sendError(400, "Invalid test ID.");
+            return;
         }
+        if (!test.getOwner().equals(currentUser)) {
+            response.sendError(403, "You do not have permission to delete the test.");
+            return;
+        }
+        testManager.deleteTest(test);
         redirect(response, getServletURL(TestController.class));
     }
 }

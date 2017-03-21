@@ -76,7 +76,7 @@
                             </div>
                         </div>
                         <div class="box-footer clearfix">
-                            <a href="test" class="btn btn-sm btn-default btn-flat pull-right">View all tests</a>
+                            <a href="test/list" class="btn btn-sm btn-default btn-flat pull-right">View all tests</a>
                         </div>
                     </div>
                 </div>

@@ -71,6 +71,6 @@ public class AddController extends ManagedServlet {
             question.addChoice(choice);
         }
         qm.addQuestion(question);
-        redirect(response, "/oes-admin/question/add");
+        redirect(response, getServletURL(QuestionController.class));
     }
 }

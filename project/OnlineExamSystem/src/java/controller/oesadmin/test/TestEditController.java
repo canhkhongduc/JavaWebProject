@@ -43,19 +43,21 @@ public class TestEditController extends ManagedServlet {
         RoleManager roleManager = new RoleManager();
         Account currentUser = (Account) request.getSession().getAttribute("currentUser");
         if (test == null) {
-            redirect(response, getServletURL(TestController.class));
-        } else if (test.getOwner().getUsername().equals(currentUser.getUsername())){
-            List<Course> courses = new CourseManager().getAllCourses();
-            List<Question> questions = new QuestionManager().getAllQuestions();
-            List<Account> students = new AccountManager().getAccountsByRole(roleManager.getRole("student"));
-            request.setAttribute("questions", questions);
-            request.setAttribute("courses", courses);
-            request.setAttribute("students", students);
-            request.setAttribute("test", test);
-            getCorrespondingViewDispatcher().forward(request, response);
-        } else {
-            redirect(response, getServletURL(TestController.class));
+            response.sendError(400, "Invalid test ID.");
+            return;
         }
+        if (!test.getOwner().equals(currentUser)) {
+            response.sendError(403, "You do not have permission to edit the test.");
+            return;
+        }
+        List<Course> courses = new CourseManager().getAllCourses();
+        List<Question> questions = new QuestionManager().getAllQuestions();
+        List<Account> students = new AccountManager().getAccountsByRole(roleManager.getRole("student"));
+        request.setAttribute("questions", questions);
+        request.setAttribute("courses", courses);
+        request.setAttribute("students", students);
+        request.setAttribute("test", test);
+        getCorrespondingViewDispatcher().forward(request, response);
     }
 
     @Override
@@ -66,9 +68,17 @@ public class TestEditController extends ManagedServlet {
         CourseManager courseManager = new CourseManager();
         QuestionManager questionManager = new QuestionManager();
         AccountManager accountManager = new AccountManager();
-        Account owner = (Account) request.getSession().getAttribute("currentUser");
-
+        Account currentUser = (Account) request.getSession().getAttribute("currentUser");
         Test test = testManager.getTest(Long.parseLong(testId), true);
+        if (test == null) {
+            response.sendError(400, "Invalid test ID.");
+            return;
+        }
+        if (!test.getOwner().equals(currentUser)) {
+            response.sendError(403, "You do not have permission to edit the test.");
+            return;
+        }
+        
         test.setName(request.getParameter("name"));
         test.setCourse(courseManager.getCourse(request.getParameter("course")));
         SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
@@ -96,7 +106,6 @@ public class TestEditController extends ManagedServlet {
                 }
             }
         }
-        test.setOwner(owner);
         testManager.updateTest(test);
         redirect(response, getServletURL(TestController.class));
     }

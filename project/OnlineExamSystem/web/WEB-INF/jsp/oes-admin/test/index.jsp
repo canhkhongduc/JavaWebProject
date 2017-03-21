@@ -7,13 +7,39 @@
         <link rel="stylesheet" type="text/css" href="${contextPath}/plugins/dataTables/media/css/dataTables.bootstrap.min.css">
     </jsp:attribute>
     <jsp:attribute name="customBeginning">
+        <div id="dlgDeleteTest" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dlgDeleteTestTitle">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form id="frmDeleteTest" action="test/delete" method="POST" accept-charset="UTF-8">
+                        <input type="hidden" name="id">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span></button>
+                            <h4 class="modal-title" id="dlgDeleteTestTitle">Delete test</h4>
+                        </div>
+                        <div class="modal-body">
+                            <span id="lblDeleteMessage">If you sure want to delete this test, then click the button below.</span>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-danger pull-left">Delete</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </jsp:attribute>
     <jsp:attribute name="customEnding">
         <script src="${contextPath}/plugins/dataTables/media/js/jquery.dataTables.min.js"></script>
         <script src="${contextPath}/plugins/dataTables/media/js/dataTables.bootstrap.min.js"></script>
         <script>
             $(document).ready(function () {
-                $('#table').DataTable();
+                $('#tblTests').DataTable();
+                
+                $('#tblTests a.delete-button').click(function() {
+                    var testId = $(this).attr('data-test-id');
+                    $('#frmDeleteTest input[name="id"]').val(testId);
+                    $('#dlgDeleteTest').modal();
+                });
             });
         </script>
     </jsp:attribute>
@@ -28,7 +54,7 @@
                             </div>
                         </div>
                         <div class="box-body table-responsive">
-                            <table class="table table-hover dataTable" id="table">
+                            <table class="table table-hover dataTable" id="tblTests">
                                 <thead>
                                     <tr>
                                         <th>Name</th>
@@ -68,7 +94,7 @@
                                                     <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" type="button" ${test.owner.username ne sessionScope.currentUser.username ? 'disabled' : ''}><span class="fa fa-gear"></span><span class="caret"></span></button>
                                                     <ul class="dropdown-menu dropdown-menu-right">
                                                         <li><a href="${contextPath}/oes-admin/test/edit?id=${test.id}"><i class="fa fa-edit"></i> Edit</a></li>
-                                                        <li><a href="${contextPath}/oes-admin/test/delete?id=${test.id}"><i class="fa fa-remove"></i> Delete</a></li>
+                                                        <li><a class="delete-button" data-test-id="${test.id}"><i class="fa fa-remove"></i> Delete</a></li>
                                                     </ul>
                                                 </div>
                                             </td>
