@@ -61,6 +61,7 @@ public class TestListController extends ManagedServlet {
             if (test.getAttemptLimit() <= currentAttempts) {
                 response.sendError(400,
                         "Sorry, you haved passed the number of attempt limit");
+                return;
             }
 
             Date today = new Date();
