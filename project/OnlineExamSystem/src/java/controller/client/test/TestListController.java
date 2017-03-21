@@ -5,13 +5,16 @@ package controller.client.test;
 
 import dao.TestManager;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Account;
 import model.Test;
+import org.jboss.logging.Logger;
 import util.servlet.ManagedServlet;
 
 /**
@@ -27,15 +30,29 @@ public class TestListController extends ManagedServlet {
         if (testId == null || testId.equals("")) {
             TestManager testManager = new TestManager();
 
-            List<Test> testList = testManager.getAllTests();
+            List<Test> testList2 = testManager.getAllTests(true);
+            List<Test> testList = new ArrayList<>();
+            for (Test test : testList2) {
+//                Logger.getLogger(TestListController.class.getName()).log(Logger.Level.WARN, test.getExaminees().size());
+                List<Account> temp = new ArrayList<>(test.getExaminees());
+                for(Account a : temp){
+                    Logger.getLogger(TestListController.class.getName()).log(Logger.Level.WARN, a.getUsername());
+                }
+                Logger.getLogger(TestListController.class.getName()).log(Logger.Level.WARN, ((Account) request.getSession().getAttribute("currentUser")).getUsername());
+                
+                if (test.getExaminees().contains(
+                        (Account) request.getSession().getAttribute("currentUser"))) {
+                    testList.add(test);
+                }
+            }
 
             request.setAttribute("testList", testList);
             getCorrespondingViewDispatcher().forward(request, response);
-        }else{
+        } else {
             request.getSession().setAttribute("questionList", null);
             request.getSession().setAttribute("testId", Long.parseLong(testId));
             request.getSession().setAttribute("testStartTime", new Date());
-            
+
             response.sendRedirect("../test");
         }
     }

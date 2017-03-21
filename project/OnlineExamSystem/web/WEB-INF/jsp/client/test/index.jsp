@@ -8,7 +8,8 @@
         <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
         <link rel="stylesheet" href="http://fonts.googleapis.com/icon?family=Material+Icons">        
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>        
+        <!--<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">-->
         <style>
             #testTitle{
                 height: 20em;
@@ -46,6 +47,21 @@
 
             pre.prettyprint {
                 background: #e0e0e0;
+            }
+
+            .mess{
+                position: absolute;
+                top: 18em;
+                left: 30em;
+            }
+
+            .hidden{
+                display: none;
+            }
+
+            .blur{
+                filter: blur(5px);
+                pointer-events: none;
             }
         </style>
     </jsp:attribute>
@@ -114,11 +130,12 @@
                 }
                 localStorage.setItem("questionList", JSON.stringify(questionList));
             }
-            
+
             function submit(testId) {
                 localStorage.clear();
 
-                alert('Please wait for your score');
+                $('#main').addClass('blur');
+                $('#mess').removeClass('hidden');
 
                 $.ajax({
                     type: 'POST',
@@ -129,9 +146,13 @@
                         testId: testId
                     },
                     success: function (response) {
+                        $('#main').removeClass('blur');
+                        $('#mess').addClass('hidden');
                         location.href = "attempt/result?attemptId=" + response;
                     },
                     error: function () {
+                        $('#main').removeClass('blur');
+                        $('#mess').addClass('hidden');
                         alert('AJAX failed');
                     }
                 });
@@ -139,7 +160,7 @@
         </script>
     </jsp:attribute>
     <jsp:body>
-        <main>
+        <main id="main">
             <div id="testContent" class="row">
                 <div id="testChoice" class="col-md-4">
                     <c:forEach items="${questionList}" var="item" varStatus="stt">
@@ -213,6 +234,8 @@
             </div>
         </main>
 
-
+        <div class="mess hidden" id="mess">
+            <h1>Please wait while your score is being calculated...</h1>
+        </div>
     </jsp:body>
 </t:oesPage>
