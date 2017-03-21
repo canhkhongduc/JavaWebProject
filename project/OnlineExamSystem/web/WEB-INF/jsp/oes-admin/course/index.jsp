@@ -54,7 +54,7 @@
                             <span id="lblDeleteMessage">If you sure want to delete the course, then click the button below.</span>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary pull-left">Delete</button>
+                            <button type="submit" class="btn btn-danger pull-left">Delete</button>
                         </div>
                     </form>
                 </div>

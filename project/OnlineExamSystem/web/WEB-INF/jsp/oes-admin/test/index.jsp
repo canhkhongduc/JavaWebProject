@@ -35,7 +35,7 @@
                                         <th>Join Start Time</th>
                                         <th>Join End Time</th>
                                         <th>Length</th>
-                                        <th>Attempts</th>
+                                        <th>Attempt limit</th>
                                         <th>Owner</th>
                                         <th>Status</th>
                                         <th>Actions</th>
@@ -47,7 +47,7 @@
                                         <th>Join Start Time</th>
                                         <th>Join End Time</th>
                                         <th>Length</th>
-                                        <th>Attempts</th>
+                                        <th>Attempt limit</th>
                                         <th>Owner</th>
                                         <th>Status</th>
                                         <th>Actions</th>
@@ -59,7 +59,7 @@
                                             <td><a href="${contextPath}/oes-admin/test/view?id=${test.id}">${test.name}</a></td>
                                             <td><fmt:formatDate type="both" value="${test.joinStartTime}"/></td>
                                             <td><fmt:formatDate type="both" value="${test.joinEndTime}"/></td>
-                                            <td>${test.timeLength}</td>
+                                            <td>${test.timeLength}&nbsp;${test.timeLength > 1 ? 'minutes' : 'minute'}</td>
                                             <td>${test.attemptLimit}</td>
                                             <td>${test.owner.username}</td>
                                             <td>
