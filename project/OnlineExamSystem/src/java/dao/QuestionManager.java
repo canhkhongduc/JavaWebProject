@@ -82,12 +82,22 @@ public class QuestionManager extends TransactionPerformer {
         });
     }
 
-    public Question getQuestion(Long id) {
+    public Question getQuestion(Long id, boolean fetch) {
         return performTransaction((session) -> {
-            return (Question) session.get(Question.class, id);
+            Question question = (Question) session.get(Question.class, id);
+            if(fetch){
+                Hibernate.initialize(question.getChoices());
+            }
+            return question;
         });
     }
 
+    public boolean addQuestion(Question question) {
+        return performTransaction((session) -> {
+            session.save(question);
+        });
+    }
+    
     public boolean saveQuestion(Question question) {
         return performTransaction((session) -> {
             session.save(question);

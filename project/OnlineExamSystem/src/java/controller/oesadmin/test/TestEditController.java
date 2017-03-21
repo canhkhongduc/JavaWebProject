@@ -85,7 +85,7 @@ public class TestEditController extends ManagedServlet {
         String[] selectedQuestions = request.getParameterValues("selectedQuestion");
         if (selectedQuestions != null) {
             for (String question : selectedQuestions) {
-                test.addQuestion(questionManager.getQuestion(Long.parseLong(question)));
+                test.addQuestion(questionManager.getQuestion(Long.parseLong(question),true));
             }
         }
         if (test.getRestricted()) {

@@ -103,7 +103,7 @@ public class AddController extends ManagedServlet {
             Choice choice = new Choice(answer, result);
             question.addChoice(choice);
         }
-        qm.saveQuestion(question);
+        qm.addQuestion(question);
         //---//
         redirect(response, "/oes-admin/question/add");
     }

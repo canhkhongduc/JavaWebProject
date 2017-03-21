@@ -31,4 +31,11 @@ public class ChoiceManager extends TransactionPerformer {
             return (Choice) session.get(Choice.class, id);
         });
     }
+    
+      
+   public boolean updateChoice(Choice choice) {
+        return performTransaction((session) -> {
+            session.update(choice);
+        });
+    }
 }

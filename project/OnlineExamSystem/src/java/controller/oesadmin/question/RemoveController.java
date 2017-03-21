@@ -48,13 +48,13 @@ public class RemoveController extends ManagedServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
-        String questionID = request.getParameter("questionID");
-        QuestionManager qm = new QuestionManager();
-        Question question = qm.getQuestion(Long.parseLong(questionID));
-        System.out.println(""+question.getContent());
-        boolean del = qm.deleteQuestion(question);
-        System.out.println(""+del);
-        redirect(response, "/oes-admin/question/edit");
+//        String questionID = request.getParameter("questionID");
+//        QuestionManager qm = new QuestionManager();
+//        Question question = qm.getQuestion(Long.parseLong(questionID));
+//        System.out.println(""+question.getContent());
+//        boolean del = qm.deleteQuestion(question);
+//        System.out.println(""+del);
+//        redirect(response, "/oes-admin/question/edit");
     }
 
     /**

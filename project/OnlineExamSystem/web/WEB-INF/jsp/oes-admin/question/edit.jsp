@@ -23,10 +23,10 @@
             <!--for each loop -->
             <c:forEach items="${questions}" var="question">
                 <tr>
-                    <td>${question.getId()}</td>
+                    <td>${question.id}</td>
                     <td>${question.content}</td>
                     <td>
-                        <a href="editquestion?questionID=${question.getId()}">Edit</a> | <a href="remove?questionID=${question.getId()}">Remove</a>
+                        <a href="editquestion?questionID=${question.id}">Edit</a>
                     </td>
                 </tr>
             </c:forEach>
