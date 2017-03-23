@@ -3,9 +3,7 @@
  */
 package util;
 
-import java.util.Collection;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  *
@@ -40,19 +38,5 @@ public class CommonUtil {
      */
     public static <T, U> U convertNullable(T value, U valueIfNull, Function<T, U> converter) {
         return (value == null) ? valueIfNull : converter.apply(value);
-    }
-
-    /**
-     * Map the collection to a string collection using the mapping function,
-     * then concatenate all the strings in the collection, of which two
-     * consecutive strings are separated with comma.
-     *
-     * @param <T> The type of the element of the original collection
-     * @param values The original collection
-     * @param map The mapping function
-     * @return The sequence string
-     */
-    public static <T> String toSequenceString(Collection<T> values, Function<T, String> map) {
-        return values.stream().map(map).collect(Collectors.joining(", "));
     }
 }

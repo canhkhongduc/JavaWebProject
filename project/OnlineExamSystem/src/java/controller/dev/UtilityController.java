@@ -13,12 +13,13 @@ import javax.servlet.http.HttpServletResponse;
 import util.servlet.ManagedServlet;
 
 /**
- * Controller for testing Hibernate DAO objects.
+ * Controller for testing minor functions. Should be disabled by default.
  *
  * @author Le Cao Nguyen
  */
 @WebServlet("/dev/util")
-@ServletSecurity(@HttpConstraint(rolesAllowed = "admin"))
+@ServletSecurity(
+        @HttpConstraint(ServletSecurity.EmptyRoleSemantic.DENY))
 public class UtilityController extends ManagedServlet {
 
     /**

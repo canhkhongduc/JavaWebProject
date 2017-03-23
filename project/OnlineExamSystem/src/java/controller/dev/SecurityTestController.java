@@ -18,11 +18,14 @@ import model.Role;
 import util.servlet.ManagedServlet;
 
 /**
+ * Controller for testing servlet security feature. It is considered as back
+ * door, so access should be disabled.
  *
  * @author Le Cao Nguyen
  */
 @WebServlet("/dev/sectest")
-@ServletSecurity(@HttpConstraint(rolesAllowed = "admin"))
+@ServletSecurity(
+        @HttpConstraint(ServletSecurity.EmptyRoleSemantic.DENY))
 public class SecurityTestController extends ManagedServlet {
 
     private void appendToResponse(HttpServletResponse response, String format, Object... args)

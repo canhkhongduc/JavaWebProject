@@ -1,8 +1,7 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" %>
-<%@taglib prefix="t" uri="/WEB-INF/tlds/template" %>
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ taglib prefix="t" uri="/WEB-INF/tlds/template" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="custom" uri="/WEB-INF/tlds/custom" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <t:oesPage pageTitle="Manage tests">
     <jsp:attribute name="customHead">
@@ -64,7 +63,7 @@
                     });
                 });
             };
-            var toggleRestricted = function() {
+            var toggleRestricted = function () {
                 $('#studentBox').slideToggle();
             };
             $(document).ready(function () {
@@ -131,13 +130,13 @@
                                                 <i class="fa fa-clock-o"></i>
                                             </div>
                                             <input type="text" class="form-control pull-right" name="joinTime" id="joinTime" value="<fmt:formatDate pattern="MM/dd/yyyy HH:mm:ss" value="${test.joinStartTime}"></fmt:formatDate> - <fmt:formatDate pattern="MM/dd/yyyy HH:mm:ss" value="${test.joinEndTime}"></fmt:formatDate>">
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="length" class="col-sm-3 col-md-2 control-label">Length</label>
-                                    <div class="col-sm-9 col-md-10">
-                                        <input placeholder="in minutes, e.g. 120" id="length" name="length" type="number" class="form-control" step="1" min="1" required value="${test.timeLength}">
+                                    <div class="form-group">
+                                        <label for="length" class="col-sm-3 col-md-2 control-label">Length</label>
+                                        <div class="col-sm-9 col-md-10">
+                                                <input placeholder="in minutes, e.g. 120" id="length" name="length" type="number" class="form-control" step="1" min="1" required value="${test.timeLength}">
                                         <div class="help-block with-errors"></div>
                                     </div>
                                 </div>
@@ -152,25 +151,25 @@
                                     <label for="restricted" class="col-sm-3 col-md-2 control-label">Restricted?</label>
                                     <div class="col-sm-9 col-md-10">
                                         <input id="restricted" name="restricted" type="checkbox" class="minimal" value="restricted" onchange="toggleRestricted();" <c:if test="${test.restricted}">checked</c:if>>
-                                        <div class="help-block with-errors"></div>
+                                            <div class="help-block with-errors"></div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div> <!-- /Info Box -->
-                        <!-- Question Box-->
-                        <div class="box box-primary">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">Questions</h3>
-                                <div class="box-tools pull-right">
-                                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
-                                        <i class="fa fa-minus"></i>
-                                    </button>
+                            </div> <!-- /Info Box -->
+                            <!-- Question Box-->
+                            <div class="box box-primary">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Questions</h3>
+                                    <div class="box-tools pull-right">
+                                        <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                            <i class="fa fa-minus"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="box-body">
-                                <div><i><i class="fa fa-info-circle"></i> Click on a question to add it to selection list</i></div>
-                                <br>
-                                <div><b><span id="questionCount">${fn:length(test.questions)}</span></b> question(s) selected.</div>
+                                <div class="box-body">
+                                    <div><i><i class="fa fa-info-circle"></i> Click on a question to add it to selection list</i></div>
+                                    <br>
+                                    <div><b><span id="questionCount">${fn:length(test.questions)}</span></b> question(s) selected.</div>
                                 <br>
                                 <ul id="questionList" class="list-group" data-table="questionTable" data-count="questionCount">
                                     <c:forEach items="${test.questions}" var="question">
@@ -190,7 +189,7 @@
                                     </thead>
                                     <tbody>
                                         <c:forEach items="${questions}" var="question">
-                                            <tr data-id="${question.id}" <c:if test="${custom:contains(test.questions, question)}">class="selected"</c:if>>
+                                            <tr data-id="${question.id}" <c:if test="${test.questions.contains(question)}">class="selected"</c:if>>
                                                 <td>${question.course.id}</td>
                                                 <td>${question.content}</td>
                                             </tr>
@@ -232,7 +231,7 @@
                                     </thead>
                                     <tbody>
                                         <c:forEach items="${students}" var="student">
-                                            <tr data-id="${student.username}" <c:if test="${custom:contains(test.examinees, student)}">class="selected"</c:if>>
+                                            <tr data-id="${student.username}" <c:if test="${test.examinees.contains(student)}">class="selected"</c:if>>
                                                 <td>${student.username}</td>
                                                 <td>${student.profile.fullName}</td>
                                             </tr>

@@ -88,13 +88,10 @@ public class TestListController extends ManagedServlet {
                             + courseName + ")<br>");
                     return;
                 }
-
-                response.sendRedirect("../test");
+                redirect(response, getServletURL(TestController.class));
             } else {
-                response.sendError(400,
-                        "Sorry, this test is unavailable at this time");
+                response.sendError(400, "Sorry, this test is unavailable at this time");
             }
-
         }
     }
 

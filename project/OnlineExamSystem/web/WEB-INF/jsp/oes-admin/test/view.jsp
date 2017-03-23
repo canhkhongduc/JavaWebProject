@@ -1,8 +1,7 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" %>
-<%@taglib prefix="t" uri="/WEB-INF/tlds/template" %>
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ taglib prefix="t" uri="/WEB-INF/tlds/template" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="custom" uri="/WEB-INF/tlds/custom" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <t:oesPage pageTitle="Manage tests">
     <jsp:attribute name="customHead">

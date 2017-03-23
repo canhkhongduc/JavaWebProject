@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright © 2017 Six Idiots Team
  */
 package controller.client.test;
 
@@ -19,7 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.HttpConstraint;
 import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Account;
@@ -27,6 +24,7 @@ import model.Attempt;
 import model.Choice;
 import model.Question;
 import model.Test;
+import util.servlet.ManagedServlet;
 
 /**
  *
@@ -34,7 +32,7 @@ import model.Test;
  */
 @WebServlet("/client/marking")
 @ServletSecurity(@HttpConstraint(rolesAllowed = "student"))
-public class TestMarkController extends HttpServlet {
+public class TestMarkController extends ManagedServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -50,7 +48,6 @@ public class TestMarkController extends HttpServlet {
         AttemptManager attemptManager = new AttemptManager();
 
         Test test = testManager.getTest(Long.parseLong(request.getParameter("testId")), true);
-        List<Question> questionList;
         List<Choice> allChoiceList = new ArrayList<>();
 
         Gson gson = new Gson();

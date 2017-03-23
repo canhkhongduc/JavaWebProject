@@ -4,7 +4,6 @@
 package controller.client.attempt;
 
 import dao.AttemptManager;
-import dao.TestManager;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -29,8 +28,6 @@ public class AttemptController extends ManagedServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Account examinee = (Account) request.getSession().getAttribute("currentUser");
         AttemptManager attemptManager = new AttemptManager();
-        
-        
         
         // Get viewMode
         String viewMode = request.getParameter("viewMode");

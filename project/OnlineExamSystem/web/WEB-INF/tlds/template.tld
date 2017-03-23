@@ -3,33 +3,6 @@
   <tlib-version>1.0</tlib-version>
   <short-name>template</short-name>
   <uri>/WEB-INF/tlds/template</uri>
-  <!-- A validator verifies that the tags are used correctly at JSP
-          translation time. Validator entries look like this: 
-       <validator>
-           <validator-class>com.mycompany.TagLibValidator</validator-class>
-           <init-param>
-              <param-name>parameter</param-name>
-              <param-value>value</param-value>
-           </init-param>
-       </validator>
-    -->
-  <!-- A tag library can register Servlet Context event listeners in
-         case it needs to react to such events. Listener entries look
-         like this: 
-      <listener>
-          <listener-class>com.mycompany.TagLibListener</listener-class> 
-      </listener>
-    -->
-  <tag>
-    <name>link</name>
-    <tag-class>util.jsp.tag.LinkTag</tag-class>
-    <body-content>scriptless</body-content>
-    <attribute>
-      <name>href</name>
-      <rtexprvalue>true</rtexprvalue>
-      <type>java.lang.String</type>
-    </attribute>
-  </tag>
   <tag-file>
     <name>genericPage</name>
     <path>/WEB-INF/tags/genericPage.tag</path>

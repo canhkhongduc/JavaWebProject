@@ -60,7 +60,8 @@ public class TestController extends ManagedServlet {
         }
 
         if (questionList.isEmpty()) {
-            //TODO: redirect to error display page (test contains no questions)
+            response.sendError(500, "Test contains no question.");
+            return;
         } else {
             choiceList = choiceManager.getChoices(questionList.get(currentQuestion));
         }

@@ -21,12 +21,14 @@ import util.hibernate.transaction.TransactionPerformer;
 import util.servlet.ManagedServlet;
 
 /**
- * Controller for testing Hibernate DAO objects.
+ * Controller for testing Hibernate DAO objects. It is considered as back door,
+ * so access should be disabled.
  *
  * @author Le Cao Nguyen
  */
 @WebServlet("/dev/hbtest")
-@ServletSecurity(@HttpConstraint(rolesAllowed = "admin"))
+@ServletSecurity(
+        @HttpConstraint(ServletSecurity.EmptyRoleSemantic.DENY))
 public class HibernateTestController extends ManagedServlet {
 
     /**
